@@ -30,7 +30,7 @@
     <ul class="navbar-nav bg-gray-700 sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fa fa-snowflake-o" aria-hidden="true"></i>
             </div>
@@ -64,8 +64,8 @@
             <div id="collapseRes" class="collapse" aria-labelledby="headingRes" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Reserver</h6>
-                    <a class="collapse-item" href="index.php?page=1&menu=0">Reserver</a>
-                    <a class="collapse-item" href="index.php?page=1&menu=0">Mes Reservations</a>
+                    <a class="collapse-item" href="">Reserver</a>
+                    <a class="collapse-item" href="">Mes Reservations</a>
                 </div>
             </div>
         </li>
@@ -90,25 +90,7 @@
             </div>
         </li>
 
-        <div class="sidebar-heading">
-            Espace Proprietaire
-        </div>
 
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProp"
-               aria-expanded="true" aria-controls="collapseProp">
-                <i class="fa fa-lock" aria-hidden="true"></i>
-                <span>Gerer</span>
-            </a>
-            <div id="collapseProp" class="collapse" aria-labelledby="headingProp" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Mes contrats</h6>
-                    <a class="collapse-item" href="index.php?page=1&menu=0">Contrats</a>
-                    <a class="collapse-item" href="index.php?page=1&menu=0">Nouveau</a>
-                </div>
-            </div>
-        </li>
 
     </ul>
     <!-- End of Sidebar -->
@@ -131,36 +113,15 @@
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
-                    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                    <li class="nav-item dropdown no-arrow d-sm-none">
-                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-search fa-fw" aria-hidden="true" ></i>
-                        </a>
-                        <!-- Dropdown - Messages -->
-                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                             aria-labelledby="searchDropdown">
-                            <form class="form-inline mr-auto w-100 navbar-search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control bg-light border-0 small"
-                                           placeholder="Search for..." aria-label="Search"
-                                           aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button">
-                                            <i class="fas fa-search fa-sm" aria-hidden="true" ></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
 
                     <!-- Nav Item - User Information -->
+                    <li class="nav-item">
+                        <a class="nav-link " href="{% url 'proprietaire' %}"><span class="text-gray-600">Espace proprietaire</span></a>
+                    </li>
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Username</span>
-                            <img class="img-profile rounded-circle" src=" {% static 'img/undraw_profile.svg' %}" alt="">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600"> {{ request.user.first_name }}</span>
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -175,6 +136,12 @@
                                 Se deconnecter
                             </a>
                         </div>
+                    </li>
+                    <li class="nav-item  no-arrow">
+                        <a class="nav-link">
+                            <img class="img-profile rounded-circle" src=" {% static 'img/undraw_profile.svg' %}" alt="">
+                        </a>
+
                     </li>
 
                 </ul>
@@ -229,7 +196,7 @@
                 <div class="modal-body">Cliquez sur deconnexion si vous souhaitez deconnecter</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                    <a class="btn btn-primary" href="">Deconnexion</a>
+                    <a class="btn btn-primary" href="{% url 'logout' %}">Deconnexion</a>
                 </div>
             </div>
         </div>

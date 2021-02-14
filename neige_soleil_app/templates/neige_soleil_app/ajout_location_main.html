@@ -1,0 +1,70 @@
+{% extends 'neige_soleil_app/layout_main.html' %}
+{% block content %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <legend><h3>Ajout d'une location</h3></legend>
+        <input type="hidden" name="user" value="{{ request.user.id }}">
+        <div class="mb-3">
+            <label for="TextInput" class="form-label">Description Breve</label>
+            <input required maxlength="200" type="text" id="TextInput" class="form-control" name="description_breve" placeholder="Decrivez brievement la location">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_description" class="form-label">Description Longue</label>
+            <textarea  class="form-control" name="description" cols="40" rows="10" maxlength="1000" required id="id_description"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="id_surface_habitable" class="form-label">Surface habitable</label>
+                <input type="number" class="form-control" name="surface_habitable" step="any" required id="id_surface_habitable">
+            </div>
+
+            <div class="col-lg-6">
+                <label for="id_surface_balcon" class="form-label">Surface du balcon</label>
+                <input type="number" class="form-control" name="surface_balcon" step="any" required id="id_surface_balcon">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-4">
+                <label for="id_capacite" class="form-label">Nombre de personne que peut accueillir la location</label>
+                <input type="number" class="form-control" name="capacite" required id="id_capacite">
+            </div>
+
+
+            <div class="col-lg-4">
+                <label for="id_distance_pistes" class="form-label">Distance qui sépare la location des pistes</label>
+                <input type="number" class="form-control" name="distance_pistes" step="any" required id="id_distance_pistes">
+            </div>
+            <div class="col-lg-4">
+                <label for="price" class="form-label">Prix Hebdomadaire</label>
+                <input required type="number" id="price" class="form-control" name="prix" placeholder="Prix">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-4">
+                <label for="id_status" class="form-label">Status actuel de la location</label>
+                <select name="status" class="form-control" id="id_status">
+                    <option value="AVAIL" selected>Disponible</option>
+
+                    <option value="BUSY">Occuper</option>
+
+                    <option value="OFF">Inactif</option>
+
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <label class="form-label">Inserer toutes les images</label>
+                <input required type="file" name="images" multiple class="form-control-file">
+            </div>
+            <input type="submit" class="btn btn-primary col-lg-4" name="envoyer" value="Ajouter">
+        </div>
+
+
+
+    </form>
+{% endblock %}
