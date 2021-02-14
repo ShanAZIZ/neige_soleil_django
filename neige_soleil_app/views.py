@@ -58,7 +58,10 @@ def home_main(request):
 
 @login_required(login_url='login')
 def proprietaire_main(request):
-    context = {}
+    locations = Location.objects.filter(user=request.user)
+    context = {
+        'locations' : locations
+    }
     return render(request, 'neige_soleil_app/proprietaire_main.html', context)
 
 
