@@ -49,8 +49,9 @@ def logoutPage(request):
 
 @login_required(login_url='login')
 def home_main(request):
+    locations = Location.objects.all()
     context = {
-        'row' : [1,2,3,4,5,6]
+        'locations': locations,
     }
     return render(request, 'neige_soleil_app/home_main.html', context)
 

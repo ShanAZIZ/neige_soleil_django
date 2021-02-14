@@ -42,3 +42,11 @@ class PrixLocation(models.Model):
 class LocationImage(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        return url

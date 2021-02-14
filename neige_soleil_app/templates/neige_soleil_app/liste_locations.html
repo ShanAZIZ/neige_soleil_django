@@ -1,0 +1,28 @@
+{% load static %}
+<div class="album py-5 bg-light">
+    <div class="container">
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for location in locations %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img class="bd-placeholder-img card-img-top" width="100%" height="225"  role="img" aria-label="Placeholder: Thumbnail"  focusable="false" src="{{ location.locationimage_set.all.first.imageURL }}">
+
+                    <div class="card-body">
+                        <p class="card-text">{{ location.description_breve }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Detail</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            </div>
+                            <small class="text-muted">{{ location.prixlocation.prix }} Euros/Semaines</small>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
