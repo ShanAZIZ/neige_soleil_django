@@ -1,0 +1,30 @@
+{% extends 'neige_soleil_app/layout_main.html' %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="card">
+        <div class="container-fliud">
+            <div class="wrapper row">
+                <div class="preview col-md-6">
+                        {% for image in location.locationimage_set.all %}
+                           <img class="img-fluid" src="{{ image.imageURL  }}">
+                        {% endfor %}
+                </div>
+                <div class="details col-md-6">
+                    <h3 class="product-title">{{ location.description_breve }}</h3>
+                    <p class="product-description">{{ location.description }}</p>
+                    <h5 class="price">Prix hebdomadaire : <span>{{ location.prixlocation.prix }} €/Semaines</span></h5>
+                    <h5>Surface habitable : {{ location.surface_habitable }} </h5>
+                    <h5>Surface du balcon : {{ location.surface_balcon }} </h5>
+                    <h5>Capacité : {{ location.capacite }}Personnes</h5>
+                    <h5>distance des pistes : {{ location.distance_pistes }} mètres</h5>
+                    <h5>status : {{ location.status.label }} </h5>
+                    <div class="action">
+                        <button class="btn btn-primary" type="button">RESERVER</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

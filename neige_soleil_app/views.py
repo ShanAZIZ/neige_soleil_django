@@ -60,7 +60,7 @@ def home_main(request):
 def proprietaire_main(request):
     locations = Location.objects.filter(user=request.user)
     context = {
-        'locations' : locations
+        'locations': locations
     }
     return render(request, 'neige_soleil_app/proprietaire_main.html', context)
 
@@ -84,3 +84,10 @@ def new_location(request):
     }
     return render(request, 'neige_soleil_app/ajout_location_main.html', context)
 
+
+def location_detail(request, pk):
+    location = Location.objects.get(id=pk)
+    context = {
+        'location': location
+    }
+    return render(request, 'neige_soleil_app/location_detail_main.html', context)

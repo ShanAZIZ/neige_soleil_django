@@ -12,7 +12,6 @@ class Profile(models.Model):
 
 
 class Location(models.Model):
-
     DISPONIBLE = 'AVAIL'
     OCCUPER = 'BUSY'
     INACTIF = 'OFF'
@@ -36,7 +35,7 @@ class Location(models.Model):
 class PrixLocation(models.Model):
     location = models.OneToOneField(Location, on_delete=models.CASCADE)
     prix = models.FloatField()
-    #TO DO : Definir les prix par saison, les saisons et les prix afficher
+    # TO DO : Definir les prix par saison, les saisons et les prix afficher
 
 
 class LocationImage(models.Model):

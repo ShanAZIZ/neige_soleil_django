@@ -12,8 +12,12 @@
                         <p class="card-text">{{ location.description_breve }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Detail</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                <a href="{% url 'location_detail' location.id %}" ><button type="button" class="btn btn-sm btn-outline-secondary">Detail</button></a>
+                                {% if location.user == request.user %}
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                {% else %}
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Reserver</button>
+                                {% endif %}
                             </div>
                             <small class="text-muted">{{ location.prixlocation.prix }} Euros/Semaines</small>
                         </div>
