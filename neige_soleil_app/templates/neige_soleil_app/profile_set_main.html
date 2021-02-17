@@ -1,0 +1,26 @@
+{% extends 'neige_soleil_app/layout_main.html' %}
+{% block content %}
+    {% load static %}
+    <h1>Votre profile</h1>
+    <p>Pour pouvoir reserver ou louer, il faut completer votre profil utilisateur en remplissant ce formulaire : </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="user" value="{{ request.user.id }}">
+        <div class="mb-3">
+            <label for="adresse" class="form-label" >Votre adresse : </label><input class="form-control" id="adresse" type="text" name="adresse" placeholder="Numero, voie, rue etc..">
+        </div>
+        <div class="mb-3">
+            <label for="cp" class="form-label">Code postale : </label><input class="form-control"  id="cp" type="number" name="code_postale" placeholder="Le code postale de votre ville">
+        </div>
+        <div class="mb-3">
+            <label for="ville" class="form-label">Ville : </label><input class="form-control"  id="ville" type="text" name="ville" placeholder="Votre ville de résidence">
+        </div>
+        <div class="mb-3">
+            <label for="tel" class="form-label">Telephone : </label><input class="form-control"  id="tel" type="tel" name="telephone" placeholder="Numero de telephone">
+        </div>
+        <div class="mb-5">
+            <input type="submit" class="btn btn-primary">
+        </div>
+    </form>
+{% endblock %}

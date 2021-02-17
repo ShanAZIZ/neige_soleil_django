@@ -49,11 +49,10 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider">
-
+        {% if request.user.profile %}
         <div class="sidebar-heading">
             Reservations et Locations
         </div>
-
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRes"
@@ -89,6 +88,15 @@
                 </div>
             </div>
         </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{% url 'profile' %}" >
+                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                <span>Completer mon profil</span>
+            </a>
+        </li>
+
+        {% endif %}
 
 
 
@@ -115,9 +123,12 @@
 
 
                     <!-- Nav Item - User Information -->
+                    {% if request.user.profile %}
+
                     <li class="nav-item">
                         <a class="nav-link " href="{% url 'proprietaire' %}"><span class="text-gray-600">Espace proprietaire</span></a>
                     </li>
+                    {% endif %}
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -164,9 +175,6 @@
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
                 </div>
             </footer>
             <!-- End of Footer -->

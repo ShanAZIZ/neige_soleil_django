@@ -2,10 +2,36 @@
 {% block content %}
     <h3>Bienvenue sur votre espace proprietaire</h3>
     <br>
-    <a href="{% url 'new_location' %}"><button class="btn btn-primary">Ajouter une location</button></a>
+    <a href="{% url 'new_location' %}"><button class="btn btn-primary">Creer un contrat</button></a>
     <br>
     <hr>
     <br>
-    <h4>Toutes vos locations</h4>
+    <h4>Vos contrats</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <td scope="col">Nom</td>
+                <td scope="col">Date de début</td>
+                <td scope="col">Date de fin</td>
+                <td scope="col">Mise a disposition</td>
+                <td scope="col">Status</td>
+                <td scope="col">Prix</td>
+                <td scope="col">Option</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button class="btn btn-primary">Details</button> <button class="btn btn-info">Modifier</button></td>
+            </tr>
+        </tbody>
+
+    </table>
+    <h4>Vos propriétés</h4>
     {% include 'neige_soleil_app/liste_locations.html' %}
 {% endblock %}

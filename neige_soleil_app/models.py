@@ -8,10 +8,9 @@ class Profile(models.Model):
     code_postale = models.IntegerField()
     ville = models.CharField(max_length=200)
     telephone = models.IntegerField()
-    rib = models.CharField(max_length=200)
 
 
-class Location(models.Model):
+class ContratProprietaire(models.Model):
     DISPONIBLE = 'AVAIL'
     OCCUPER = 'BUSY'
     INACTIF = 'OFF'
@@ -23,7 +22,7 @@ class Location(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    description_breve = models.CharField(max_length=200)
+    nom = models.CharField(max_length=200)
     description = models.TextField(max_length=1000)
     surface_habitable = models.FloatField()
     surface_balcon = models.FloatField()
@@ -32,14 +31,14 @@ class Location(models.Model):
     status = models.CharField(max_length=5, choices=YEAR_IN_SCHOOL_CHOICES, default=DISPONIBLE)
 
 
-class PrixLocation(models.Model):
-    location = models.OneToOneField(Location, on_delete=models.CASCADE)
+class ProprietePrix(models.Model):
+    location = models.OneToOneField(ContratProprietaire, on_delete=models.CASCADE)
     prix = models.FloatField()
     # TO DO : Definir les prix par saison, les saisons et les prix afficher
 
 
-class LocationImage(models.Model):
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+class ProprieteImage(models.Model):
+    location = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
 
     @property

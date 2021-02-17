@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
-from .forms import UserCreationForm, LocationCreationFrom
+from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm
 from django.contrib.auth.decorators import login_required
 from .models import *
 
@@ -49,45 +49,57 @@ def logoutPage(request):
 
 @login_required(login_url='login')
 def home_main(request):
-    locations = Location.objects.all()
+    contrat_prop = ContratProprietaire.objects.all()
     context = {
-        'locations': locations,
+        'contrats': contrat_prop,
     }
     return render(request, 'neige_soleil_app/home_main.html', context)
 
 
 @login_required(login_url='login')
+def profile(request):
+    if request.method == 'POST':
+        profile = ProfileForm(request.POST)
+        if profile.is_valid():
+            profile.save()
+            return redirect('accueil')
+    context = {}
+    return render(request, 'neige_soleil_app/profile_set_main.html', context)
+
+
+@login_required(login_url='login')
 def proprietaire_main(request):
-    locations = Location.objects.filter(user=request.user)
+    contrat = ContratProprietaire.objects.filter(user=request.user)
     context = {
-        'locations': locations
+        'contrats': contrat
     }
     return render(request, 'neige_soleil_app/proprietaire_main.html', context)
 
 
 @login_required(login_url='login')
 def new_location(request):
-    Locationform = LocationCreationFrom(initial={'user': request.user.id})
+    ContratProp = ContratProprietaireFrom(initial={'user': request.user.id})
 
     if request.method == 'POST':
         print(request.POST)
-        Locationform = LocationCreationFrom(request.POST)
+        ContratProp = ContratProprietaireFrom(request.POST)
         images = request.FILES.getlist('images')
-        if Locationform.is_valid():
-            location = Locationform.save()
-            PrixLocation.objects.create(location=location, prix=request.POST['prix'])
+        if ContratProp.is_valid():
+            contrat = ContratProp.save()
+            ProprietePrix.objects.create(location=contrat, prix=request.POST['prix'])
             for image in images:
-                LocationImage.objects.create(location=location, image=image)
+                ProprieteImage.objects.create(location=contrat, image=image)
             return redirect('proprietaire')
     context = {
-        'form': Locationform,
+        'form': ContratProp,
     }
     return render(request, 'neige_soleil_app/ajout_location_main.html', context)
 
 
+@login_required(login_url='login')
 def location_detail(request, pk):
-    location = Location.objects.get(id=pk)
+    location = ContratProprietaire.objects.get(id=pk)
     context = {
-        'location': location
+        'contrat': location
     }
     return render(request, 'neige_soleil_app/location_detail_main.html', context)

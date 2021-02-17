@@ -3,23 +3,23 @@
     <div class="container">
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for location in locations %}
+            {% for contrat in contrats %}
             <div class="col">
                 <div class="card shadow-sm">
-                    <img class="bd-placeholder-img card-img-top" width="100%" height="225"  role="img" aria-label="Placeholder: Thumbnail"  focusable="false" src="{{ location.locationimage_set.all.first.imageURL }}">
+                    <img class="bd-placeholder-img card-img-top" width="100%" height="225"  role="img" aria-label="Placeholder: Thumbnail"  focusable="false" src="{{ contrat.proprieteimage_set.all.first.imageURL }}">
 
                     <div class="card-body">
-                        <p class="card-text">{{ location.description_breve }}</p>
+                        <p class="card-text">{{ contrat.nom }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a href="{% url 'location_detail' location.id %}" ><button type="button" class="btn btn-sm btn-outline-secondary">Detail</button></a>
-                                {% if location.user == request.user %}
+                                <a href="{% url 'location_detail' contrat.id %}" ><button type="button" class="btn btn-sm btn-outline-secondary">Detail</button></a>
+                                {% if contrat.user == request.user %}
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                                 {% else %}
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Reserver</button>
                                 {% endif %}
                             </div>
-                            <small class="text-muted">{{ location.prixlocation.prix }} Euros/Semaines</small>
+                            <small class="text-muted">{{ contrat.proprieteprix.prix }} Euros/Semaines</small>
                         </div>
                     </div>
                 </div>

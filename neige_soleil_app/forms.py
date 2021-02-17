@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Location, PrixLocation
+from .models import Profile, ContratProprietaire, ProprietePrix
 
 
 class UserCreationForm(UserCreationForm):
@@ -11,13 +11,19 @@ class UserCreationForm(UserCreationForm):
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
 
-class LocationCreationFrom(ModelForm):
+class ContratProprietaireFrom(ModelForm):
     class Meta:
-        model = Location
+        model = ContratProprietaire
         fields = '__all__'
 
 
 class LocationSetPrix(ModelForm):
     class Meta:
-        model = PrixLocation
+        model = ProprietePrix
+        fields = '__all__'
+
+
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
         fields = '__all__'

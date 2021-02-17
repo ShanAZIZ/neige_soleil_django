@@ -6,19 +6,19 @@
         <div class="container-fliud">
             <div class="wrapper row">
                 <div class="preview col-md-6">
-                        {% for image in location.locationimage_set.all %}
+                        {% for image in contrat.locationimage_set.all %}
                            <img class="img-fluid" src="{{ image.imageURL  }}">
                         {% endfor %}
                 </div>
                 <div class="details col-md-6">
-                    <h3 class="product-title">{{ location.description_breve }}</h3>
-                    <p class="product-description">{{ location.description }}</p>
-                    <h5 class="price">Prix hebdomadaire : <span>{{ location.prixlocation.prix }} €/Semaines</span></h5>
-                    <h5>Surface habitable : {{ location.surface_habitable }} </h5>
-                    <h5>Surface du balcon : {{ location.surface_balcon }} </h5>
-                    <h5>Capacité : {{ location.capacite }}Personnes</h5>
-                    <h5>distance des pistes : {{ location.distance_pistes }} mètres</h5>
-                    <h5>status : {{ location.status.label }} </h5>
+                    <h3 class="product-title">{{ contrat.description_breve }}</h3>
+                    <p class="product-description">{{ contrat.description }}</p>
+                    <h5 class="price">Prix hebdomadaire : <span>{{ contrat.prixlocation.prix }} €/Semaines</span></h5>
+                    <h5>Surface habitable : {{ contrat.surface_habitable }} </h5>
+                    <h5>Surface du balcon : {{ contrat.surface_balcon }} </h5>
+                    <h5>Capacité : {{ contrat.capacite }}Personnes</h5>
+                    <h5>distance des pistes : {{ contrat.distance_pistes }} mètres</h5>
+                    <h5>status : {{ contrat.status.label }} </h5>
                     <div class="action">
                         <button class="btn btn-primary" type="button">RESERVER</button>
                     </div>

@@ -7,8 +7,8 @@
         <legend><h3>Ajout d'une location</h3></legend>
         <input type="hidden" name="user" value="{{ request.user.id }}">
         <div class="mb-3">
-            <label for="TextInput" class="form-label">Description Breve</label>
-            <input required maxlength="200" type="text" id="TextInput" class="form-control" name="description_breve" placeholder="Decrivez brievement la location">
+            <label for="TextInput" class="form-label">Nom de l'immeuble ou du chalet</label>
+            <input required maxlength="200" type="text" id="TextInput" class="form-control" name="nom" placeholder="Decrivez brievement la location">
         </div>
 
         <div class="mb-3">
