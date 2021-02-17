@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm
 from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user, known_profile
 from .models import *
 
 
@@ -11,6 +12,7 @@ def accueil(request):
     return render(request, 'neige_soleil_app/home_guest.html', context)
 
 
+@unauthenticated_user
 def register(request):
     form = UserCreationForm()
     if request.method == 'POST':
@@ -26,6 +28,7 @@ def register(request):
     return render(request, 'neige_soleil_app/register.html', context)
 
 
+@unauthenticated_user
 def loginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -68,6 +71,7 @@ def profile(request):
 
 
 @login_required(login_url='login')
+@known_profile
 def proprietaire_main(request):
     contrat = ContratProprietaire.objects.filter(user=request.user)
     context = {
@@ -77,6 +81,7 @@ def proprietaire_main(request):
 
 
 @login_required(login_url='login')
+@known_profile
 def new_location(request):
     ContratProp = ContratProprietaireFrom(initial={'user': request.user.id})
 
@@ -97,6 +102,7 @@ def new_location(request):
 
 
 @login_required(login_url='login')
+@known_profile
 def location_detail(request, pk):
     location = ContratProprietaire.objects.get(id=pk)
     context = {
