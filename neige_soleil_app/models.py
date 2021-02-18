@@ -69,3 +69,7 @@ class Reservation(models.Model):
     date_fin_sejour = models.DateField()
     status_reservation = models.CharField(max_length=6, choices=STATUS_RES, default=ENCOURS)
 
+    def prixTotal(self):
+        duree = (self.date_fin_sejour - self.date_debut_sejour).days
+        return duree * self.location.proprieteprix.prix/7
+

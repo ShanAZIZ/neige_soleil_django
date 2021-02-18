@@ -109,6 +109,8 @@ def location_detail(request, pk):
     }
     return render(request, 'neige_soleil_app/main_location_detail.html', context)
 
+
+# Definir les dates de dispo des biens en rapports au reservations
 @login_required(login_url='login')
 @known_profile
 def reserver(request, pk):
@@ -122,3 +124,12 @@ def reserver(request, pk):
         'contrat': contrat
     }
     return render(request, 'neige_soleil_app/main_reserver.html', context)
+
+
+def all_reservations(request):
+    # Definir l'affichage du status des reservations et la mise en place des contrats de locations
+    reservations = Reservation.objects.filter(profile=request.user.profile.id)
+    context = {
+        'reservations': reservations
+    }
+    return render(request, 'neige_soleil_app/main_reservations_all.html', context)
