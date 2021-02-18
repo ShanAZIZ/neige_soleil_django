@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
-from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm
+from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm, ReservationForm
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, known_profile
 from .models import *
@@ -9,7 +9,7 @@ from .models import *
 
 def accueil(request):
     context = {}
-    return render(request, 'neige_soleil_app/home_guest.html', context)
+    return render(request, 'neige_soleil_app/guest_home.html', context)
 
 
 @unauthenticated_user
@@ -20,7 +20,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
-            #messages.success(request, 'account was created for ' + username)
+            # messages.success(request, 'account was created for ' + username)
             return redirect('login')
     context = {
         'form': form,
@@ -56,7 +56,7 @@ def home_main(request):
     context = {
         'contrats': contrat_prop,
     }
-    return render(request, 'neige_soleil_app/home_main.html', context)
+    return render(request, 'neige_soleil_app/main_home.html', context)
 
 
 @login_required(login_url='login')
@@ -67,7 +67,7 @@ def profile(request):
             profile.save()
             return redirect('accueil')
     context = {}
-    return render(request, 'neige_soleil_app/profile_set_main.html', context)
+    return render(request, 'neige_soleil_app/main_profile_set.html', context)
 
 
 @login_required(login_url='login')
@@ -77,7 +77,7 @@ def proprietaire_main(request):
     context = {
         'contrats': contrat
     }
-    return render(request, 'neige_soleil_app/proprietaire_main.html', context)
+    return render(request, 'neige_soleil_app/main_proprietaire.html', context)
 
 
 @login_required(login_url='login')
@@ -98,14 +98,27 @@ def new_location(request):
     context = {
         'form': ContratProp,
     }
-    return render(request, 'neige_soleil_app/ajout_location_main.html', context)
+    return render(request, 'neige_soleil_app/main_ajout_location.html', context)
 
 
 @login_required(login_url='login')
-@known_profile
 def location_detail(request, pk):
-    location = ContratProprietaire.objects.get(id=pk)
+    contrat = ContratProprietaire.objects.get(id=pk)
     context = {
-        'contrat': location
+        'contrat': contrat
     }
-    return render(request, 'neige_soleil_app/location_detail_main.html', context)
+    return render(request, 'neige_soleil_app/main_location_detail.html', context)
+
+@login_required(login_url='login')
+@known_profile
+def reserver(request, pk):
+    contrat = ContratProprietaire.objects.get(id=pk)
+    if request.method == 'POST':
+        reservation = ReservationForm(request.POST)
+        if reservation.is_valid():
+            reservation.save()
+            return redirect('home_main')
+    context = {
+        'contrat': contrat
+    }
+    return render(request, 'neige_soleil_app/main_reserver.html', context)

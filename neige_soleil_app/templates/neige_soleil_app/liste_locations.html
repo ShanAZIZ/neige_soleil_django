@@ -16,7 +16,9 @@
                                 {% if contrat.user == request.user %}
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                                 {% else %}
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Reserver</button>
+                                    {% if request.user.profile %}
+                                    <a href="{% url 'reserver' contrat.id %}"><button type="button" class="btn btn-sm btn-outline-secondary">Reserver</button></a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             <small class="text-muted">{{ contrat.proprieteprix.prix }} Euros/Semaines</small>

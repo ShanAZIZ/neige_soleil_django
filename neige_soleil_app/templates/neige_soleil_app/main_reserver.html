@@ -1,0 +1,22 @@
+{% extends 'neige_soleil_app/main_layout.html' %}
+{% block content %}
+    {% load static %}
+    <h1>Pour reserver, completer le formulaire suivant</h1>
+    <p>Veuillez respecter les dates de disponibilites de la propriété pour que votre reservation réussisse</p>
+    <p>Affichage des dates de dispo</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="location" value="{{ contrat.id }}">
+        <input type="hidden" name="profile" value="{{ request.user.profile.id }}">
+        <input type="hidden" name="status_reservation" value="WAIT">
+        <div class="mb-3">
+            <label for="date_debut" class="form-label" >Date de debut de votre sejour</label><input class="form-control" id="date_debut" type="date" name="date_debut_sejour">
+        </div>
+        <div class="mb-3">
+            <label for="date_fin" class="form-label" >Date de fin de votre sejour</label><input class="form-control" id="date_fin" type="date" name="date_fin_sejour">
+        </div>
+        <div class="mb-5">
+            <input type="submit" class="btn btn-primary">
+        </div>
+    </form>
+{% endblock %}

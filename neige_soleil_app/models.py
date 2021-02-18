@@ -48,3 +48,24 @@ class ProprieteImage(models.Model):
         except:
             url = ''
         return url
+
+
+class Reservation(models.Model):
+
+    ENCOURS = 'WAIT'
+    CONFIRMER = 'VALID'
+    ANNULER = 'CANCEL'
+
+    STATUS_RES = [
+        (ENCOURS, 'En cours'),
+        (CONFIRMER, 'Confirmer'),
+        (ANNULER, 'Annuler'),
+    ]
+
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    location = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
+    date_reservation = models.DateField(auto_now_add=True)
+    date_debut_sejour = models.DateField()
+    date_fin_sejour = models.DateField()
+    status_reservation = models.CharField(max_length=6, choices=STATUS_RES, default=ENCOURS)
+

@@ -13,4 +13,5 @@ urlpatterns = [
     path('proprietaire/', views.proprietaire_main, name="proprietaire"),
     path('newlocation/', views.new_location, name="new_location"),
     path('locationdetail/<str:pk>', views.location_detail, name="location_detail"),
+    path('reserver/<str:pk>', views.reserver, name="reserver"),
 ]
