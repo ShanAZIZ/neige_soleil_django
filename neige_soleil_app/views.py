@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
+from django.utils.dateparse import parse_date
+
 from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm, ReservationForm
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, known_profile
@@ -52,10 +54,7 @@ def logoutPage(request):
 
 @login_required(login_url='login')
 def home_main(request):
-    contrat_prop = ContratProprietaire.objects.all()
-    context = {
-        'contrats': contrat_prop,
-    }
+    context = {}
     return render(request, 'neige_soleil_app/main_home.html', context)
 
 
@@ -113,17 +112,32 @@ def location_detail(request, pk):
 # Definir les dates de dispo des biens en rapports au reservations
 @login_required(login_url='login')
 @known_profile
-def reserver(request, pk):
-    contrat = ContratProprietaire.objects.get(id=pk)
-    if request.method == 'POST':
-        reservation = ReservationForm(request.POST)
-        if reservation.is_valid():
-            reservation.save()
-            return redirect('home_main')
+def reserver(request):
+    if request.GET:
+        date_debut_sejour = parse_date(request.GET['date_debut_sejour'])
+        date_fin_sejour = parse_date(request.GET['date_fin_sejour'])
+        if date_fin_sejour and date_debut_sejour:
+            contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
+            for contrat in contrat_prop:
+                reservations_contrat = contrat.reservation_set.all()
+                for reservation in reservations_contrat:
+                    if reservation.date_debut_sejour <= date_debut_sejour and reservation.date_fin_sejour >= date_fin_sejour:
+                        if contrat in contrat_prop:
+                            contrat_prop.exclude(contrat)
+                print(reservations_contrat)
+        else:
+            contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
+    else:
+        contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
     context = {
-        'contrat': contrat
+        'contrats': contrat_prop,
     }
     return render(request, 'neige_soleil_app/main_reserver.html', context)
+
+
+def confirmReserver(request):
+    context = {}
+    return render(request, 'neige_soleil_app/main_confirm_reservation.html', context)
 
 
 def all_reservations(request):

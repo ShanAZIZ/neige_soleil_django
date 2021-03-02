@@ -7,7 +7,7 @@
         <thead>
             <tr>
                 <td>Date de reservation</td>
-                <td>Nom de l'immeuble/chalet</td>
+                <td>Nom de la propriétée</td>
                 <td>Debut de sejour</td>
                 <td>Fin de sejour</td>
                 <td>Prix total</td>
@@ -23,7 +23,7 @@
                     <td>{{ reservation.date_debut_sejour }}</td>
                     <td>{{ reservation.date_fin_sejour }}</td>
                     <td> {{ reservation.prixTotal | floatformat:2 }} Euros</td>
-                    <td> <button class="btn btn-info">Modifier</button> <button class="btn btn-danger">Annuler</button> <button class="btn btn-primary">Confirmer</button></td>
+                    <td> <button class="btn btn-info">Afficher</button> <button class="btn btn-danger">Annuler</button></td>
                 </tr>
             {% endfor %}
         {% endif %}

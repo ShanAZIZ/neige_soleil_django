@@ -14,6 +14,6 @@ urlpatterns = [
     path('newlocation/', views.new_location, name="new_location"),
     path('reservations/', views.all_reservations, name="reservations"),
     path('locationdetail/<str:pk>', views.location_detail, name="location_detail"),
-    path('reserver/<str:pk>', views.reserver, name="reserver"),
-
+    path('reserver/', views.reserver, name="reserver"),
+    path('confirmreserver/', views.confirmReserver, name="confirm_res"),
 ]
