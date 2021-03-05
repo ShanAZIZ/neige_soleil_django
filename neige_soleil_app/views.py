@@ -54,7 +54,10 @@ def logoutPage(request):
 
 @login_required(login_url='login')
 def home_main(request):
-    context = {}
+    contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
+    context = {
+        'contrats': contrat_prop,
+    }
     return render(request, 'neige_soleil_app/main_home.html', context)
 
 
@@ -85,7 +88,6 @@ def new_location(request):
     ContratProp = ContratProprietaireFrom(initial={'user': request.user.id})
 
     if request.method == 'POST':
-        print(request.POST)
         ContratProp = ContratProprietaireFrom(request.POST)
         images = request.FILES.getlist('images')
         if ContratProp.is_valid():
@@ -102,9 +104,16 @@ def new_location(request):
 
 @login_required(login_url='login')
 def location_detail(request, pk):
+    if request.method == "POST":
+        resForm = ReservationForm(request.POST)
+        print(resForm)
+        if resForm.is_valid():
+            resForm.save()
     contrat = ContratProprietaire.objects.get(id=pk)
+    reservations = contrat.reservation_set.all()
     context = {
-        'contrat': contrat
+        'contrat': contrat,
+        'reservations': reservations
     }
     return render(request, 'neige_soleil_app/main_location_detail.html', context)
 
@@ -112,27 +121,12 @@ def location_detail(request, pk):
 # Definir les dates de dispo des biens en rapports au reservations
 @login_required(login_url='login')
 @known_profile
-def reserver(request):
-    if request.GET:
-        date_debut_sejour = parse_date(request.GET['date_debut_sejour'])
-        date_fin_sejour = parse_date(request.GET['date_fin_sejour'])
-        if date_fin_sejour and date_debut_sejour:
-            contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
-            for contrat in contrat_prop:
-                reservations_contrat = contrat.reservation_set.all()
-                for reservation in reservations_contrat:
-                    if reservation.date_debut_sejour <= date_debut_sejour and reservation.date_fin_sejour >= date_fin_sejour:
-                        if contrat in contrat_prop:
-                            contrat_prop.exclude(contrat)
-                print(reservations_contrat)
-        else:
-            contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
-    else:
-        contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
+def espace_client(request):
+    contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
     context = {
         'contrats': contrat_prop,
     }
-    return render(request, 'neige_soleil_app/main_reserver.html', context)
+    return render(request, 'neige_soleil_app/main_espace.html', context)
 
 
 def confirmReserver(request):

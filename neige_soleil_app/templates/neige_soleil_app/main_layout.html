@@ -63,7 +63,7 @@
             <div id="collapseRes" class="collapse" aria-labelledby="headingRes" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Reserver</h6>
-                    <a class="collapse-item" href="{% url 'reserver' %}">Reserver</a>
+                    <a class="collapse-item" href="{% url 'espace' %}">Mon espace client</a>
                     <a class="collapse-item" href="{% url 'reservations' %}">Mes Reservations</a>
                 </div>
             </div>
@@ -161,12 +161,11 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
-            <div class="container-fluid">
 
+            <div class="container">
                 <!-- Page Heading -->
                 {% block content %}
                 {% endblock %}
-
             </div>
             <!-- /.container-fluid -->
 

@@ -1,30 +1,134 @@
 {% extends 'neige_soleil_app/main_layout.html' %}
 {% block content %}
 {% load static %}
-<div class="container">
-    <div class="card">
-        <div class="container-fliud">
-            <div class="wrapper row">
-                <div class="preview col-md-6">
-                        {% for image in contrat.locationimage_set.all %}
-                           <img class="img-fluid" src="{{ image.imageURL  }}">
-                        {% endfor %}
-                </div>
-                <div class="details col-md-6">
-                    <h3 class="product-title">{{ contrat.description_breve }}</h3>
-                    <p class="product-description">{{ contrat.description }}</p>
-                    <h5 class="price">Prix hebdomadaire : <span>{{ contrat.prixlocation.prix }} €/Semaines</span></h5>
-                    <h5>Surface habitable : {{ contrat.surface_habitable }} </h5>
-                    <h5>Surface du balcon : {{ contrat.surface_balcon }} </h5>
-                    <h5>Capacité : {{ contrat.capacite }}Personnes</h5>
-                    <h5>distance des pistes : {{ contrat.distance_pistes }} mètres</h5>
-                    <h5>status : {{ contrat.status.label }} </h5>
-                    <div class="action">
-                        <button class="btn btn-primary" type="button">RESERVER</button>
-                    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for image in contrat.proprieteimage_set.all %}
+        <div class="col">
+            <img src="{{ image.imageURL }}" class="img-thumbnail" style="width: 100%;height: 100%;" height="" alt="..." >
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <h5 class="card-header"> {{ contrat.nom }}</h5>
+                <div class="card-body">
+                    <p class="card-text">{{ contrat.description }}</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <br>
+    <div class="row">
+        <div class="col-3">
+            <div class="card">
+                <h5 class="card-header"> Surface habitable :</h5>
+                <div class="card-body">
+                    <p class="card-text">{{ contrat.surface_habitable }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="card">
+                <h5 class="card-header"> Surface balcon :</h5>
+                <div class="card-body">
+                    <p class="card-text">{{ contrat.surface_balcon }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="card">
+                <h5 class="card-header"> Capacité :</h5>
+                <div class="card-body">
+                    <p class="card-text"> {{ contrat.capacite }}Personnes </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <h5 class="card-header"> Distance des pistes :</h5>
+                <div class="card-body">
+                    <p class="card-text"> {{ contrat.distance_pistes }} mètres </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-3">
+            <div class="card">
+                <h5 class="card-header"> Status :</h5>
+                <div class="card-body">
+                    <p class="card-text"> {{ contrat.status }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <h5 class="card-header"> Prix Hebdomadaire</h5>
+                <div class="card-body">
+                    <h5 class="card-text price">{{ contrat.proprieteprix.prix }} €/Semaines</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <h5 class="card-header"> Disponibilités</h5>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <td scope="col">Numero de reservation</td>
+                    <td scope="col">Date de début</td>
+                    <td scope="col">Date de fin</td>
+                    <td scope="col">Date de la reservation</td>
+                    <td scope="col">Status</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% if reservations %}
+                {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.id}}</td>
+                    <td>{{ reservation.date_debut_sejour }}</td>
+                    <td>{{ reservation.date_fin_sejour }}</td>
+                    <td>{{ reservation.date_reservation }}</td>
+                    <td>{{ reservation.status_reservation }}</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <h5 class="card-header"> Formulaire de reservation</h5>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="profile" value="{{ request.user.profile.id }}">
+                <input type="hidden" name="location" value="{{ contrat.id }}">
+                <input type="hidden" name="status_reservation" value="WAIT">
+                <div class="row">
+                    <div class="col-6">
+                        <label id="debut" class="form-label">Date de debut de votre sejour</label>
+                        <input for="debut" class="form-control" type="date" name="date_debut_sejour" required>
+                    </div>
+                    <div class="col-6">
+                        <label id="fin" class="form-label">Date de fin de votre sejour</label>
+                        <input for="fin" class="form-control" type="date" name="date_fin_sejour" required>
+                    </div>
+                </div>
+                <br>
+                <input type="submit" class="btn btn-dark" value="Reserver">
+            </form>
+        </div>
+    </div>
+
 {% endblock %}
