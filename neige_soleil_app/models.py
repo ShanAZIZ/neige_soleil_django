@@ -9,6 +9,8 @@ class Profile(models.Model):
     ville = models.CharField(max_length=200)
     telephone = models.IntegerField()
 
+    def __str__(self):
+        return self.user.first_name
 
 class ContratProprietaire(models.Model):
     DISPONIBLE = 'AVAIL'
@@ -30,16 +32,25 @@ class ContratProprietaire(models.Model):
     distance_pistes = models.FloatField()
     status = models.CharField(max_length=5, choices=YEAR_IN_SCHOOL_CHOICES, default=DISPONIBLE)
 
+    def __str__(self):
+        return self.nom
+
 
 class ProprietePrix(models.Model):
     location = models.OneToOneField(ContratProprietaire, on_delete=models.CASCADE)
     prix = models.FloatField()
     # TO DO : Definir les prix par saison, les saisons et les prix afficher
 
+    def __str__(self):
+        return self.location.nom
+
 
 class ProprieteImage(models.Model):
     location = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
+
+    def __str__(self):
+        return self.location.nom + " " + str(self.id)
 
     @property
     def imageURL(self):
@@ -72,4 +83,5 @@ class Reservation(models.Model):
     def prixTotal(self):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days
         return duree * self.location.proprieteprix.prix/7
+
 

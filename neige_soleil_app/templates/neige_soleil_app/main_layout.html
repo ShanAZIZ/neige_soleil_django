@@ -1,225 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Neige et Soleil</title>
     {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Custom fonts for this template-->
-    <script src="https://use.fontawesome.com/0d09ab6020.js"></script>
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="{% static '/css/sb-admin-2.min.css' %}" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <title>Neige et Soleil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
 </head>
 <body>
-<div id="wrapper">
-
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gray-700 sidebar sidebar-dark accordion" id="accordionSidebar">
-
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fa fa-snowflake-o" aria-hidden="true"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">Neige et Soleil</div>
-        </a>
+            <a class="navbar-brand" href="{% url 'home_main' %}">Neige et Soleil</a>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'home_main' %}">
-                <i class="fa fa-bookmark" aria-hidden="true" ></i>
-                <span>Accueil</span></a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-        {% if request.user.profile %}
-        <div class="sidebar-heading">
-            Reservations et Locations
-        </div>
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRes"
-               aria-expanded="true" aria-controls="collapseRes">
-                <i class="fa fa-plane" aria-hidden="true" ></i>
-                <span>Reservations</span>
-            </a>
-            <div id="collapseRes" class="collapse" aria-labelledby="headingRes" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Reserver</h6>
-                    <a class="collapse-item" href="{% url 'espace' %}">Mon espace client</a>
-                    <a class="collapse-item" href="{% url 'reservations' %}">Mes Reservations</a>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link" href="{% url 'home_main' %}">Accueil</a>
+                        {% if request.user.profile %}
+                            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        {% else %}
+                            <span class="navbar-text">
+                              Vous n'avez pas encore de profile utilisateur, creez en un tout de suite
+                            </span>
+                            <a class="nav-link" href="{% url 'profile_set' %}">Completer mon profile</a>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        </li>
 
-        <div class="sidebar-heading">
-            Les locations
-        </div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLoc"
-               aria-expanded="true" aria-controls="collapseLoc">
-                <i class="fa fa-info-circle" aria-hidden="true" ></i>
-                <span>Gerer vos locations</span>
-            </a>
-            <div id="collapseLoc" class="collapse" aria-labelledby="headingLoc" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Locations</h6>
-                    <a class="collapse-item" href="">Mes contrats</a>
-                    <a class="collapse-item" href="">Un soucis ?</a>
-                </div>
-            </div>
-        </li>
-        {% else %}
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'profile' %}" >
-                <i class="fa fa-user-circle" aria-hidden="true"></i>
-                <span>Completer mon profil</span>
-            </a>
-        </li>
-
-        {% endif %}
-
-
-
-    </ul>
-    <!-- End of Sidebar -->
-
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-        <!-- Main Content -->
-        <div id="content">
-
-            <!-- Topbar -->
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars" aria-hidden="true"></i>
-                </button>
-
-
-                <!-- Topbar Navbar -->
-                <ul class="navbar-nav ml-auto">
-
-
-                    <!-- Nav Item - User Information -->
-                    {% if request.user.profile %}
-
-                    <li class="nav-item">
-                        <a class="nav-link " href="{% url 'proprietaire' %}"><span class="text-gray-600">Espace proprietaire</span></a>
-                    </li>
-                    {% endif %}
-                    <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600"> {{ request.user.first_name }}</span>
-                        </a>
-                        <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-user-circle-o" aria-hidden="true" ></i>
-                                Compte
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fa fa-sign-out" aria-hidden="true" ></i>
-                                Se deconnecter
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item  no-arrow">
-                        <a class="nav-link">
-                            <img class="img-profile rounded-circle" src=" {% static 'img/undraw_profile.svg' %}" alt="">
+            <div class="d-flex">
+                {% if request.user.profile %}
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ request.user.first_name }}
                         </a>
 
-                    </li>
-
-                </ul>
-
-            </nav>
-            <!-- End of Topbar -->
-
-            <!-- Begin Page Content -->
-
-            <div class="container">
-                <!-- Page Heading -->
-                {% block content %}
-                {% endblock %}
-            </div>
-            <!-- /.container-fluid -->
-
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" href="{% url 'proprietaire' %}">Espace proprietaire</a></li>
+                            <li><a class="dropdown-item" href="#">Mon profil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Se deconnecter</a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="navbar-nav">
+                        <a class="nav-link" href="{% url 'logout' %}">Se deconnecter</a>
+                    </div>
+                {% endif %}
+                <div class="navbar-nav">
+                    <a class="nav-link" href="#">A propos</a>
                 </div>
-            </footer>
-            <!-- End of Footer -->
 
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up" aria-hidden="true" ></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Etes vous sur ?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Cliquez sur deconnexion si vous souhaitez deconnecter</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
-                    <a class="btn btn-primary" href="{% url 'logout' %}">Deconnexion</a>
-                </div>
             </div>
         </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Heading -->
+        <br>
+        {% block content %}
+        {% endblock %}
     </div>
 
-</div>
-<!-- Bootstrap core JavaScript-->
-<script src="{% static '/vendor/jquery/jquery.min.js' %}"></script>
-<script src="{% static '/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="{% static '/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="{% static '/js/sb-admin-2.min.js' %}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </body>
-
 </html>

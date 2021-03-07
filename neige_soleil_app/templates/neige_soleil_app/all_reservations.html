@@ -1,0 +1,33 @@
+<div class="card" >
+    <div class="card-body">
+        <h5 class="card-title">La liste de vos reservations</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Ici vous pourrez modifier vos reservations ou bien les confirmer</h6>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Date de reservation</td>
+                <td>Nom de la propriétée</td>
+                <td>Debut de sejour</td>
+                <td>Fin de sejour</td>
+                <td>Prix total</td>
+                <td>Operations</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% if reservations %}
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.date_reservation }}</td>
+                        <td>{{ reservation.location.nom }}</td>
+                        <td>{{ reservation.date_debut_sejour }}</td>
+                        <td>{{ reservation.date_fin_sejour }}</td>
+                        <td> {{ reservation.prixTotal | floatformat:2 }} Euros</td>
+                        <td> <button class="btn btn-success">Confirmer</button> <button class="btn btn-danger">Annuler</button></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+

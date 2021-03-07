@@ -62,12 +62,12 @@ def home_main(request):
 
 
 @login_required(login_url='login')
-def profile(request):
+def profile_set(request):
     if request.method == 'POST':
         profile = ProfileForm(request.POST)
         if profile.is_valid():
             profile.save()
-            return redirect('accueil')
+            return redirect('home_main')
     context = {}
     return render(request, 'neige_soleil_app/main_profile_set.html', context)
 
@@ -106,7 +106,7 @@ def new_location(request):
 def location_detail(request, pk):
     if request.method == "POST":
         resForm = ReservationForm(request.POST)
-        print(resForm)
+        #Ajouter une verification des dates ici
         if resForm.is_valid():
             resForm.save()
     contrat = ContratProprietaire.objects.get(id=pk)
@@ -118,26 +118,12 @@ def location_detail(request, pk):
     return render(request, 'neige_soleil_app/main_location_detail.html', context)
 
 
-# Definir les dates de dispo des biens en rapports au reservations
 @login_required(login_url='login')
 @known_profile
-def espace_client(request):
-    contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
-    context = {
-        'contrats': contrat_prop,
-    }
-    return render(request, 'neige_soleil_app/main_espace.html', context)
-
-
-def confirmReserver(request):
-    context = {}
-    return render(request, 'neige_soleil_app/main_confirm_reservation.html', context)
-
-
-def all_reservations(request):
+def dashboard(request):
     # Definir l'affichage du status des reservations et la mise en place des contrats de locations
     reservations = Reservation.objects.filter(profile=request.user.profile.id)
     context = {
         'reservations': reservations
     }
-    return render(request, 'neige_soleil_app/main_reservations_all.html', context)
+    return render(request, 'neige_soleil_app/dashboard.html', context)

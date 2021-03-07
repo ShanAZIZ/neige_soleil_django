@@ -9,11 +9,9 @@ urlpatterns = [
     path('login/', views.loginPage, name="login"),
     path('home/', views.home_main, name="home_main"),
     path('logout/', views.logoutPage, name="logout"),
-    path('profile/', views.profile, name="profile"),
+    path('profileset/', views.profile_set, name="profile_set"),
     path('proprietaire/', views.proprietaire_main, name="proprietaire"),
     path('newlocation/', views.new_location, name="new_location"),
-    path('reservations/', views.all_reservations, name="reservations"),
+    path('dashboard/', views.dashboard, name="dashboard"),
     path('locationdetail/<str:pk>', views.location_detail, name="location_detail"),
-    path('espace/', views.espace_client, name="espace"),
-    path('confirmreserver/', views.confirmReserver, name="confirm_res"),
 ]

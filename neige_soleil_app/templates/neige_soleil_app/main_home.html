@@ -1,4 +1,25 @@
 {% extends 'neige_soleil_app/main_layout.html' %}
 {% block content %}
-    {% include 'neige_soleil_app/liste_locations.html' %}
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Bienvenue chez Neige et soleil</h1>
+            {% if request.user.profile %}
+                <p class="lead text-muted"> Vous avez ci dessous les meilleurs locations de vacances</p>
+                <p>
+                    <a href="#Locations" class="btn btn-primary my-2">Reserver un bien</a>
+                    <a href="#" class="btn btn-secondary my-2">A propos</a>
+                </p>
+            {% else %}
+
+                <p class="lead text-muted"> Vous n'avez pas encore de profil, veuillez en creer un pour avoir accès a tout les services</p>
+                <p>
+                    <a href="{% url 'profile_set' %}" class="btn btn-danger my-2">Completer mon profil</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+    <section id="Locations">
+        {% include 'neige_soleil_app/liste_locations.html' %}
+    </section>
+
 {% endblock %}
