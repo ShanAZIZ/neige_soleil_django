@@ -8,11 +8,11 @@ TODO: Vue de creation d'un profil proprietaire avec RIB
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils.dateparse import parse_date
 
 from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm, ReservationForm
-from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, known_profile
 from .models import *
 
@@ -42,7 +42,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
-            # messages.success(request, 'account was created for ' + username)
+            messages.success(request, 'Bienvenue' + username)
             login(request, user)
             return redirect('home_main')
     context = {
@@ -58,8 +58,6 @@ def loginPage(request):
     Recuperer les infos de connexion et authentifier l'utilisateur avec le systeme d'auth de
     Django
     Restriction: User non authentifies
-
-    TODO : Gerer les messages d'erreurs sur la connexion
     """
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -70,7 +68,7 @@ def loginPage(request):
             login(request, user)
             return redirect('home_main')
         else:
-            messages.info(request, 'Username or Password is incorrect')
+            messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect')
     context = {}
     return render(request, 'neige_soleil_app/login.html', context)
 
@@ -166,14 +164,7 @@ def propriete_detail(request, pk):
     """
     Vue qui affiche les détails d'un contrat proprietaire et permet de reservation un bien
     Restriction: User authentifier
-    TODO: Redirection vers une page de reservation séparée.
-    TODO: Verification des dates avant reservations et gestion du message d'erreur
     """
-    if request.method == "POST":
-        resForm = ReservationForm(request.POST)
-        # Ajouter une verification des dates ici
-        if resForm.is_valid():
-            resForm.save()
     contrat = ContratProprietaire.objects.get(id=pk)
     reservations = contrat.reservation_set.all()
     context = {
@@ -181,6 +172,27 @@ def propriete_detail(request, pk):
         'reservations': reservations
     }
     return render(request, 'neige_soleil_app/main_propriete_detail.html', context)
+
+
+@login_required(login_url='login')
+@known_profile
+def new_reservation(request, pk):
+    """
+    Vue de reservation
+    Restriction: User authentifier,  avec Profile
+    TODO: Verification des dates avant reservations et gestion du message d'erreur
+    TODO: Empecher le proprietaire d'arriver a cet url manuellement
+    """
+    contrat = ContratProprietaire.objects.get(id=pk)
+    if request.method == "POST":
+        resForm = ReservationForm(request.POST)
+        print(resForm)
+        # Ajouter une verification des dates ici
+        if resForm.is_valid():
+            resForm.save()
+            return redirect('dashboard')
+    context = {'contrat': contrat}
+    return render(request, 'neige_soleil_app/main_new_reservation.html', context)
 
 
 @login_required(login_url='login')

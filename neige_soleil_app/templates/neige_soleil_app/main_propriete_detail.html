@@ -109,29 +109,7 @@
     <br>
     {% if request.user.profile %}
         {% if contrat.user.id is not request.user.id %}
-            <div class="card">
-                <h5 class="card-header"> Formulaire de reservation</h5>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="profile" value="{{ request.user.profile.id }}">
-                        <input type="hidden" name="propriete" value="{{ contrat.id }}">
-                        <input type="hidden" name="status_reservation" value="WAIT">
-                        <div class="row">
-                            <div class="col-6">
-                                <label id="debut" class="form-label">Date de debut de votre sejour</label>
-                                <input for="debut" class="form-control" type="date" name="date_debut_sejour" required>
-                            </div>
-                            <div class="col-6">
-                                <label id="fin" class="form-label">Date de fin de votre sejour</label>
-                                <input for="fin" class="form-control" type="date" name="date_fin_sejour" required>
-                            </div>
-                        </div>
-                        <br>
-                        <input type="submit" class="btn btn-dark" value="Reserver">
-                    </form>
-                </div>
-            </div>
+            <a href="{% url 'reserver' contrat.id %}"><button class="btn btn-secondary">RESERVER</button></a>
         {% endif %}
     {% endif %}
 {% endblock %}

@@ -28,6 +28,11 @@
                             </form>
                             <hr>
                             <div class="text-center">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <p class="text-warning">{{ message }}</p>
+                                    {% endfor %}
+                                {% endif %}
                                 <a class="small" href="{% url 'register' %}">Vous n'etes pas membre ? inscrivez vous ! </a>
                             </div>
 
