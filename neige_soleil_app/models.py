@@ -95,12 +95,6 @@ class Reservation(models.Model):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days
         return duree * self.propriete.proprieteprix.prix / 7
 
-    def isConfirmed(self):
-        if self.location:
-            return "Confirmer"
-        else:
-            return self.status_reservation.title()
-
 
 class Location(models.Model):
     reservation = models.OneToOneField(Reservation, on_delete=models.CASCADE)

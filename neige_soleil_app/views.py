@@ -122,8 +122,24 @@ def propriete_detail(request, pk):
 @known_profile
 def dashboard(request):
     # Definir l'affichage du status des reservations et la mise en place des contrats de locations
-    reservations = Reservation.objects.filter(profile=request.user.profile.id)
+    reservations = Reservation.objects.filter(profile=request.user.profile.id, location__isnull=True)
+    locations = Location.objects.filter(reservation__profile=request.user.profile.id)
+
     context = {
-        'reservations': reservations
+        'reservations': reservations,
+        'locations': locations
     }
-    return render(request, 'neige_soleil_app/dashboard.html', context)
+    return render(request, 'neige_soleil_app/main_dashboard.html', context)
+
+
+@login_required(login_url='login')
+@known_profile
+def louer_propriete(request, pk):
+    reservation = Reservation.objects.get(id=pk)
+    if request.method == 'POST':
+        Location.objects.create(reservation=reservation)
+        return redirect('dashboard')
+    context = {
+        'reservation': reservation,
+    }
+    return render(request, 'neige_soleil_app/main_confirm_reservation.html', context)

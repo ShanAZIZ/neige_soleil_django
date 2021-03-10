@@ -23,9 +23,6 @@
                         {% if request.user.profile %}
                             <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                         {% else %}
-                            <span class="navbar-text">
-                              Vous n'avez pas encore de profile utilisateur, creez en un tout de suite
-                            </span>
                             <a class="nav-link" href="{% url 'profile_set' %}">Completer mon profile</a>
                         {% endif %}
                     </div>

@@ -1,0 +1,29 @@
+<div class="card" >
+    <div class="card-body">
+        <h5 class="card-title">Vos locations</h5>
+        <h6 class="card-subtitle mb-2 text-muted">La liste complète de toutes vos locations</h6>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Date de confirmation</td>
+                <td>Nom de la propriétée</td>
+                <td>Debut de sejour</td>
+                <td>Fin de sejour</td>
+                <td>Prix total</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for location in locations %}
+            <tr>
+                <td>{{ location.date_confirmation }}</td>
+                <td>{{ location.reservation.propriete.nom }}</td>
+                <td>{{ location.reservation.date_debut_sejour }}</td>
+                <td>{{ location.reservation.date_fin_sejour }}</td>
+                <td>{{ location.reservation.prixTotal | floatformat:2 }} Euros</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+

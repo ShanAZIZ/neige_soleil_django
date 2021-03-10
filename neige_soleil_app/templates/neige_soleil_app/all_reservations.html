@@ -5,6 +5,7 @@
         <table class="table">
             <thead>
             <tr>
+                <td>Status</td>
                 <td>Date de reservation</td>
                 <td>Nom de la propriétée</td>
                 <td>Debut de sejour</td>
@@ -17,12 +18,13 @@
             {% if reservations %}
                 {% for reservation in reservations %}
                     <tr>
+                        <td>{{ reservation.status_reservation.get_state_display}}</td>
                         <td>{{ reservation.date_reservation }}</td>
-                        <td>{{ reservation.location.nom }}</td>
+                        <td>{{ reservation.propriete.nom }}</td>
                         <td>{{ reservation.date_debut_sejour }}</td>
                         <td>{{ reservation.date_fin_sejour }}</td>
-                        <td> {{ reservation.prixTotal | floatformat:2 }} Euros</td>
-                        <td> <button class="btn btn-success">Confirmer</button> <button class="btn btn-danger">Annuler</button></td>
+                        <td>{{ reservation.prixTotal | floatformat:2 }} Euros</td>
+                        <td> <a href="{% url 'louer' reservation.id %}"><button class="btn btn-success">Confirmer</button></a> <button class="btn btn-info">Modifier</button></td>
                     </tr>
                 {% endfor %}
             {% endif %}
