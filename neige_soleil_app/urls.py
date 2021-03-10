@@ -11,7 +11,7 @@ urlpatterns = [
     path('logout/', views.logoutPage, name="logout"),
     path('profileset/', views.profile_set, name="profile_set"),
     path('proprietaire/', views.proprietaire_main, name="proprietaire"),
-    path('newlocation/', views.new_location, name="new_location"),
+    path('new-propriete/', views.new_propriete, name="new_propriete"),
     path('dashboard/', views.dashboard, name="dashboard"),
-    path('locationdetail/<str:pk>', views.location_detail, name="location_detail"),
+    path('propriete-detail/<str:pk>', views.propriete_detail, name="propriete_detail"),
 ]

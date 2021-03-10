@@ -114,7 +114,7 @@
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="profile" value="{{ request.user.profile.id }}">
-                <input type="hidden" name="location" value="{{ contrat.id }}">
+                <input type="hidden" name="propriete" value="{{ contrat.id }}">
                 <input type="hidden" name="status_reservation" value="WAIT">
                 <div class="row">
                     <div class="col-6">

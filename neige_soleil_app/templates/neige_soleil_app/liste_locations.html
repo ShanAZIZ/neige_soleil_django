@@ -9,7 +9,7 @@
                         <p class="card-text">{{ contrat.nom }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a href="{% url 'location_detail' contrat.id %}" ><button type="button" class="btn btn-sm btn-outline-secondary">Details</button></a>
+                                <a href="{% url 'proriete_detail' contrat.id %}" ><button type="button" class="btn btn-sm btn-outline-secondary">Details</button></a>
                                 {% if contrat.user == request.user %}
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Modifier</button>
                                 {% endif %}

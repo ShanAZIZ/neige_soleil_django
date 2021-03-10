@@ -84,7 +84,7 @@ def proprietaire_main(request):
 
 @login_required(login_url='login')
 @known_profile
-def new_location(request):
+def new_propriete(request):
     ContratProp = ContratProprietaireFrom(initial={'user': request.user.id})
 
     if request.method == 'POST':
@@ -92,9 +92,9 @@ def new_location(request):
         images = request.FILES.getlist('images')
         if ContratProp.is_valid():
             contrat = ContratProp.save()
-            ProprietePrix.objects.create(location=contrat, prix=request.POST['prix'])
+            ProprietePrix.objects.create(propriete=contrat, prix=request.POST['prix'])
             for image in images:
-                ProprieteImage.objects.create(location=contrat, image=image)
+                ProprieteImage.objects.create(propriete=contrat, image=image)
             return redirect('proprietaire')
     context = {
         'form': ContratProp,
@@ -103,10 +103,10 @@ def new_location(request):
 
 
 @login_required(login_url='login')
-def location_detail(request, pk):
+def propriete_detail(request, pk):
     if request.method == "POST":
         resForm = ReservationForm(request.POST)
-        #Ajouter une verification des dates ici
+        # Ajouter une verification des dates ici
         if resForm.is_valid():
             resForm.save()
     contrat = ContratProprietaire.objects.get(id=pk)
@@ -115,7 +115,7 @@ def location_detail(request, pk):
         'contrat': contrat,
         'reservations': reservations
     }
-    return render(request, 'neige_soleil_app/main_location_detail.html', context)
+    return render(request, 'neige_soleil_app/main_propriete_detail.html', context)
 
 
 @login_required(login_url='login')

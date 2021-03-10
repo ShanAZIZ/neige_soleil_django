@@ -3,6 +3,10 @@ from django.db import models
 
 
 class Profile(models.Model):
+    """
+    Le profile de l'utilisateur :
+    il contient des informations propre à un utilisateur
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     adresse = models.CharField(max_length=200)
     code_postale = models.IntegerField()
@@ -11,6 +15,15 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.first_name
+
+
+class ProfileProprietaire(models.Model):
+    """
+    Défini si les utilisateurs deviennent proprietaire (seuls les proprietaire peuvent
+    creer des contrats)
+    """
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
 
 class ContratProprietaire(models.Model):
     DISPONIBLE = 'AVAIL'
@@ -37,20 +50,21 @@ class ContratProprietaire(models.Model):
 
 
 class ProprietePrix(models.Model):
-    location = models.OneToOneField(ContratProprietaire, on_delete=models.CASCADE)
+    propriete = models.OneToOneField(ContratProprietaire, on_delete=models.CASCADE)
     prix = models.FloatField()
+
     # TO DO : Definir les prix par saison, les saisons et les prix afficher
 
     def __str__(self):
-        return self.location.nom
+        return self.propriete.nom
 
 
 class ProprieteImage(models.Model):
-    location = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
+    propriete = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
-        return self.location.nom + " " + str(self.id)
+        return self.propriete.nom + " " + str(self.id)
 
     @property
     def imageURL(self):
@@ -62,19 +76,16 @@ class ProprieteImage(models.Model):
 
 
 class Reservation(models.Model):
-
     ENCOURS = 'WAIT'
-    CONFIRMER = 'VALID'
     ANNULER = 'CANCEL'
 
     STATUS_RES = [
         (ENCOURS, 'En cours'),
-        (CONFIRMER, 'Confirmer'),
         (ANNULER, 'Annuler'),
     ]
 
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    location = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
+    propriete = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     date_reservation = models.DateField(auto_now_add=True)
     date_debut_sejour = models.DateField()
     date_fin_sejour = models.DateField()
@@ -82,6 +93,15 @@ class Reservation(models.Model):
 
     def prixTotal(self):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days
-        return duree * self.location.proprieteprix.prix/7
+        return duree * self.propriete.proprieteprix.prix / 7
+
+    def isConfirmed(self):
+        if self.location:
+            return "Confirmer"
+        else:
+            return self.status_reservation.title()
 
 
+class Location(models.Model):
+    reservation = models.OneToOneField(Reservation, on_delete=models.CASCADE)
+    date_confirmation = models.DateField(auto_now_add=True)
