@@ -3,7 +3,6 @@ TODO: Vue de modification du profile des info user et des info proprietaire si i
 TODO: Vue de Modification des proprietes
 TODO: Vue de modification des reservations
 TODO: Vue de modification des locations(A voir)
-TODO: Vue de creation d'un profil proprietaire avec RIB
 """
 
 from django.contrib import messages
@@ -219,14 +218,27 @@ def new_reservation(request, pk):
     TODO: Empecher le proprietaire d'arriver a cet url manuellement
     """
     contrat = ContratProprietaire.objects.get(id=pk)
+    reservations = contrat.reservation_set.all()
     if request.method == "POST":
         resForm = ReservationForm(request.POST)
         print(resForm)
-        # Ajouter une verification des dates ici
+        date_debut_sejour = resForm.cleaned_data.get('date_debut_sejour')
+        date_fin_sejour = resForm.cleaned_data.get('date_fin_sejour')
+        for reservation in contrat.reservation_set.all():
+            if reservation.date_debut_sejour < date_debut_sejour < reservation.date_fin_sejour or reservation.date_debut_sejour < date_fin_sejour < reservation.date_fin_sejour:
+                messages.error(request, 'Cette propriete est deja reservée a cette date')
+                context = {
+                    'contrat': contrat,
+                    'reservations': reservations
+                }
+                return render(request, 'neige_soleil_app/main_new_reservation.html', context)
         if resForm.is_valid():
             resForm.save()
             return redirect('dashboard')
-    context = {'contrat': contrat}
+    context = {
+        'contrat': contrat,
+        'reservations': reservations
+    }
     return render(request, 'neige_soleil_app/main_new_reservation.html', context)
 
 

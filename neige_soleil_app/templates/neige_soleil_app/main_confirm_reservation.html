@@ -7,7 +7,7 @@
                 <ul>
                     <li>Propriete : {{ reservation.propriete.nom }}</li>
                     <li>Du {{ reservation.date_debut_sejour }} au {{ reservation.date_fin_sejour }}</li>
-                    <li>Prix : {{ reservation.prixTotal }}</li>
+                    <li>Prix : {{ reservation.prixTotal | floatformat:2 }}</li>
                 </ul>
                 <p class="text-center">
                     <form method="post">

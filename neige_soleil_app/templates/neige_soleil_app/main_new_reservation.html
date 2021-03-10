@@ -21,6 +21,42 @@
             <br>
             <input type="submit" class="btn btn-dark" value="Reserver">
         </form>
+        {% if messages %}
+            {% for message in messages %}
+                <p class="text-danger">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<br>
+<div class="card">
+    <h5 class="card-header"> Indisponibilitée</h5>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <td scope="col">Numero de reservation</td>
+                <td scope="col">Date de début</td>
+                <td scope="col">Date de fin</td>
+                <td scope="col">Date de la reservation</td>
+                <td scope="col">Status</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% if reservations %}
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.id}}</td>
+                        <td>{{ reservation.date_debut_sejour }}</td>
+                        <td>{{ reservation.date_fin_sejour }}</td>
+                        <td>{{ reservation.date_reservation }}</td>
+                        <td>{{ reservation.status_reservation }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+
+        </table>
     </div>
 </div>
 {% endblock %}

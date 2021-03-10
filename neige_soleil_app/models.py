@@ -110,6 +110,8 @@ class Reservation(models.Model):
 
     def prixTotal(self):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days
+        if duree == 0:
+            duree = 1
         return duree * self.propriete.proprieteprix.prix / 7
 
 
@@ -117,5 +119,5 @@ class Location(models.Model):
     """
     Classe des locations
     """
-    reservation = models.OneToOneField(Reservation, on_delete=models.CASCADE)
+    reservation = models.OneToOneField(Reservation, on_delete=models.SET_NULL, null=True)
     date_confirmation = models.DateField(auto_now_add=True)
