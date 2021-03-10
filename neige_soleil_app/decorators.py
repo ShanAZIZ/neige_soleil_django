@@ -4,6 +4,9 @@ from django.shortcuts import redirect
 
 
 def unauthenticated_user(view_func):
+    """
+    Verifie si un user n'est pas authentifiers
+    """
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('home_main')
@@ -14,11 +17,14 @@ def unauthenticated_user(view_func):
 
 
 def known_profile(view_func):
+    """
+    Verifie si un utilisateur a un profile ou non
+    """
     def wrapper_func(request, *args, **kwargs):
         try:
             val = request.user.profile
             return view_func(request, *args, **kwargs)
         except ObjectDoesNotExist:
-            return redirect('home_main')
+            return redirect('profile_set')
 
     return wrapper_func

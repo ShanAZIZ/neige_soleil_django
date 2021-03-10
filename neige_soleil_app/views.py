@@ -1,3 +1,11 @@
+"""
+TODO: Vue de modification du profile des info user et des info proprietaire si il y en a
+TODO: Vue de Modification des proprietes
+TODO: Vue de modification des reservations
+TODO: Vue de modification des locations(A voir)
+TODO: Vue de creation d'un profil proprietaire avec RIB
+"""
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
@@ -10,12 +18,24 @@ from .models import *
 
 
 def accueil(request):
+    """
+    Page d'accueil publique de l'application
+    Aucune restriction appliquer
+    """
     context = {}
     return render(request, 'neige_soleil_app/guest_home.html', context)
 
 
 @unauthenticated_user
 def register(request):
+    """
+    Page de creation de compte utilisateur
+    Creation d'un utilisateur dans la table user de Django
+    Restriction: User non authentifies
+
+    TODO : Gerer les messages d'erreurs sur la creation de compte selon les Rules Django
+
+    """
     form = UserCreationForm()
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -32,6 +52,14 @@ def register(request):
 
 @unauthenticated_user
 def loginPage(request):
+    """
+    Page de connexion
+    Recuperer les infos de connexion et authentifier l'utilisateur avec le systeme d'auth de
+    Django
+    Restriction: User non authentifies
+
+    TODO : Gerer les messages d'erreurs sur la connexion
+    """
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -48,12 +76,21 @@ def loginPage(request):
 
 @login_required(login_url='login')
 def logoutPage(request):
+    """
+    Page de deconnexion, utilise la methode logout de Django
+    Restriction: User authentifier
+    """
     logout(request)
     return redirect('/')
 
 
 @login_required(login_url='login')
 def home_main(request):
+    """
+    Page d'accueil pour les utilisateurs Authentifies
+    Recupere les proprietés et les affiches
+    Restriction: User authentifier
+    """
     contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
     context = {
         'contrats': contrat_prop,
@@ -63,6 +100,16 @@ def home_main(request):
 
 @login_required(login_url='login')
 def profile_set(request):
+    """
+    Page de creation du profile utilisateur
+    Utilise la table Profile
+    Permet de completer les informations d'un utilisateur
+    Restriction: User authentifier
+
+    TODO : Gerer les messages d'erreurs du formulaire
+    TODO : Ajouter une photo de profile (Optionnel)
+
+    """
     if request.method == 'POST':
         profile = ProfileForm(request.POST)
         if profile.is_valid():
@@ -75,6 +122,13 @@ def profile_set(request):
 @login_required(login_url='login')
 @known_profile
 def proprietaire_main(request):
+    """
+    Vue espace proprietaire, elle affiche les contrats du proprietaire et
+    lui permet de se rediriger vers l'ajout de nouveaux contrats
+    Restriction: User authentifier, avec Profile
+    TODO: Ajouter des visuels de données interressant pour les Propriétaires
+
+    """
     contrat = ContratProprietaire.objects.filter(user=request.user)
     context = {
         'contrats': contrat
@@ -85,6 +139,10 @@ def proprietaire_main(request):
 @login_required(login_url='login')
 @known_profile
 def new_propriete(request):
+    """
+    Vue qui permet de créer un contrat d'un proprietaire
+    Restriction: User authentifier, avec Profile
+    """
     ContratProp = ContratProprietaireFrom(initial={'user': request.user.id})
 
     if request.method == 'POST':
@@ -104,6 +162,11 @@ def new_propriete(request):
 
 @login_required(login_url='login')
 def propriete_detail(request, pk):
+    """
+    Vue qui affiche les détails d'un contrat proprietaire et permet de reservation un bien
+    Restriction: User authentifier
+    TODO: Redirection vers une page de reservation séparée.
+    """
     if request.method == "POST":
         resForm = ReservationForm(request.POST)
         # Ajouter une verification des dates ici
@@ -121,7 +184,11 @@ def propriete_detail(request, pk):
 @login_required(login_url='login')
 @known_profile
 def dashboard(request):
-    # Definir l'affichage du status des reservations et la mise en place des contrats de locations
+    """
+    Vue dashboard
+    Restriction: User authentifier, avec Profile
+    TODO: Optimiser les visuels et ajouter des options
+    """
     reservations = Reservation.objects.filter(profile=request.user.profile.id, location__isnull=True)
     locations = Location.objects.filter(reservation__profile=request.user.profile.id)
 
@@ -135,6 +202,10 @@ def dashboard(request):
 @login_required(login_url='login')
 @known_profile
 def louer_propriete(request, pk):
+    """
+    Vue qui permet de generer une location (Page de confirmation de location)
+    Restriction: User authentifier, avec Profile
+    """
     reservation = Reservation.objects.get(id=pk)
     if request.method == 'POST':
         Location.objects.create(reservation=reservation)

@@ -26,6 +26,12 @@ class ProfileProprietaire(models.Model):
 
 
 class ContratProprietaire(models.Model):
+    """
+    Cette classe generera la table des proprietés,
+    et contients les informations des proprietés.
+
+    TODO: Ajouter les dates du contrat selon la demande du Projet
+    """
     DISPONIBLE = 'AVAIL'
     OCCUPER = 'BUSY'
     INACTIF = 'OFF'
@@ -50,6 +56,10 @@ class ContratProprietaire(models.Model):
 
 
 class ProprietePrix(models.Model):
+    """
+    Permet de definir les differents prix de la propriete
+    TODO: Ajouter plusieurs types de prix et la fonction d'affichage selon la période
+    """
     propriete = models.OneToOneField(ContratProprietaire, on_delete=models.CASCADE)
     prix = models.FloatField()
 
@@ -60,6 +70,9 @@ class ProprietePrix(models.Model):
 
 
 class ProprieteImage(models.Model):
+    """
+    Classe qui regroupe les images des proprietés
+    """
     propriete = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
 
@@ -76,6 +89,9 @@ class ProprieteImage(models.Model):
 
 
 class Reservation(models.Model):
+    """
+    Classe des reservations
+    """
     ENCOURS = 'WAIT'
     ANNULER = 'CANCEL'
 
@@ -97,5 +113,8 @@ class Reservation(models.Model):
 
 
 class Location(models.Model):
+    """
+    Classe des locations
+    """
     reservation = models.OneToOneField(Reservation, on_delete=models.CASCADE)
     date_confirmation = models.DateField(auto_now_add=True)
