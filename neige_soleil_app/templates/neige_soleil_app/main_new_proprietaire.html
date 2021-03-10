@@ -5,21 +5,15 @@
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-                <input type="hidden" name="profile" value="">
-                <input type="hidden" name="propriete" value="">
-                <input type="hidden" name="status_reservation" value="WAIT">
+                <input type="hidden" name="profile" value="{{ request.user.profile.id }}">
                 <div class="row">
                     <div class="col-6">
-                        <label id="debut" class="form-label">Date de debut de votre sejour</label>
-                        <input for="debut" class="form-control" type="date" name="date_debut_sejour" required>
-                    </div>
-                    <div class="col-6">
-                        <label id="fin" class="form-label">Date de fin de votre sejour</label>
-                        <input for="fin" class="form-control" type="date" name="date_fin_sejour" required>
+                        <label id="rib" class="form-label">Votre Releve d'identité bancaire</label>
+                        <input for="rib" class="form-control" type="text" name="rib" required>
                     </div>
                 </div>
                 <br>
-                <input type="submit" class="btn btn-dark" value="Reserver">
+                <input type="submit" class="btn btn-dark" value="Valider">
             </form>
         </div>
     </div>

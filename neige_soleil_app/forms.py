@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile, ContratProprietaire, ProprietePrix, Reservation
+from .models import Profile, ContratProprietaire, ProprietePrix, Reservation, ProfileProprietaire
 
 
 class UserCreationForm(UserCreationForm):
@@ -32,4 +32,10 @@ class ProfileForm(ModelForm):
 class ReservationForm(ModelForm):
     class Meta:
         model = Reservation
+        fields = '__all__'
+
+
+class ProfileProprietaireForm(ModelForm):
+    class Meta:
+        model = ProfileProprietaire
         fields = '__all__'

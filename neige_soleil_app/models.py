@@ -23,6 +23,7 @@ class ProfileProprietaire(models.Model):
     creer des contrats)
     """
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    rib = models.CharField(max_length=50)
 
 
 class ContratProprietaire(models.Model):
@@ -42,7 +43,7 @@ class ContratProprietaire(models.Model):
         (INACTIF, 'Inactif'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profileproprietaire = models.ForeignKey(ProfileProprietaire, on_delete=models.CASCADE)
     nom = models.CharField(max_length=200)
     description = models.TextField(max_length=1000)
     surface_habitable = models.FloatField()

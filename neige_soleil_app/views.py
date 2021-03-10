@@ -9,11 +9,12 @@ TODO: Vue de creation d'un profil proprietaire avec RIB
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.utils.dateparse import parse_date
 
-from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm, ReservationForm
-from .decorators import unauthenticated_user, known_profile
+from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm, ReservationForm, ProfileProprietaireForm
+from .decorators import unauthenticated_user, known_profile, known_proprietaire
 from .models import *
 
 
@@ -42,7 +43,6 @@ def register(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, 'Bienvenue' + username)
             login(request, user)
             return redirect('home_main')
     context = {
@@ -111,7 +111,10 @@ def home_main(request):
     Recupere les proprietés et les affiches
     Restriction: User authentifier
     """
-    contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
+    try:
+        contrat_prop = ContratProprietaire.objects.exclude(profileproprietaire=request.user.profile.profileproprietaire.id)
+    except ObjectDoesNotExist:
+        contrat_prop = ContratProprietaire.objects.all()
     context = {
         'contrats': contrat_prop,
     }
@@ -139,12 +142,18 @@ def dashboard(request):
 @login_required(login_url='login')
 @known_profile
 def new_proprietaire(request):
+    if request.method == 'POST':
+        aproprietaireForm = ProfileProprietaireForm(request.POST)
+        if aproprietaireForm.is_valid():
+            aproprietaireForm.save()
+            return redirect('proprietaire')
     context = {}
     return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
 
 
 @login_required(login_url='login')
 @known_profile
+@known_proprietaire
 def proprietaire_main(request):
     """
     Vue espace proprietaire, elle affiche les contrats du proprietaire et
@@ -153,7 +162,7 @@ def proprietaire_main(request):
     TODO: Ajouter des visuels de données interressant pour les Propriétaires
 
     """
-    contrat = ContratProprietaire.objects.filter(user=request.user)
+    contrat = ContratProprietaire.objects.filter(profileproprietaire=request.user.profile.profileproprietaire)
     context = {
         'contrats': contrat
     }
@@ -162,6 +171,7 @@ def proprietaire_main(request):
 
 @login_required(login_url='login')
 @known_profile
+@known_proprietaire
 def new_propriete(request):
     """
     Vue qui permet de créer un contrat d'un proprietaire
@@ -181,7 +191,7 @@ def new_propriete(request):
     context = {
         'form': ContratProp,
     }
-    return render(request, 'neige_soleil_app/main_ajout_location.html', context)
+    return render(request, 'neige_soleil_app/main_new_propriete.html', context)
 
 
 @login_required(login_url='login')
