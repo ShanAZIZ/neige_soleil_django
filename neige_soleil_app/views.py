@@ -43,7 +43,8 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             # messages.success(request, 'account was created for ' + username)
-            return redirect('login')
+            login(request, user)
+            return redirect('home_main')
     context = {
         'form': form,
     }
@@ -166,6 +167,7 @@ def propriete_detail(request, pk):
     Vue qui affiche les détails d'un contrat proprietaire et permet de reservation un bien
     Restriction: User authentifier
     TODO: Redirection vers une page de reservation séparée.
+    TODO: Verification des dates avant reservations et gestion du message d'erreur
     """
     if request.method == "POST":
         resForm = ReservationForm(request.POST)
