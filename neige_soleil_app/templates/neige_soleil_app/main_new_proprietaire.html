@@ -1,0 +1,26 @@
+{% extends 'neige_soleil_app/main_layout.html' %}
+{% block content %}
+    <div class="card">
+        <h5 class="card-header"> Devenez hote pour proposer des contrats à Neige et Soleil</h5>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="profile" value="">
+                <input type="hidden" name="propriete" value="">
+                <input type="hidden" name="status_reservation" value="WAIT">
+                <div class="row">
+                    <div class="col-6">
+                        <label id="debut" class="form-label">Date de debut de votre sejour</label>
+                        <input for="debut" class="form-control" type="date" name="date_debut_sejour" required>
+                    </div>
+                    <div class="col-6">
+                        <label id="fin" class="form-label">Date de fin de votre sejour</label>
+                        <input for="fin" class="form-control" type="date" name="date_fin_sejour" required>
+                    </div>
+                </div>
+                <br>
+                <input type="submit" class="btn btn-dark" value="Reserver">
+            </form>
+        </div>
+    </div>
+{% endblock %}

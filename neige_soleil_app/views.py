@@ -84,20 +84,6 @@ def logoutPage(request):
 
 
 @login_required(login_url='login')
-def home_main(request):
-    """
-    Page d'accueil pour les utilisateurs Authentifies
-    Recupere les proprietés et les affiches
-    Restriction: User authentifier
-    """
-    contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
-    context = {
-        'contrats': contrat_prop,
-    }
-    return render(request, 'neige_soleil_app/main_home.html', context)
-
-
-@login_required(login_url='login')
 def profile_set(request):
     """
     Page de creation du profile utilisateur
@@ -116,6 +102,45 @@ def profile_set(request):
             return redirect('home_main')
     context = {}
     return render(request, 'neige_soleil_app/main_profile_set.html', context)
+
+
+@login_required(login_url='login')
+def home_main(request):
+    """
+    Page d'accueil pour les utilisateurs Authentifies
+    Recupere les proprietés et les affiches
+    Restriction: User authentifier
+    """
+    contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
+    context = {
+        'contrats': contrat_prop,
+    }
+    return render(request, 'neige_soleil_app/main_home.html', context)
+
+
+@login_required(login_url='login')
+@known_profile
+def dashboard(request):
+    """
+    Vue dashboard
+    Restriction: User authentifier, avec Profile
+    TODO: Optimiser les visuels et ajouter des options
+    """
+    reservations = Reservation.objects.filter(profile=request.user.profile.id, location__isnull=True)
+    locations = Location.objects.filter(reservation__profile=request.user.profile.id)
+
+    context = {
+        'reservations': reservations,
+        'locations': locations
+    }
+    return render(request, 'neige_soleil_app/main_dashboard.html', context)
+
+
+@login_required(login_url='login')
+@known_profile
+def new_proprietaire(request):
+    context = {}
+    return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
 
 
 @login_required(login_url='login')
@@ -193,24 +218,6 @@ def new_reservation(request, pk):
             return redirect('dashboard')
     context = {'contrat': contrat}
     return render(request, 'neige_soleil_app/main_new_reservation.html', context)
-
-
-@login_required(login_url='login')
-@known_profile
-def dashboard(request):
-    """
-    Vue dashboard
-    Restriction: User authentifier, avec Profile
-    TODO: Optimiser les visuels et ajouter des options
-    """
-    reservations = Reservation.objects.filter(profile=request.user.profile.id, location__isnull=True)
-    locations = Location.objects.filter(reservation__profile=request.user.profile.id)
-
-    context = {
-        'reservations': reservations,
-        'locations': locations
-    }
-    return render(request, 'neige_soleil_app/main_dashboard.html', context)
 
 
 @login_required(login_url='login')
