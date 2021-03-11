@@ -214,7 +214,7 @@ def new_reservation(request, pk):
     """
     Vue de reservation
     Restriction: User authentifier,  avec Profile
-    TODO: Verification des dates avant reservations et gestion du message d'erreur
+    TODO: Gerer les dates de reservations annuler, Ecraser le save par defaut du form
     TODO: Empecher le proprietaire d'arriver a cet url manuellement
     """
     contrat = ContratProprietaire.objects.get(id=pk)
