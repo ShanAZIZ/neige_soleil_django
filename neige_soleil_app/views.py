@@ -47,7 +47,7 @@ def register(request):
     context = {
         'form': form,
     }
-    return render(request, 'neige_soleil_app/register.html', context)
+    return render(request, 'neige_soleil_app/auth_register.html', context)
 
 
 @unauthenticated_user
@@ -69,7 +69,7 @@ def loginPage(request):
         else:
             messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect')
     context = {}
-    return render(request, 'neige_soleil_app/login.html', context)
+    return render(request, 'neige_soleil_app/auth_login.html', context)
 
 
 @login_required(login_url='login')
@@ -97,10 +97,12 @@ def profile_set(request):
     if request.method == 'POST':
         profile = ProfileForm(request.POST)
         if profile.is_valid():
-            profile.save()
+            form = profile.save(commit=False)
+            form.user = request.user
+            form.save()
             return redirect('home_main')
     context = {}
-    return render(request, 'neige_soleil_app/main_profile_set.html', context)
+    return render(request, 'neige_soleil_app/main_new_profile.html', context)
 
 
 @login_required(login_url='login')
@@ -153,6 +155,13 @@ def new_proprietaire(request):
 @login_required(login_url='login')
 @known_profile
 def profile_detail(request):
+    context = {}
+    return render(request, 'neige_soleil_app/main_profile_detail.html', context)
+
+
+@login_required(login_url='login')
+@known_profile
+def profile_edit(request):
     context = {}
     return render(request, 'neige_soleil_app/main_profile_detail.html', context)
 

@@ -1,0 +1,8 @@
+{% extends 'neige_soleil_app/main_layout.html' %}
+{% block content %}
+    {% load static %}
+    <h1>Votre profile</h1>
+    <p>Pour pouvoir reserver ou louer, il faut completer votre profil utilisateur en remplissant ce formulaire : </p>
+
+    {% include 'neige_soleil_app/form_profile.html' %}
+{% endblock %}
