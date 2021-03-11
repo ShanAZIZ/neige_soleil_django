@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .models import Profile, ContratProprietaire, ProprietePrix, Reservation, ProfileProprietaire
 
 
-class UserModelForm(UserCreationForm):
+class UserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
@@ -47,3 +47,4 @@ class ProfileProprietaireForm(ModelForm):
     class Meta:
         model = ProfileProprietaire
         fields = '__all__'
+        exclude = ['profile']

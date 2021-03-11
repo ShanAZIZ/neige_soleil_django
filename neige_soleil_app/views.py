@@ -1,18 +1,18 @@
 """
-TODO: Vue de modification du profile des info user et des info proprietaire si il y en a
 TODO: Vue de Mise a jour des images de proprietes
 TODO: Vue de modification des reservations
 TODO: Vue de modification des locations(A voir)
 """
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.utils.dateparse import parse_date
 
-from .forms import UserModelForm, ContratProprietaireFrom, ProfileForm, ReservationForm, ProfileProprietaireForm, UserInfoUpdateForm
+from .forms import *
 from .decorators import unauthenticated_user, known_profile, known_proprietaire
 from .models import *
 
@@ -36,9 +36,9 @@ def register(request):
     TODO : Gerer les messages d'erreurs sur la creation de compte selon les Rules Django
 
     """
-    form = UserModelForm()
+    form = UserCreationForm()
     if request.method == 'POST':
-        form = UserModelForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
@@ -144,10 +144,25 @@ def dashboard(request):
 @known_profile
 def new_proprietaire(request):
     if request.method == 'POST':
-        aproprietaireForm = ProfileProprietaireForm(request.POST)
-        if aproprietaireForm.is_valid():
-            aproprietaireForm.save()
+        form = ProfileProprietaireForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.profile = request.user.profile
+            form.save()
             return redirect('proprietaire')
+    context = {}
+    return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
+
+
+@login_required(login_url='login')
+@known_profile
+@known_proprietaire
+def edit_proprietaire(request):
+    if request.method == 'POST':
+        form = ProfileProprietaireForm(request.POST, instance=request.user.profile.profileproprietaire)
+        if form.is_valid():
+            form.save()
+            return redirect('main_proprietaire')
     context = {}
     return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
 
@@ -167,6 +182,18 @@ def edit_profile(request):
         'edit': edit
     }
     return render(request, 'neige_soleil_app/main_edit_profile.html', context)
+
+
+def edit_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Votre mot de passe a bien été mis a jour")
+            return redirect('detail_profile')
+    context = {}
+    return render(request, 'neige_soleil_app/main_edit_password.html', context)
 
 
 @login_required(login_url='login')
