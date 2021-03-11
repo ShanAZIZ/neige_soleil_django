@@ -22,7 +22,11 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('neige_soleil_app.urls'))
+    path('', include('neige_soleil_app.urls')),
+    path('', include('api_neige_soleil.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += [
+    path('api-auth/', include('rest_framework.urls')),
+]
