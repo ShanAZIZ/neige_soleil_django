@@ -15,15 +15,15 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fa fa-snowflake-o" aria-hidden="true"></i>
             </div>
-            <a class="navbar-brand" href="{% url 'home_main' %}">Neige et Soleil</a>
+            <a class="navbar-brand" href="{% url 'main_home' %}">Neige et Soleil</a>
 
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link" href="{% url 'home_main' %}">Accueil</a>
+                        <a class="nav-link" href="{% url 'main_home' %}">Accueil</a>
                         {% if request.user.profile %}
                             <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                         {% else %}
-                            <a class="nav-link" href="{% url 'profile_set' %}">Completer mon profile</a>
+                            <a class="nav-link" href="{% url 'new_profile' %}">Completer mon profile</a>
                         {% endif %}
                     </div>
                 </div>
@@ -37,11 +37,11 @@
 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             {% if request.user.profile.profileproprietaire %}
-                                <li><a class="dropdown-item" href="{% url 'proprietaire' %}">Espace proprietaire</a></li>
+                                <li><a class="dropdown-item" href="{% url 'main_proprietaire' %}">Espace proprietaire</a></li>
                             {% else %}
                                 <li><a class="dropdown-item" href="{% url 'new_proprietaire' %}">Devenir proprietaire</a></li>
                             {% endif %}
-                            <li><a class="dropdown-item" href="{% url 'profile_detail' %}">Mon profil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'detail_profile' %}">Mon profil</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Se deconnecter</a></li>
                         </ul>
                     </div>

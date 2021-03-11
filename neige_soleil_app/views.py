@@ -43,7 +43,7 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             login(request, user)
-            return redirect('home_main')
+            return redirect('main_home')
     context = {
         'form': form,
     }
@@ -65,7 +65,7 @@ def loginPage(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home_main')
+            return redirect('main_home')
         else:
             messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect')
     context = {}
@@ -83,7 +83,7 @@ def logoutPage(request):
 
 
 @login_required(login_url='login')
-def profile_set(request):
+def new_profile(request):
     """
     Page de creation du profile utilisateur
     Utilise la table Profile
@@ -100,13 +100,13 @@ def profile_set(request):
             form = profile.save(commit=False)
             form.user = request.user
             form.save()
-            return redirect('home_main')
+            return redirect('main_home')
     context = {}
     return render(request, 'neige_soleil_app/main_new_profile.html', context)
 
 
 @login_required(login_url='login')
-def home_main(request):
+def main_home(request):
     """
     Page d'accueil pour les utilisateurs Authentifies
     Recupere les proprietés et les affiches
@@ -154,7 +154,7 @@ def new_proprietaire(request):
 
 @login_required(login_url='login')
 @known_profile
-def profile_edit(request):
+def edit_profile(request):
     edit = True
     if request.method == 'POST':
         formProfile = ProfileForm(request.POST, instance=request.user.profile)
@@ -162,7 +162,7 @@ def profile_edit(request):
         if formProfile.is_valid() and formUser.is_valid():
             formProfile.save()
             formUser.save()
-            return redirect('profile_detail')
+            return redirect('detail_profile')
     context = {
         'edit': edit
     }
@@ -171,15 +171,15 @@ def profile_edit(request):
 
 @login_required(login_url='login')
 @known_profile
-def profile_detail(request):
+def detail_profile(request):
     context = {}
-    return render(request, 'neige_soleil_app/main_profile_detail.html', context)
+    return render(request, 'neige_soleil_app/main_detail_profile.html', context)
 
 
 @login_required(login_url='login')
 @known_profile
 @known_proprietaire
-def proprietaire_main(request):
+def main_proprietaire(request):
     """
     Vue espace proprietaire, elle affiche les contrats du proprietaire et
     lui permet de se rediriger vers l'ajout de nouveaux contrats
@@ -221,7 +221,7 @@ def new_propriete(request):
 
 
 @login_required(login_url='login')
-def propriete_detail(request, pk):
+def detail_propriete(request, pk):
     """
     Vue qui affiche les détails d'un contrat proprietaire et permet de reservation un bien
     Restriction: User authentifier
@@ -232,7 +232,7 @@ def propriete_detail(request, pk):
         'contrat': contrat,
         'reservations': reservations
     }
-    return render(request, 'neige_soleil_app/main_propriete_detail.html', context)
+    return render(request, 'neige_soleil_app/main_detail_propriete.html', context)
 
 
 @login_required(login_url='login')
@@ -299,7 +299,7 @@ def edit_propriete(request, pk):
                 contratEditForm.save()
                 print(request.POST['prix'])
                 ProprietePrix.objects.filter(propriete=contrat).update(prix=request.POST['prix'])
-                return redirect('proprietaire')
+                return redirect('main_proprietaire')
         context = {
             'contrat': contrat
         }

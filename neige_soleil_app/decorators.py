@@ -9,7 +9,7 @@ def unauthenticated_user(view_func):
     """
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home_main')
+            return redirect('main_home')
         else:
             return view_func(request, *args, **kwargs)
 
@@ -25,7 +25,7 @@ def known_profile(view_func):
             val = request.user.profile
             return view_func(request, *args, **kwargs)
         except ObjectDoesNotExist:
-            return redirect('profile_set')
+            return redirect('new_profile')
 
     return wrapper_func
 

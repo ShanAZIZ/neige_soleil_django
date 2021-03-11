@@ -9,7 +9,7 @@
                         <p class="card-title">{{ contrat.nom }}</p>
                         <p class="text-muted">{{ contrat.proprieteprix.prix }} Euros/Semaines</p>
                         <hr>
-                        <a href="{% url 'propriete_detail' contrat.id %}" ><button type="button" class="btn btn-secondary">Details</button></a>
+                        <a href="{% url 'detail_propriete' contrat.id %}" ><button type="button" class="btn btn-secondary">Details</button></a>
                         {% if contrat.user == request.user %}
                             <a><button type="button" class="btn btn-secondary">Modifier</button></a>
                         {% endif %}

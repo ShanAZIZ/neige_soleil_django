@@ -13,13 +13,13 @@
 
                 <p class="lead text-muted text-center"> Vous devez completer votre profil pour avoir accès a toutes les fonctionnalités</p>
                 <p class="text-center">
-                    <a href="{% url 'profile_set' %}" class="btn btn-danger my-2">Completer mon profil</a>
+                    <a href="{% url 'new_profile' %}" class="btn btn-danger my-2">Completer mon profil</a>
                 </p>
             {% endif %}
         </div>
     </div>
     <section id="Locations">
-        {% include 'neige_soleil_app/liste_propriete.html' %}
+        {% include 'neige_soleil_app/list_propriete.html' %}
     </section>
 
 {% endblock %}

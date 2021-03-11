@@ -11,7 +11,7 @@
                     <li>Adresse postale : {{ request.user.profile.adresse }}, {{ request.user.profile.code_postale }} {{ request.user.profile.ville }} </li>
                     <li>Telephone : {{ request.user.profile.telephone }}</li>
                 </ul>
-                <a href="{% url 'profile_edit' %}"><button class="btn btn-warning">Modifier</button></a>
+                <a href="{% url 'edit_profile' %}"><button class="btn btn-warning">Modifier</button></a>
             </div>
         </div>
     </div>
