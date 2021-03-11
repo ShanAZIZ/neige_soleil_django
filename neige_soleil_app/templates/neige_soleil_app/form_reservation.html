@@ -9,11 +9,11 @@
             <div class="row">
                 <div class="col-6">
                     <label id="debut" class="form-label">Date de debut de votre sejour</label>
-                    <input for="debut" class="form-control" type="date" name="date_debut_sejour" required>
+                    <input for="debut" class="form-control" type="date" name="date_debut_sejour" value="{{ reservation.date_debut_sejour }}" required>
                 </div>
                 <div class="col-6">
                     <label id="fin" class="form-label">Date de fin de votre sejour</label>
-                    <input for="fin" class="form-control" type="date" name="date_fin_sejour" required>
+                    <input for="fin" class="form-control" type="date" name="date_fin_sejour"  value="{{ reservation.date_fin_sejour }}" required>
                 </div>
             </div>
             <br>

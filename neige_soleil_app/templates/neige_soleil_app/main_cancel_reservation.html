@@ -1,0 +1,20 @@
+{% extends 'neige_soleil_app/main_layout.html' %}
+{% block content %}
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light text-center">Annulation</h1>
+            <p class="lead text-muted text-center"> Souhaitez vous annuler votre reservation : </p>
+            <ul>
+                <li>Propriete : {{ reservation.propriete.nom }}</li>
+                <li>Du {{ reservation.date_debut_sejour }} au {{ reservation.date_fin_sejour }}</li>
+                <li>Prix : {{ reservation.prix_total | floatformat:2 }}</li>
+            </ul>
+            <p class="text-center">
+            <form method="post">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger" value="Annuler">
+            </form>
+            </p>
+        </div>
+    </div>
+{% endblock %}

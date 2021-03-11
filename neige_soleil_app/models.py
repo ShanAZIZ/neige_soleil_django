@@ -28,7 +28,7 @@ class ProfileProprietaire(models.Model):
 
 class ContratProprietaire(models.Model):
     """
-    Cette classe generera la table des proprietés,
+    Cette class generera la table des proprietés,
     et contients les informations des proprietés.
 
     TODO: Ajouter les dates du contrat selon la demande du Projet
@@ -72,7 +72,7 @@ class ProprietePrix(models.Model):
 
 class ProprieteImage(models.Model):
     """
-    Classe qui regroupe les images des proprietés
+    Class qui regroupe les images des proprietés
     """
     propriete = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
@@ -91,7 +91,7 @@ class ProprieteImage(models.Model):
 
 class Reservation(models.Model):
     """
-    Classe des reservations
+    Class des reservations
     """
     ENCOURS = 'WAIT'
     ANNULER = 'CANCEL'
@@ -108,16 +108,21 @@ class Reservation(models.Model):
     date_fin_sejour = models.DateField()
     status_reservation = models.CharField(max_length=6, choices=STATUS_RES, default=ENCOURS)
 
-    def prixTotal(self):
+    def prix_total(self):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days
         if duree == 0:
             duree = 1
         return duree * self.propriete.proprieteprix.prix / 7
 
+    def annuler_reservation(self):
+        """
+        modifier le status de la reservation
+        """
+        pass
 
 class Location(models.Model):
     """
-    Classe des locations
+    Class des locations
     """
     reservation = models.OneToOneField(Reservation, on_delete=models.SET_NULL, null=True)
     date_confirmation = models.DateField(auto_now_add=True)

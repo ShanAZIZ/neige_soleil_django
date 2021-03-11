@@ -18,13 +18,16 @@
             {% if reservations %}
                 {% for reservation in reservations %}
                     <tr>
-                        <td>{{ reservation.status_reservation.get_state_display}}</td>
+                        <td>{{ reservation.status_reservation}}</td>
                         <td>{{ reservation.date_reservation }}</td>
                         <td>{{ reservation.propriete.nom }}</td>
                         <td>{{ reservation.date_debut_sejour }}</td>
                         <td>{{ reservation.date_fin_sejour }}</td>
                         <td>{{ reservation.prixTotal | floatformat:2 }} Euros</td>
-                        <td> <a href="{% url 'louer' reservation.id %}"><button class="btn btn-success">Confirmer</button></a> <button class="btn btn-info">Modifier</button></td>
+                        <td>
+                            <a href="{% url 'louer' reservation.id %}"><button class="btn btn-success">Confirmer</button></a>
+                            <a href="{% url 'edit_reservation' reservation.id %}"><button class="btn btn-info">Modifier</button></a>
+                        </td>
                     </tr>
                 {% endfor %}
             {% endif %}

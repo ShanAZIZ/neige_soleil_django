@@ -21,5 +21,6 @@ urlpatterns = [
     path('propriete-detail/<str:pk>', views.detail_propriete, name="detail_propriete"),
     path('propriete-edit/<str:pk>', views.edit_propriete, name="propriete_edit"),
     path('reserver/<str:pk>', views.new_reservation, name="reserver"),
-    path('louer/<str:pk>', views.louer_propriete, name="louer"),
+    path('edit-reservation/<str:pk>', views.edit_reservation, name="edit_reservation"),
+    path('louer/<str:pk>', views.new_location, name="louer"),
 ]
