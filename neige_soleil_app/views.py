@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.utils.dateparse import parse_date
 
-from .forms import UserCreationForm, ContratProprietaireFrom, ProfileForm, ReservationForm, ProfileProprietaireForm
+from .forms import UserModelForm, ContratProprietaireFrom, ProfileForm, ReservationForm, ProfileProprietaireForm, UserInfoUpdateForm
 from .decorators import unauthenticated_user, known_profile, known_proprietaire
 from .models import *
 
@@ -36,9 +36,9 @@ def register(request):
     TODO : Gerer les messages d'erreurs sur la creation de compte selon les Rules Django
 
     """
-    form = UserCreationForm()
+    form = UserModelForm()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserModelForm(request.POST)
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
@@ -154,14 +154,24 @@ def new_proprietaire(request):
 
 @login_required(login_url='login')
 @known_profile
-def profile_detail(request):
-    context = {}
-    return render(request, 'neige_soleil_app/main_profile_detail.html', context)
+def profile_edit(request):
+    edit = True
+    if request.method == 'POST':
+        formProfile = ProfileForm(request.POST, instance=request.user.profile)
+        formUser = UserInfoUpdateForm(request.POST, instance=request.user)
+        if formProfile.is_valid() and formUser.is_valid():
+            formProfile.save()
+            formUser.save()
+            return redirect('profile_detail')
+    context = {
+        'edit': edit
+    }
+    return render(request, 'neige_soleil_app/main_edit_profile.html', context)
 
 
 @login_required(login_url='login')
 @known_profile
-def profile_edit(request):
+def profile_detail(request):
     context = {}
     return render(request, 'neige_soleil_app/main_profile_detail.html', context)
 
@@ -286,9 +296,7 @@ def edit_propriete(request, pk):
         if request.method == 'POST':
             contratEditForm = ContratProprietaireFrom(request.POST, instance=contrat)
             if contratEditForm.is_valid():
-                form = contratEditForm.save(commit=False)
-                form.profileproprietaire = request.user.profile.profileproprietaire
-                form.save()
+                contratEditForm.save()
                 print(request.POST['prix'])
                 ProprietePrix.objects.filter(propriete=contrat).update(prix=request.POST['prix'])
                 return redirect('proprietaire')

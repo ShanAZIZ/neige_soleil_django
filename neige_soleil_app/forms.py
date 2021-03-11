@@ -5,10 +5,16 @@ from django.contrib.auth.models import User
 from .models import Profile, ContratProprietaire, ProprietePrix, Reservation, ProfileProprietaire
 
 
-class UserCreationForm(UserCreationForm):
+class UserModelForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
+
+class UserInfoUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'username']
 
 
 class ContratProprietaireFrom(ModelForm):
