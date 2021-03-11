@@ -1,6 +1,6 @@
 """
 TODO: Vue de modification du profile des info user et des info proprietaire si il y en a
-TODO: Vue de Modification des proprietes
+TODO: Vue de Mise a jour des images de proprietes
 TODO: Vue de modification des reservations
 TODO: Vue de modification des locations(A voir)
 """
@@ -216,31 +216,33 @@ def new_reservation(request, pk):
     Vue de reservation
     Restriction: User authentifier,  avec Profile
     TODO: Gerer les dates de reservations annuler, Ecraser le save par defaut du form
-    TODO: Empecher le proprietaire d'arriver a cet url manuellement
     """
     contrat = ContratProprietaire.objects.get(id=pk)
-    reservations = contrat.reservation_set.all()
-    if request.method == "POST":
-        resForm = ReservationForm(request.POST)
-        print(resForm)
-        date_debut_sejour = resForm.cleaned_data.get('date_debut_sejour')
-        date_fin_sejour = resForm.cleaned_data.get('date_fin_sejour')
-        for reservation in contrat.reservation_set.all():
-            if reservation.date_debut_sejour < date_debut_sejour < reservation.date_fin_sejour or reservation.date_debut_sejour < date_fin_sejour < reservation.date_fin_sejour:
-                messages.error(request, 'Cette propriete est deja reservée a cette date')
-                context = {
-                    'contrat': contrat,
-                    'reservations': reservations
-                }
-                return render(request, 'neige_soleil_app/main_new_reservation.html', context)
-        if resForm.is_valid():
-            resForm.save()
-            return redirect('dashboard')
-    context = {
-        'contrat': contrat,
-        'reservations': reservations
-    }
-    return render(request, 'neige_soleil_app/main_new_reservation.html', context)
+    if request.user.profile.profileproprietaire != contrat.profileproprietaire:
+        reservations = contrat.reservation_set.all()
+        if request.method == "POST":
+            resForm = ReservationForm(request.POST)
+            print(resForm)
+            date_debut_sejour = resForm.cleaned_data.get('date_debut_sejour')
+            date_fin_sejour = resForm.cleaned_data.get('date_fin_sejour')
+            for reservation in contrat.reservation_set.all():
+                if reservation.date_debut_sejour < date_debut_sejour < reservation.date_fin_sejour or reservation.date_debut_sejour < date_fin_sejour < reservation.date_fin_sejour:
+                    messages.error(request, 'Cette propriete est deja reservée a cette date')
+                    context = {
+                        'contrat': contrat,
+                        'reservations': reservations
+                    }
+                    return render(request, 'neige_soleil_app/main_new_reservation.html', context)
+            if resForm.is_valid():
+                resForm.save()
+                return redirect('dashboard')
+        context = {
+            'contrat': contrat,
+            'reservations': reservations
+        }
+        return render(request, 'neige_soleil_app/main_new_reservation.html', context)
+    else:
+        return redirect('dashboard')
 
 
 @login_required(login_url='login')
@@ -280,3 +282,5 @@ def edit_propriete(request, pk):
         return render(request, 'neige_soleil_app/main_edit_propriete.html', context)
     else:
         return redirect('dashboard')
+
+
