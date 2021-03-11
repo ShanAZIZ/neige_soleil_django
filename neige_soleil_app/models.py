@@ -121,3 +121,5 @@ class Location(models.Model):
     """
     reservation = models.OneToOneField(Reservation, on_delete=models.SET_NULL, null=True)
     date_confirmation = models.DateField(auto_now_add=True)
+
+

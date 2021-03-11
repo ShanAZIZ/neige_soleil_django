@@ -152,6 +152,13 @@ def new_proprietaire(request):
 
 @login_required(login_url='login')
 @known_profile
+def profile_detail(request):
+    context = {}
+    return render(request, 'neige_soleil_app/main_profile_detail.html', context)
+
+
+@login_required(login_url='login')
+@known_profile
 @known_proprietaire
 def proprietaire_main(request):
     """

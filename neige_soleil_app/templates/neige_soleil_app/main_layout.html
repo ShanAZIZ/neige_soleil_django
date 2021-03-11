@@ -41,7 +41,7 @@
                             {% else %}
                                 <li><a class="dropdown-item" href="{% url 'new_proprietaire' %}">Devenir proprietaire</a></li>
                             {% endif %}
-                            <li><a class="dropdown-item" href="#">Mon profil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'profile_detail' %}">Mon profil</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Se deconnecter</a></li>
                         </ul>
                     </div>
