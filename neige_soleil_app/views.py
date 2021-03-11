@@ -176,13 +176,14 @@ def new_propriete(request):
     Vue qui permet de créer un contrat d'un proprietaire
     Restriction: User authentifier, avec Profile
     """
-    ContratProp = ContratProprietaireFrom(initial={'user': request.user.id})
 
     if request.method == 'POST':
         ContratProp = ContratProprietaireFrom(request.POST)
         images = request.FILES.getlist('images')
         if ContratProp.is_valid():
-            contrat = ContratProp.save()
+            contrat = ContratProp.save(commit=False)
+            contrat.profileproprietaire = request.user.profile.profileproprietaire
+            contrat.save()
             ProprietePrix.objects.create(propriete=contrat, prix=request.POST['prix'])
             for image in images:
                 ProprieteImage.objects.create(propriete=contrat, image=image)
@@ -257,3 +258,25 @@ def louer_propriete(request, pk):
         'reservation': reservation,
     }
     return render(request, 'neige_soleil_app/main_confirm_reservation.html', context)
+
+
+@login_required(login_url='login')
+@known_profile
+def edit_propriete(request, pk):
+    contrat = ContratProprietaire.objects.get(id=pk)
+    if contrat.profileproprietaire == request.user.profile.profileproprietaire:
+        if request.method == 'POST':
+            contratEditForm = ContratProprietaireFrom(request.POST, instance=contrat)
+            if contratEditForm.is_valid():
+                form = contratEditForm.save(commit=False)
+                form.profileproprietaire = request.user.profile.profileproprietaire
+                form.save()
+                print(request.POST['prix'])
+                ProprietePrix.objects.filter(propriete=contrat).update(prix=request.POST['prix'])
+                return redirect('proprietaire')
+        context = {
+            'contrat': contrat
+        }
+        return render(request, 'neige_soleil_app/main_edit_propriete.html', context)
+    else:
+        return redirect('dashboard')

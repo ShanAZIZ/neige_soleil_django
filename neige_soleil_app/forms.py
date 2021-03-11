@@ -15,6 +15,7 @@ class ContratProprietaireFrom(ModelForm):
     class Meta:
         model = ContratProprietaire
         fields = '__all__'
+        exclude = ['profileproprietaire']
 
 
 class LocationSetPrix(ModelForm):
