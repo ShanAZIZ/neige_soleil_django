@@ -4,6 +4,7 @@
             {% for contrat in contrats %}
             <div class="col">
                 <div class="card shadow-sm">
+                    <!-- TODO: FRONTEND - Mettre une image de remplacement en cas de non presence d'images prédefinies -->
                     <img class="bd-placeholder-img card-img-top" width="100%" height="225"  role="img" aria-label="Placeholder: Thumbnail"  focusable="false" src="{{ contrat.proprieteimage_set.all.first.imageURL }}">
                     <div class="card-body">
                         <p class="card-title">{{ contrat.nom }}</p>

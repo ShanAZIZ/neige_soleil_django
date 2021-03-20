@@ -5,8 +5,8 @@
             <div class="col-lg-12">
                 <ul>
                     <li>Nom d'utilisateur : {{ request.user.username }}</li>
-                    <li>Nom : {{ request.user.last_name }}</li>
-                    <li>Prenom : {{ request.user.first_name }}</li>
+                    <li>Nom : {{ request.user.profile.nom }}</li>
+                    <li>Prenom : {{ request.user.profile.prenom }}</li>
                     <li>Adresse email : {{ request.user.email }}</li>
                     <li>Adresse postale : {{ request.user.profile.adresse }}, {{ request.user.profile.code_postale }} {{ request.user.profile.ville }} </li>
                     <li>Telephone : {{ request.user.profile.telephone }}</li>
@@ -31,6 +31,7 @@
     </div>
 {% else %}
     <a href="{% url 'new_proprietaire' %}"><button class="btn btn-primary">Devenir proprietaire</button></a>
+    <br>
 {% endif %}
 <br>
 <a href="{% url 'edit_password' %}"><button class="btn btn-warning">Changer mon mot de passe</button></a>

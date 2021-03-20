@@ -5,15 +5,16 @@
             <label for="username" class="form-label" >Nom d'utilisateur : </label><input class="form-control" id="username" type="text" name="username"  value="{{ request.user.username }}">
         </div>
         <div class="mb-3">
-            <label for="lastname" class="form-label" >Nom : </label><input class="form-control" id="lastname" type="text" name="last_name"  value="{{ request.user.last_name }}">
-        </div>
-        <div class="mb-3">
-            <label for="firstname" class="form-label">Prenom : </label><input class="form-control"  id="firstname" type="text" name="first_name" value="{{ request.user.first_name }}">
-        </div>
-        <div class="mb-3">
             <label for="email" class="form-label">Email : </label><input class="form-control"  id="email" type="text" name="email" value="{{ request.user.email }}">
         </div>
     {% endif %}
+    <div class="mb-3">
+        <label for="lastname" class="form-label" >Nom : </label><input class="form-control" placeholder="Votre nom" id="nom" type="text" name="nom"  value="{{ request.user.profile.nom }}">
+    </div>
+    <div class="mb-3">
+        <label for="firstname" class="form-label">Prenom : </label><input class="form-control" placeholder="Votre prenom" id="prenom" type="text" name="prenom" value="{{ request.user.profile.prenom }}">
+    </div>
+
     <div class="mb-3">
         <label for="adresse" class="form-label" >Votre adresse : </label><input class="form-control" id="adresse" type="text" name="adresse" placeholder="Numero, voie, rue etc.." value="{{ request.user.profile.adresse }}">
     </div>
