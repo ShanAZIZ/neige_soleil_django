@@ -1,7 +1,9 @@
 """
-TODO: Vue de Mise a jour des images de proprietes
-TODO: Vue de modification des reservations
-TODO: Vue de modification des locations(A voir)
+TODO: FEATURE - Vue de Mise a jour des images de proprietes
+TODO: PROJET - Vue de modification des reservations
+TODO: PROJET - Vue de modification des locations(A voir)
+TODO: DEBUG - Effectuer un refactor des vues(Utiliser les class based View)
+TODO: PROJET - Revoir la logique des bases user et de l'authentification
 """
 
 from django.contrib import messages
@@ -13,7 +15,7 @@ from django.shortcuts import render, redirect
 from django.utils.dateparse import parse_date
 
 from .forms import *
-from .decorators import unauthenticated_user, known_profile, known_proprietaire
+from .decorators import unauthenticated_user, known_profile, known_proprietaire, no_profile
 from .models import *
 
 
@@ -21,6 +23,9 @@ def accueil(request):
     """
     Page d'accueil publique de l'application
     Aucune restriction appliquer
+
+    TODO: PROJET -Gerer l'affichage des biens reservables
+
     """
     context = {}
     return render(request, 'neige_soleil_app/guest_home.html', context)
@@ -33,7 +38,7 @@ def register(request):
     Creation d'un utilisateur dans la table user de Django
     Restriction: User non authentifies
 
-    TODO : Gerer les messages d'erreurs sur la creation de compte selon les Rules Django
+    TODO : FEATURE - Rediger le message d'erreur
 
     """
     form = UserCreationForm()
@@ -44,6 +49,8 @@ def register(request):
             username = form.cleaned_data.get('username')
             login(request, user)
             return redirect('main_home')
+        else:
+            messages.error(request, "Entrez des informations correcte et suffisant (longueur de mot de passe 8 caractères")
     context = {
         'form': form,
     }
@@ -83,6 +90,7 @@ def logoutPage(request):
 
 
 @login_required(login_url='login')
+@no_profile
 def new_profile(request):
     """
     Page de creation du profile utilisateur
@@ -90,8 +98,8 @@ def new_profile(request):
     Permet de completer les informations d'un utilisateur
     Restriction: User authentifier
 
-    TODO : Gerer les messages d'erreurs du formulaire
-    TODO : Ajouter une photo de profile (Optionnel)
+    TODO : FEATURE - Gerer les messages d'erreurs du formulaire
+    TODO : FEATURE - Ajouter une photo de profile (Optionnel)
 
     """
     if request.method == 'POST':
@@ -128,7 +136,8 @@ def dashboard(request):
     """
     Vue dashboard
     Restriction: User authentifier, avec Profile
-    TODO: Optimiser les visuels et ajouter des options
+    TODO: FEATURE Optimiser les visuels et ajouter des options
+    TODO: PROJET - Gerer le status des reservations dans l'affichage et la gestion
     """
     reservations = Reservation.objects.filter(profile=request.user.profile.id, location__isnull=True)
     locations = Location.objects.filter(reservation__profile=request.user.profile.id)
@@ -146,10 +155,10 @@ def new_proprietaire(request):
     if request.method == 'POST':
         form = ProfileProprietaireForm(request.POST)
         if form.is_valid():
-            form.save(commit=False)
-            form.profile = request.user.profile
-            form.save()
-            return redirect('proprietaire')
+            prop = form.save(commit=False)
+            prop.profile = request.user.profile
+            prop.save()
+            return redirect('main_proprietaire')
     context = {}
     return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
 
@@ -211,7 +220,7 @@ def main_proprietaire(request):
     Vue espace proprietaire, elle affiche les contrats du proprietaire et
     lui permet de se rediriger vers l'ajout de nouveaux contrats
     Restriction: User authentifier, avec Profile
-    TODO: Ajouter des visuels de données interressant pour les Propriétaires
+    TODO: PROJET - Terminer le front end de la vue main_proprietaire
 
     """
     contrat = ContratProprietaire.objects.filter(profileproprietaire=request.user.profile.profileproprietaire)
@@ -229,21 +238,18 @@ def new_propriete(request):
     Vue qui permet de créer un contrat d'un proprietaire
     Restriction: User authentifier, avec Profile
     """
-
     if request.method == 'POST':
-        ContratProp = ContratProprietaireFrom(request.POST)
+        ContratPropForm = ContratProprietaireFrom(request.POST)
         images = request.FILES.getlist('images')
-        if ContratProp.is_valid():
-            contrat = ContratProp.save(commit=False)
+        if ContratPropForm.is_valid():
+            contrat = ContratPropForm.save(commit=False)
             contrat.profileproprietaire = request.user.profile.profileproprietaire
             contrat.save()
             ProprietePrix.objects.create(propriete=contrat, prix=request.POST['prix'])
             for image in images:
                 ProprieteImage.objects.create(propriete=contrat, image=image)
-            return redirect('proprietaire')
-    context = {
-        'form': ContratProp,
-    }
+            return redirect('main_proprietaire')
+    context = {}
     return render(request, 'neige_soleil_app/main_new_propriete.html', context)
 
 
@@ -252,6 +258,9 @@ def detail_propriete(request, pk):
     """
     Vue qui affiche les détails d'un contrat proprietaire et permet de reservation un bien
     Restriction: User authentifier
+
+    TODO: PROJET - Affichage sans authentification necessaire, mais avec contrainte
+
     """
     contrat = ContratProprietaire.objects.get(id=pk)
     reservations = contrat.reservation_set.all()
@@ -268,8 +277,7 @@ def new_reservation(request, pk):
     """
     Vue de reservation
     Restriction: User authentifier,  avec Profile
-    TODO: Gerer les dates de reservations annuler, Ecraser le save par defaut du form
-    TODO: Empecher le propriete d'acceder a cette vue par l'url
+    TODO: DEBUG - Empecher le propriete d'acceder a cette vue par l'url
     """
     contrat = ContratProprietaire.objects.get(id=pk)
 
@@ -349,3 +357,4 @@ def cancel_reservation(request, pk):
         'reservation': reservation,
     }
     return render(request, 'neige_soleil_app/main_cancel_reservation.html', context)
+

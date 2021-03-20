@@ -8,6 +8,8 @@ class Profile(models.Model):
     il contient des informations propre à un utilisateur
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nom = models.CharField(max_length=200)
+    prenom = models.CharField(max_length=200)
     adresse = models.CharField(max_length=200)
     code_postale = models.IntegerField()
     ville = models.CharField(max_length=200)
@@ -31,7 +33,7 @@ class ContratProprietaire(models.Model):
     Cette class generera la table des proprietés,
     et contients les informations des proprietés.
 
-    TODO: Ajouter les dates du contrat selon la demande du Projet
+    TODO: PROJET - Ajouter les dates du contrat selon la demande du Projet
     """
     DISPONIBLE = 'AVAIL'
     OCCUPER = 'BUSY'
@@ -40,7 +42,7 @@ class ContratProprietaire(models.Model):
     YEAR_IN_SCHOOL_CHOICES = [
         (DISPONIBLE, 'Disponible'),
         (OCCUPER, 'Occuper'),
-        (INACTIF, 'Inactif'),
+        (INACTIF, 'Inactif')
     ]
 
     profileproprietaire = models.ForeignKey(ProfileProprietaire, on_delete=models.CASCADE)
@@ -59,7 +61,7 @@ class ContratProprietaire(models.Model):
 class ProprietePrix(models.Model):
     """
     Permet de definir les differents prix de la propriete
-    TODO: Ajouter plusieurs types de prix et la fonction d'affichage selon la période
+    TODO: PROJET - Ajouter plusieurs types de prix et la fonction d'affichage selon la période
     """
     propriete = models.OneToOneField(ContratProprietaire, on_delete=models.CASCADE)
     prix = models.FloatField()
@@ -119,6 +121,7 @@ class Reservation(models.Model):
         modifier le status de la reservation
         """
         pass
+
 
 class Location(models.Model):
     """

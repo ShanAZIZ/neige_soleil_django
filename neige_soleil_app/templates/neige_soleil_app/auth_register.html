@@ -13,6 +13,11 @@
                             </div>
                             {% include 'neige_soleil_app/form_user_model.html' %}
                             <hr>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <p class="text-danger">{{ message }}</p>
+                                {% endfor %}
+                            {% endif %}
                             <div class="text-center">
                                 <a class="small" href="{% url 'login' %}">Vous etes deja membre ? connectez vous ! </a>
                             </div>

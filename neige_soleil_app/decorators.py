@@ -16,6 +16,20 @@ def unauthenticated_user(view_func):
     return wrapper_func
 
 
+def no_profile(view_func):
+    """
+    Verifie si un user n'as pas de profile
+    """
+    def wrapper_func(request, *args, **kwargs):
+        try:
+            if request.user.profile:
+                return redirect('main_home')
+        except ObjectDoesNotExist:
+            return view_func(request, *args, **kwargs)
+
+    return wrapper_func
+
+
 def known_profile(view_func):
     """
     Verifie si un utilisateur a un profile ou non
