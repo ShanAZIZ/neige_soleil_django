@@ -12,6 +12,7 @@
             <h5 class="card-header"> {{ contrat.nom }}</h5>
             <div class="card-body">
                 <p class="card-text">{{ contrat.description }}</p>
+                <p class="card-text">Adresse : {{ contrat.adresse }}, {{ contrat.ville }}, {{ contrat.code_postale }}</p>
             </div>
         </div>
     </div>
@@ -57,9 +58,25 @@
 <div class="row">
     <div class="col-3">
         <div class="card">
+            <h5 class="card-header"> Type :</h5>
+            <div class="card-body">
+                <p class="card-text">{{ contrat.type }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card">
+            <h5 class="card-header"> exposition :</h5>
+            <div class="card-body">
+                <p class="card-text">{{ contrat.exposition }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card">
             <h5 class="card-header"> Status :</h5>
             <div class="card-body">
-                <p class="card-text"> {{ contrat.status }}</p>
+                <p class="card-text"> {{ contrat.get_status_display }}</p>
             </div>
         </div>
     </div>
@@ -67,7 +84,7 @@
         <div class="card">
             <h5 class="card-header"> Prix Hebdomadaire</h5>
             <div class="card-body">
-                <h5 class="card-text price">{{ contrat.proprieteprix.prix }} €/Semaines</h5>
+                <h5 class="card-text price">{{ contrat.get_prix_actuel }} €/Semaines</h5>
             </div>
         </div>
     </div>

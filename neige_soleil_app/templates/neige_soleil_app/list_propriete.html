@@ -8,7 +8,7 @@
                     <img class="bd-placeholder-img card-img-top" width="100%" height="225"  role="img" aria-label="Placeholder: Thumbnail"  focusable="false" src="{{ contrat.proprieteimage_set.all.first.imageURL }}">
                     <div class="card-body">
                         <p class="card-title">{{ contrat.nom }}</p>
-                        <p class="text-muted">{{ contrat.proprieteprix.prix }} Euros/Semaines</p>
+                        <p class="text-muted">{{ contrat.get_prix_actuel }} Euros/Semaines</p>
                         <hr>
                         <a href="{% url 'detail_propriete' contrat.id %}" ><button type="button" class="btn btn-secondary">Details</button></a>
                         {% if contrat.user == request.user %}

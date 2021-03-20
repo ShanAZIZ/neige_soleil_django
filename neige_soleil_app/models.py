@@ -11,7 +11,7 @@ class Profile(models.Model):
     nom = models.CharField(max_length=200)
     prenom = models.CharField(max_length=200)
     adresse = models.CharField(max_length=200)
-    code_postale = models.IntegerField()
+    code_postale = models.CharField(max_length=5)
     ville = models.CharField(max_length=200)
     telephone = models.IntegerField()
 
@@ -32,44 +32,57 @@ class ContratProprietaire(models.Model):
     """
     Cette class generera la table des proprietés,
     et contients les informations des proprietés.
-
-    TODO: PROJET - Ajouter les dates du contrat selon la demande du Projet
     """
     DISPONIBLE = 'AVAIL'
     OCCUPER = 'BUSY'
     INACTIF = 'OFF'
 
-    YEAR_IN_SCHOOL_CHOICES = [
-        (DISPONIBLE, 'Disponible'),
-        (OCCUPER, 'Occuper'),
+    STATUS_CHOICES = [
+        (DISPONIBLE, 'Actif'),
         (INACTIF, 'Inactif')
+    ]
+
+    TYPES_CHOICES = [
+        ('F1', 'F1'),
+        ('F2', 'F2'),
+        ('F3', 'F3'),
+        ('F4', 'F4'),
+        ('F5', 'F5'),
+    ]
+
+    EXPOSITION_CHOICES = [
+        ('Sud', 'Sud'),
+        ('Nord', 'Nord'),
+        ('Nord-est', 'Nord-est'),
+        ('Nord-ouest', 'Nord-ouest'),
+        ('Sud-est', 'Sud-est'),
+        ('Sud-ouest', 'Sud-ouest'),
+        ('Est', 'Est'),
+        ('Ouest', 'Ouest'),
     ]
 
     profileproprietaire = models.ForeignKey(ProfileProprietaire, on_delete=models.CASCADE)
     nom = models.CharField(max_length=200)
+    adresse = models.CharField(max_length=200)
+    code_postale = models.CharField(max_length=5)
+    ville = models.CharField(max_length=200)
     description = models.TextField(max_length=1000)
+    type = models.CharField(max_length=2, choices=TYPES_CHOICES)
+    exposition = models.CharField(max_length=10, choices=EXPOSITION_CHOICES)
     surface_habitable = models.FloatField()
     surface_balcon = models.FloatField()
     capacite = models.IntegerField()
     distance_pistes = models.FloatField()
-    status = models.CharField(max_length=5, choices=YEAR_IN_SCHOOL_CHOICES, default=DISPONIBLE)
+    status = models.CharField(max_length=5, choices=STATUS_CHOICES, default=DISPONIBLE)
+    prix_saison_haute = models.FloatField()
+    prix_saison_moyenne = models.FloatField()
+    prix_saison_basse = models.FloatField()
 
     def __str__(self):
         return self.nom
 
-
-class ProprietePrix(models.Model):
-    """
-    Permet de definir les differents prix de la propriete
-    TODO: PROJET - Ajouter plusieurs types de prix et la fonction d'affichage selon la période
-    """
-    propriete = models.OneToOneField(ContratProprietaire, on_delete=models.CASCADE)
-    prix = models.FloatField()
-
-    # TO DO : Definir les prix par saison, les saisons et les prix afficher
-
-    def __str__(self):
-        return self.propriete.nom
+    def get_prix_actuel(self):
+        return self.prix_saison_moyenne
 
 
 class ProprieteImage(models.Model):
@@ -114,7 +127,7 @@ class Reservation(models.Model):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days
         if duree == 0:
             duree = 1
-        return duree * self.propriete.proprieteprix.prix / 7
+        return duree * self.propriete.get_prix_actuel() / 7
 
     def annuler_reservation(self):
         """
@@ -129,5 +142,3 @@ class Location(models.Model):
     """
     reservation = models.OneToOneField(Reservation, on_delete=models.SET_NULL, null=True)
     date_confirmation = models.DateField(auto_now_add=True)
-
-

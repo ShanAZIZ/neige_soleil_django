@@ -5,59 +5,102 @@
 
     <div class="mb-3">
         <label for="TextInput" class="form-label">Nom de l'immeuble ou du chalet</label>
-        <input required maxlength="200" type="text" id="TextInput" class="form-control" name="nom" placeholder="Decrivez brievement la location" value="{{ contrat.nom }}">
+        <input required maxlength="200" type="text" id="TextInput" class="form-control" name="nom" placeholder="Le nom du lieu ou de l'immeuble" value="{{ contrat.nom }}">
     </div>
-
+    <div class="row">
+        <div class="col-4">
+            <label for="TextInput" class="form-label">Adresse</label>
+            <input required maxlength="200" type="text" id="TextInput" class="form-control" name="adresse" placeholder="l'adresse du lieu" value="{{ contrat.adresse }}">
+        </div>
+        <div class="col-4">
+            <label for="TextInput" class="form-label">Ville</label>
+            <input required maxlength="200" type="text" id="TextInput" class="form-control" name="ville" placeholder="La ville" value="{{ contrat.ville }}">
+        </div>
+        <div class="col-4">
+            <label for="TextInput" class="form-label">Code postale</label>
+            <input required maxlength="200" type="text" id="TextInput" class="form-control" name="code_postale" placeholder="Le code postale" value="{{ contrat.code_postale }}">
+        </div>
+    </div>
     <div class="mb-3">
         <label for="id_description" class="form-label">Description Longue</label>
         <textarea  class="form-control" name="description" cols="40" rows="10" maxlength="1000" required id="id_description" >{{ contrat.description }}</textarea>
     </div>
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-3">
             <label for="id_surface_habitable" class="form-label">Surface habitable</label>
             <input type="number" class="form-control" name="surface_habitable" step="any" required id="id_surface_habitable" value="{{ contrat.surface_habitable }}">
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-3">
             <label for="id_surface_balcon" class="form-label">Surface du balcon</label>
             <input type="number" class="form-control" name="surface_balcon" step="any" required id="id_surface_balcon" value="{{ contrat.surface_balcon }}">
         </div>
     </div>
     <br>
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-2">
             <label for="id_capacite" class="form-label">Capacite d'accueil</label>
             <input type="number" class="form-control" name="capacite" required id="id_capacite" value="{{ contrat.capacite }}">
         </div>
-
-
-        <div class="col-lg-4">
-            <label for="id_distance_pistes" class="form-label">Distance qui sépare la location des pistes</label>
+        <div class="col-2">
+            <label for="id_distance_pistes" class="form-label">Distance des pistes</label>
             <input type="number" class="form-control" name="distance_pistes" step="any" required id="id_distance_pistes" value="{{ contrat.distance_pistes }}">
         </div>
-        <div class="col-lg-4">
-            <label for="price" class="form-label">Prix Hebdomadaire</label>
-            <input required type="number" id="price" class="form-control" name="prix" placeholder="Prix" value="{{ contrat.proprieteprix.prix }}">
+        <div class="col-2">
+            <label for="price" class="form-label">Prix a la saison haute</label>
+            <input required type="number" id="price" class="form-control" name="prix_saison_haute" placeholder="Prix" value="{{ contrat.prix_saison_haute }}">
+        </div>
+        <div class="col-2">
+            <label for="price" class="form-label">Prix a la saison moyenne</label>
+            <input required type="number" id="price" class="form-control" name="prix_saison_moyenne" placeholder="Prix" value="{{ contrat.prix_saison_moyenne }}">
+        </div>
+        <div class="col-2">
+            <label for="price" class="form-label">Prix a la saison basse</label>
+            <input required type="number" id="price" class="form-control" name="prix_saison_basse" placeholder="Prix" value="{{ contrat.prix_saison_basse }}">
         </div>
     </div>
     <br>
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-3">
+            <label for="id_status" class="form-label">Type</label>
+            <select name="type" class="form-control" id="id_status" required>
+                <option value="F1">F1</option>
+                <option value="F2">F2</option>
+                <option value="F3">F3</option>
+                <option value="F4">F4</option>
+                <option value="F5">F5</option>
+            </select>
+        </div>
+        <div class="col-3">
+            <label for="id_status" class="form-label">Exposition</label>
+            <select name="exposition" class="form-control" id="id_status" required>
+                <option value="Sud" >Sud</option>
+                <option value="Nord">Nord</option>
+                <option value="Nord-est">Nord-est</option>
+                <option value="Nord-ouest">Nord-ouest</option>
+                <option value="Nord-ouest">Nord-ouest</option>
+                <option value="Sud">Sud</option>
+                <option value="Sud-est">Sud-est</option>
+                <option value="Sud-ouest">Sud-ouest</option>
+                <option value="Est">Est</option>
+                <option value="Ouest">Ouest</option>
+            </select>
+        </div>
+        <div class="col-3">
             <label for="id_status" class="form-label">Status actuel de la location</label>
             <select name="status" class="form-control" id="id_status" required>
                 <option value="AVAIL" >Disponible</option>
-
                 <option value="BUSY">Occuper</option>
-
                 <option value="OFF">Inactif</option>
-
             </select>
         </div>
-        <div class="col-lg-4">
+
+        <div class="col-3">
             <label class="form-label">Inserer toutes les images</label>
             <input type="file" name="images" multiple class="form-control-file">
         </div>
-        <input type="submit" class="btn btn-primary col-lg-4" name="envoyer" value="Valider">
     </div>
+    <br>
+    <input type="submit" class="btn btn-primary col-lg-4" name="envoyer" value="Valider">
 </form>

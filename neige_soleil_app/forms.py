@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile, ContratProprietaire, ProprietePrix, Reservation, ProfileProprietaire
+from .models import Profile, ContratProprietaire, Reservation, ProfileProprietaire
 
 
 class UserCreationForm(UserCreationForm):
@@ -24,12 +24,6 @@ class ContratProprietaireFrom(ModelForm):
         exclude = ['profileproprietaire']
 
 
-class LocationSetPrix(ModelForm):
-    class Meta:
-        model = ProprietePrix
-        fields = '__all__'
-
-
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
@@ -41,6 +35,12 @@ class ReservationForm(ModelForm):
     class Meta:
         model = Reservation
         fields = '__all__'
+
+    def is_avail(self, contrat):
+        for reservation in contrat.reservation_set.all():
+            if reservation.date_debut_sejour <= self.date_debut_sejour <= reservation.date_fin_sejour or reservation.date_debut_sejour <= self.date_fin_sejour <= reservation.date_fin_sejour:
+                return False
+        return True
 
 
 class ProfileProprietaireForm(ModelForm):
