@@ -18,7 +18,7 @@
             {% if reservations %}
                 {% for reservation in reservations %}
                     <tr>
-                        <td>{{ reservation.status_reservation}}</td>
+                        <td>{{ reservation.get_status_reservation_display}}</td>
                         <td>{{ reservation.date_reservation }}</td>
                         <td>{{ reservation.propriete.nom }}</td>
                         <td>{{ reservation.date_debut_sejour }}</td>

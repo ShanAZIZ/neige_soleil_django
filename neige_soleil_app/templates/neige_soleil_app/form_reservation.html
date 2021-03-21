@@ -46,7 +46,7 @@
                         <td>{{ reservation.date_debut_sejour }}</td>
                         <td>{{ reservation.date_fin_sejour }}</td>
                         <td>{{ reservation.date_reservation }}</td>
-                        <td>{{ reservation.status_reservation }}</td>
+                        <td>{{ reservation.get_status_reservation_display }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}

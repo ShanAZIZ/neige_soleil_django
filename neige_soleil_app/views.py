@@ -1,6 +1,5 @@
 """
 TODO: FEATURE - Vue de Mise a jour des images de proprietes
-TODO: PROJET - Vue de modification des reservations
 TODO: PROJET - Vue de modification des locations(A voir)
 TODO: DEBUG - Effectuer un refactor des vues(Utiliser les class based View)
 TODO: PROJET - Revoir la logique des bases user et de l'authentification
@@ -130,7 +129,6 @@ def dashboard(request):
     Vue dashboard
     Restriction: User authentifier, avec Profile
     TODO: FEATURE Optimiser les visuels et ajouter des options
-    TODO: PROJET - Gerer le status des reservations dans l'affichage et la gestion
     """
     reservations = Reservation.objects.filter(profile=request.user.profile.id, location__isnull=True)
     locations = Location.objects.filter(reservation__profile=request.user.profile.id)
