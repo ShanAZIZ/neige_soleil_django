@@ -83,6 +83,13 @@ class ContratProprietaire(models.Model):
 
     def get_prix_actuel(self):
         return self.prix_saison_moyenne
+    
+    def is_avail(self, date_debut_sejour, date_fin_sejour, pk=None):
+        reservations = self.reservation_set.exclude(id=pk)
+        for reservation in reservations:
+            if reservation.date_debut_sejour <= date_debut_sejour <= reservation.date_fin_sejour or reservation.date_debut_sejour <= date_fin_sejour <= reservation.date_fin_sejour:
+                return False
+        return True
 
 
 class ProprieteImage(models.Model):
@@ -109,10 +116,12 @@ class Reservation(models.Model):
     Class des reservations
     """
     ENCOURS = 'WAIT'
+    LOCATION = 'LOCATION'
     ANNULER = 'CANCEL'
 
     STATUS_RES = [
         (ENCOURS, 'En cours'),
+        (LOCATION, 'Location'),
         (ANNULER, 'Annuler'),
     ]
 
@@ -121,7 +130,7 @@ class Reservation(models.Model):
     date_reservation = models.DateField(auto_now_add=True)
     date_debut_sejour = models.DateField()
     date_fin_sejour = models.DateField()
-    status_reservation = models.CharField(max_length=6, choices=STATUS_RES, default=ENCOURS)
+    status_reservation = models.CharField(max_length=8, choices=STATUS_RES, default=ENCOURS)
 
     def prix_total(self):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days

@@ -35,12 +35,7 @@ class ReservationForm(ModelForm):
     class Meta:
         model = Reservation
         fields = '__all__'
-
-    def is_avail(self, contrat):
-        for reservation in contrat.reservation_set.all():
-            if reservation.date_debut_sejour <= self.date_debut_sejour <= reservation.date_fin_sejour or reservation.date_debut_sejour <= self.date_fin_sejour <= reservation.date_fin_sejour:
-                return False
-        return True
+        exclude = ['profile', 'propriete']
 
 
 class ProfileProprietaireForm(ModelForm):
