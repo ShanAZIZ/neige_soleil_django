@@ -32,6 +32,7 @@ class ContratProprietaire(models.Model):
     """
     Cette class generera la table des proprietés,
     et contients les informations des proprietés.
+    TODO: Gerer les dates du contrat, debut et fin et status a revoir
     """
     DISPONIBLE = 'AVAIL'
     OCCUPER = 'BUSY'

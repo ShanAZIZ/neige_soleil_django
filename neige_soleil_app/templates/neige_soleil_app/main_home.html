@@ -1,5 +1,13 @@
 {% extends 'neige_soleil_app/main_layout.html' %}
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <hr>
     <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light text-center">Bienvenue chez Neige et soleil</h1>

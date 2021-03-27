@@ -1,8 +1,9 @@
 """
-TODO: FEATURE - Vue de Mise a jour des images de proprietes
+TODO: FEATURE - Vue de Mise a jour des images de propriétés
 TODO: PROJET - Vue de modification des locations(A voir)
 TODO: DEBUG - Effectuer un refactor des vues(Utiliser les class based View)
 TODO: PROJET - Revoir la logique des bases user et de l'authentification
+TODO: REFACTOR - Revoir la logique des formulaire (Héritage de classes)
 """
 
 from django.contrib import messages
@@ -23,7 +24,7 @@ def accueil(request):
     Page d'accueil publique de l'application
     Aucune restriction appliquer
 
-    TODO: PROJET -Gerer l'affichage des biens reservables
+    TODO: PROJET - Gérer l'affichage des biens reservables
 
     """
     context = {}
@@ -40,7 +41,7 @@ def register(request):
     Creation d'un utilisateur dans la table user de Django
     Restriction: User non authentifies
 
-    TODO : FEATURE - Rediger le message d'erreur
+    TODO : FEATURE - Rédiger le message d'erreur
 
     """
     form = UserCreationForm()
@@ -50,9 +51,11 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             login(request, user)
+            messages.success(request, " Votre compte à bien été créer "+username)
             return redirect('main_home')
         else:
-            messages.error(request, "Entrez des informations correcte et suffisant (longueur de mot de passe 8 caractères")
+            messages.error(request, "Entrez des informations correcte et suffisant (longueur de mot de passe 8 "
+                                    "caractères")
     context = {
         'form': form,
     }
@@ -83,7 +86,7 @@ def loginPage(request):
 @login_required(login_url='login')
 def logoutPage(request):
     """
-    Page de deconnexion, utilise la methode logout de Django
+    Page de déconnexion, utilise la methode logout de Django
     Restriction: User authentifier
     """
     logout(request)
@@ -103,17 +106,18 @@ def edit_password(request):
 
 
 ############################################################################################
-# VUES GENERALES
+# VUES GÉNÉRALES
 ############################################################################################
 @login_required(login_url='login')
 def main_home(request):
     """
     Page d'accueil pour les utilisateurs Authentifies
-    Recupere les proprietés et les affiches
+    Récupère les propriétés et les affiches
     Restriction: User authentifier
     """
     try:
-        contrat_prop = ContratProprietaire.objects.exclude(profileproprietaire=request.user.profile.profileproprietaire.id)
+        profile = request.user.profile
+        contrat_prop = ContratProprietaire.objects.exclude(profileproprietaire=profile.profileproprietaire.id)
     except ObjectDoesNotExist:
         contrat_prop = ContratProprietaire.objects.all()
     context = {
@@ -152,7 +156,7 @@ def new_profile(request):
     Permet de completer les informations d'un utilisateur
     Restriction: User authentifier
 
-    TODO : FEATURE - Gerer les messages d'erreurs du formulaire
+    TODO : FEATURE - Gérer les messages d'erreurs du formulaire
     TODO : FEATURE - Ajouter une photo de profile (Optionnel)
 
     """
@@ -192,7 +196,7 @@ def detail_profile(request):
 
 
 ############################################################################################
-# LES PROPRIETAIRES/HOTES
+# LES PROPRIÉTAIRES/HÔTES
 ############################################################################################
 @login_required(login_url='login')
 @known_profile
@@ -240,7 +244,7 @@ def main_proprietaire(request):
 
 
 ############################################################################################
-# LES PROPRIETES
+# LES PROPRIÉTÉS
 ############################################################################################
 @login_required(login_url='login')
 @known_profile
@@ -288,7 +292,7 @@ def detail_propriete(request, pk):
     Vue qui affiche les détails d'un contrat proprietaire et permet de reservation un bien
     Restriction: User authentifier
 
-    TODO: PROJET - Affichage sans authentification necessaire, mais avec contrainte
+    TODO: PROJET - Affichage sans authentification nécessaire, mais avec contrainte
 
     """
     contrat = ContratProprietaire.objects.get(id=pk)
@@ -356,7 +360,10 @@ def edit_reservation(request, pk):
     return render(request, 'neige_soleil_app/main_edit_reservation.html', context)
 
 
-def cancel_reservation(request, pk):
+def cancel_reservation(request):
+    """
+    TODO: À implémenter
+    """
     context = {}
     return render(request, 'neige_soleil_app/main_cancel_reservation.html', context)
 
@@ -368,7 +375,7 @@ def cancel_reservation(request, pk):
 @known_profile
 def new_location(request, pk):
     """
-    Vue qui permet de generer une location (Page de confirmation de location)
+    Vue qui permet de générer une location (Page de confirmation de location)
     Restriction: User authentifier, avec Profile
     """
     reservation = Reservation.objects.get(id=pk)
@@ -381,9 +388,3 @@ def new_location(request, pk):
         'reservation': reservation,
     }
     return render(request, 'neige_soleil_app/main_confirm_reservation.html', context)
-
-
-
-
-
-
