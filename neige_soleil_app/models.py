@@ -6,6 +6,7 @@ class Profile(models.Model):
     """
     Le profile de l'utilisateur :
     il contient des informations propre à un utilisateur
+    TODO: Mettre en place AbstractUser et le groupe Proprietaire
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nom = models.CharField(max_length=200)
@@ -30,9 +31,9 @@ class ProfileProprietaire(models.Model):
 
 class ContratProprietaire(models.Model):
     """
-    Cette class generera la table des proprietés,
-    et contients les informations des proprietés.
-    TODO: Gerer les dates du contrat, debut et fin et status a revoir
+    Cette class génèrera la table des propriétés,
+    et contient les informations des propriétés.
+    TODO: Gérer les dates du contrat, debut et fin et status a revoir
     """
     DISPONIBLE = 'AVAIL'
     OCCUPER = 'BUSY'

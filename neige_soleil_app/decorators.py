@@ -1,12 +1,12 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
 from django.shortcuts import redirect
 
 
 def unauthenticated_user(view_func):
     """
-    Verifie si un user n'est pas authentifiers
+    Vérifie si un user n'est pas authentifier
     """
+
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('main_home')
@@ -18,8 +18,9 @@ def unauthenticated_user(view_func):
 
 def no_profile(view_func):
     """
-    Verifie si un user n'as pas de profile
+    Vérifie si un user n'as pas de profile
     """
+
     def wrapper_func(request, *args, **kwargs):
         try:
             if request.user.profile:
@@ -32,8 +33,9 @@ def no_profile(view_func):
 
 def known_profile(view_func):
     """
-    Verifie si un utilisateur a un profile ou non
+    Vérifie si un utilisateur a un profile ou non
     """
+
     def wrapper_func(request, *args, **kwargs):
         try:
             val = request.user.profile
@@ -46,12 +48,22 @@ def known_profile(view_func):
 
 def known_proprietaire(view_func):
     """
-    Verifie si un utilisateur a un profile ou non
+    Vérifie si un utilisateur a un profile ou non
     """
+
     def wrapper_func(request, *args, **kwargs):
         try:
-            val = request.user.profile.profileproprietaire
-            return view_func(request, *args, **kwargs)
+            if request.user.profile.profileproprietaire:
+                return view_func(request, *args, **kwargs)
         except ObjectDoesNotExist:
             return redirect('new_proprietaire')
+
     return wrapper_func
+
+
+def unknown_proprietaire(view_func):
+    """
+    Vérifie qu'un utilisateur n'est pas propriétaire
+    TODO: Décorateur unknown_proprietaire
+    """
+    pass

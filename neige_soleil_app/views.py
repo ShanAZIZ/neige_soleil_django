@@ -1,9 +1,5 @@
 """
-TODO: FEATURE - Vue de Mise a jour des images de propriétés
-TODO: PROJET - Vue de modification des locations(A voir)
-TODO: DEBUG - Effectuer un refactor des vues(Utiliser les class based View)
-TODO: PROJET - Revoir la logique des bases user et de l'authentification
-TODO: REFACTOR - Revoir la logique des formulaire (Héritage de classes)
+TODO: DEBUG - Identifier les vues à transformer en Class View
 """
 
 from django.contrib import messages
@@ -19,13 +15,11 @@ from .decorators import unauthenticated_user, known_profile, known_proprietaire,
 from .models import *
 
 
+@unauthenticated_user
 def accueil(request):
     """
     Page d'accueil publique de l'application
     Aucune restriction appliquer
-
-    TODO: PROJET - Gérer l'affichage des biens reservables
-
     """
     context = {}
     return render(request, 'neige_soleil_app/guest_home.html', context)
@@ -204,6 +198,7 @@ def new_proprietaire(request):
     """
     Création d'un proprietaire
     TODO: Vérification de la qualité du RIB
+    TODO: Décorateur pour les propriétaires déjà existants
     """
     if request.method == 'POST':
         form = ProfileProprietaireForm(request.POST)
@@ -275,6 +270,9 @@ def new_propriete(request):
 @login_required(login_url='login')
 @known_profile
 def edit_propriete(request, pk):
+    """
+    TODO: FEATURE - Mise a jour des images de propriétés
+    """
     contrat = ContratProprietaire.objects.get(id=pk)
     if contrat.profileproprietaire == request.user.profile.profileproprietaire:
         if request.method == 'POST':
@@ -295,9 +293,6 @@ def detail_propriete(request, pk):
     """
     Vue qui affiche les détails d'un contrat proprietaire et permet de reservation un bien
     Restriction: User authentifier
-
-    TODO: PROJET - Affichage sans authentification nécessaire, mais avec contrainte
-
     """
     contrat = ContratProprietaire.objects.get(id=pk)
     reservations = contrat.reservation_set.all()
@@ -317,7 +312,7 @@ def new_reservation(request, pk):
     """
     Vue de reservation
     Restriction: User authentifier,  avec Profile
-    TODO: DEBUG - Empecher le propriete d'acceder a cette vue par l'url
+    TODO: DEBUG - Empêcher le propriete d'accéder a cette vue par l'url
     """
     contrat = ContratProprietaire.objects.get(id=pk)
     reservations = contrat.reservation_set.all()
