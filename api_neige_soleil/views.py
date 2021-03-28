@@ -1,14 +1,18 @@
 from django.shortcuts import render
 
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import *
 from neige_soleil_app.models import *
+
 # TODO: API - Adapter les permissions des vues
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -32,6 +36,7 @@ class ContratProprietaireViewSet(viewsets.ModelViewSet):
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer

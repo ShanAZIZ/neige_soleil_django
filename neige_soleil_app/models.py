@@ -115,6 +115,7 @@ class ProprieteImage(models.Model):
 class Reservation(models.Model):
     """
     Class des reservations
+    TODO: Gerer les dates de fin antèrieures aux dates débuts
     """
     ENCOURS = 'WAIT'
     LOCATION = 'LOCATION'

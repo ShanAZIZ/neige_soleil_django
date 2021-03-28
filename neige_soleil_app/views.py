@@ -66,7 +66,7 @@ def register(request):
 def loginPage(request):
     """
     Page de connexion
-    Recuperer les infos de connexion et authentifier l'utilisateur avec le systeme d'auth de
+    Récupérer les infos de connexion et authentifier l'utilisateur avec le système d'authentification de
     Django
     Restriction: User non authentifies
     """
@@ -201,6 +201,10 @@ def detail_profile(request):
 @login_required(login_url='login')
 @known_profile
 def new_proprietaire(request):
+    """
+    Création d'un proprietaire
+    TODO: Vérification de la qualité du RIB
+    """
     if request.method == 'POST':
         form = ProfileProprietaireForm(request.POST)
         if form.is_valid():

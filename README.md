@@ -12,19 +12,23 @@ Si vous êtes sur Windows n'oubliez pas d'ajouter python à PATH
 3. Installer les dependencies - Mettez vous dans le répertoire du projet et tapez
    la commande suivante 
    
-    `pip install requirements.txt`
-
+    `pip install -r requirements.txt`
+4. Renommer le fichier .env.example en .env et ajouter les configurations demandées 
+   (SECRET_KEY, DEBUG). Ces configurations seront spécifiés ulterieurement
+   
 ### Installer la base de donnée
 
+1. Lancer votre serveur MySQL, et créer une nouvelle base de donnée
+2. Configurer le fichier settings.py avec les informations de votre base de donnée (HOST, PORT)
+3. Renommez le fichier my.cnf.example en my.cnf et completez les données necessaires(user, password)
+4. Lancer la commande `python manage.py makemigrations`
+5. Puis la commande `python manage.py migrate`
+6. Pour créer un administrateur :
+   `python manage.py createsuperuser`
 
-## Page d'accueil 
-La page d'accueil, page sur laquelle on arrive lors de l'ouverture du projet, est une page qui permet de rediriger
-vers une page d'inscription ou un page de connexion
+## Utilisation 
 
-## Inscriptions et connexions
+Pour demarrer votre serveur de developpement Django, utilisez la commande `python3 manage.py runserver`
 
-Pour l'inscription et la connexion, nous utiliserons le systeme d'authentification fournis par le framework Django. Le système fournis une table users,
-une table groups, et une table permissions. On utilisera pour l'instant uniquement la table users. 
+## API
 
-Le systeme comporte aussi des decorators (python : ) pour permettre d'identifier les vues que les utilisateur non authentifiés n'ont 
-pas le droits de voir
