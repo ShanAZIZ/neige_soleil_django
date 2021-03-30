@@ -18,15 +18,13 @@ class Profile(models.Model):
     rib = models.CharField(max_length=50)
 
     def __str__(self):
-        return str(self.first_name) + " " + str(self.last_name)
+        return str(self.user.first_name) + " " + str(self.user.last_name)
 
 
 class ContratProprietaire(models.Model):
     """
     Cette class génèrera la table des propriétés,
     et contient les informations des propriétés.
-    TODO: Gérer les dates du contrat, debut et fin et status a revoir
-    TODO: Tester la vérification des reservations annulés
     """
     DISPONIBLE = 'AVAIL'
     INACTIF = 'EXPIRED'
@@ -69,23 +67,26 @@ class ContratProprietaire(models.Model):
     surface_balcon = models.FloatField()
     capacite = models.IntegerField()
     distance_pistes = models.FloatField()
-    status = models.CharField(max_length=7, choices=STATUS_CHOICES, default=DISPONIBLE)
+    status = models.CharField(max_length=7, choices=STATUS_CHOICES, default=ATTENTE)
     prix_saison_haute = models.FloatField()
     prix_saison_moyenne = models.FloatField()
     prix_saison_basse = models.FloatField()
+    date_debut = models.DateField()
+    date_fin = models.DateField()
+    date_creation = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.nom
 
     def get_prix_actuel(self):
         return self.prix_saison_moyenne
-    
+
     def is_avail(self, date_debut_sejour, date_fin_sejour, pk=None):
         reservations = self.reservation_set.exclude(id=pk)
         for reservation in reservations:
-            if (reservation.date_debut_sejour <= date_debut_sejour \
-                    <= reservation.date_fin_sejour or reservation.date_debut_sejour \
-                    <= date_fin_sejour <= reservation.date_fin_sejour) and reservation.status_reservation != 'CANCEL':
+            if (reservation.date_debut_sejour <= date_debut_sejour <= reservation.date_fin_sejour or
+                reservation.date_debut_sejour <= date_fin_sejour <= reservation.date_fin_sejour) and \
+                    reservation.status_reservation != 'CANCEL':
                 return False
         return True
 
@@ -112,7 +113,7 @@ class ProprieteImage(models.Model):
 class Reservation(models.Model):
     """
     Class des reservations
-    TODO: Gerer les dates de fin antèrieures aux dates débuts
+    TODO: Gérer les dates de fin antérieures aux dates débuts et les dates de debut avant date actuelle
     """
     ENCOURS = 'WAIT'
     LOCATION = 'LOCATION'
@@ -147,6 +148,7 @@ class Reservation(models.Model):
         """
         modifier le status de la reservation
         """
+        self.status_reservation = self.ANNULER
         pass
 
 

@@ -6,7 +6,7 @@
     <br>
     <hr>
     <br>
-    <!--
+
     <h4>Vos contrats</h4>
     <table class="table">
         <thead>
@@ -14,26 +14,28 @@
                 <td scope="col">Nom</td>
                 <td scope="col">Date de début</td>
                 <td scope="col">Date de fin</td>
-                <td scope="col">Mise a disposition</td>
                 <td scope="col">Status</td>
                 <td scope="col">Prix</td>
                 <td scope="col">Option</td>
             </tr>
         </thead>
         <tbody>
+        {% for contrat in contrats %}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><button class="btn btn-primary">Details</button> <button class="btn btn-warning">Modifier</button></td>
+                <td>{{ contrat.nom }}</td>
+                <td>{{ contrat.date_debut }}</td>
+                <td>{{ contrat.date_fin }}</td>
+                <td>{{ contrat.get_status_display }}</td>
+                <td>{{ contrat.get_prix_actuel | floatformat:2 }}</td>
+                <td>
+                    <a href="{% url 'detail_propriete' contrat.id %}"><button class="btn btn-primary">Details</button></a>
+                    <a href="{% url 'propriete_edit' contrat.id %}"><button class="btn btn-warning">Modifier</button></a>
+                </td>
             </tr>
+        {% endfor %}
         </tbody>
-
     </table>
-    -->
+
     <h4>Voici vos propriétés</h4>
     {% include 'neige_soleil_app/list_propriete.html' %}
 {% endblock %}

@@ -87,13 +87,17 @@
                 <option value="Ouest">Ouest</option>
             </select>
         </div>
-        <div class="col-3">
-            <label for="id_status" class="form-label">Status actuel de la location</label>
-            <select name="status" class="form-control" id="id_status" required>
-                <option value="AVAIL" >Disponible</option>
-                <option value="BUSY">Occuper</option>
-                <option value="OFF">Inactif</option>
-            </select>
+        <div class="row">
+            <div class="col-6">
+                <label for="datedebut" class="form-label"> Date de début du contrat </label>
+                <input id="datedebut" name="date_debut" type="date" required value="{{ contrat.date_debut }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <label for="datefin" class="form-label"> Date de fin du contrat </label>
+                <input id="datefin" name="date_fin" type="date" required value="{{ contrat.date_fin }}">
+            </div>
         </div>
 
         <div class="col-3">

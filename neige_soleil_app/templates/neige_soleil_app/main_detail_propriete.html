@@ -4,7 +4,7 @@
     {% include 'neige_soleil_app/detail_propriete.html' %}
     <br>
     {% if request.user.profile %}
-        {% if contrat.profileproprietaire.id is not request.user.profile.profileproprietaire.id %}
+        {% if contrat.user.id is not request.user.id %}
             <a href="{% url 'reserver' contrat.id %}"><button class="btn btn-secondary">RESERVER</button></a>
         {% else %}
             <a href="{% url 'propriete_edit' contrat.id %}"><button class="btn btn-warning">MODIFIER</button></a>
