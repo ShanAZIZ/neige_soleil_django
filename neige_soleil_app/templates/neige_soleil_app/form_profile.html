@@ -1,0 +1,39 @@
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label" >Nom : </label><input class="form-control" placeholder="Nom d'utilisateur" id="username" type="text" name="username"  value="{{ request.user.username }}">
+        </div>
+        <div class="mb-3">
+            <label for="lastname" class="form-label" >Nom : </label><input class="form-control" placeholder="Votre nom" id="nom" type="text" name="last_name"  value="{{ request.user.last_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="firstname" class="form-label">Prenom : </label><input class="form-control" placeholder="Votre prenom" id="prenom" type="text" name="first_name" value="{{ request.user.first_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="mail" class="form-label">Email : </label><input class="form-control" placeholder="Adresse email" id="mail" type="email" name="email" value="{{ request.user.email }}">
+        </div>
+        <div class="mb-3">
+            <label for="adresse" class="form-label" >Votre adresse : </label><input class="form-control" id="adresse" type="text" name="adresse" placeholder="Numero, voie, rue etc.." value="{{ request.user.profile.adresse }}">
+        </div>
+        <div class="mb-3">
+            <label for="cp" class="form-label">Code postale : </label><input class="form-control"  id="cp" type="number" name="code_postale" placeholder="Le code postale de votre ville" value="{{ request.user.profile.code_postale }}">
+        </div>
+        <div class="mb-3">
+            <label for="ville" class="form-label">Ville : </label><input class="form-control"  id="ville" type="text" name="ville" placeholder="Votre ville de résidence" value="{{ request.user.profile.ville }}">
+        </div>
+        <div class="mb-3">
+            <label for="tel" class="form-label">Telephone : </label><input class="form-control"  id="tel" type="tel" name="telephone" placeholder="Numero de telephone" value="{{ request.user.profile.telephone }}">
+        </div>
+        <div class="mb-3">
+            <label for="rib" class="form-label">RIB : </label><input class="form-control"  id="rib" type="tel" name="rib" placeholder="Releve d'identité bancaire" value="{{ request.user.profile.rib }}">
+        </div>
+        <input type="submit" class="btn btn-primary" value="Valider">
+    </form>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="text-danger">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
