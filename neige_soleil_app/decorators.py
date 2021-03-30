@@ -38,8 +38,8 @@ def known_profile(view_func):
 
     def wrapper_func(request, *args, **kwargs):
         try:
-            val = request.user.profile
-            return view_func(request, *args, **kwargs)
+            if request.user.profile:
+                return view_func(request, *args, **kwargs)
         except ObjectDoesNotExist:
             return redirect('new_profile')
 
@@ -48,14 +48,11 @@ def known_profile(view_func):
 
 def known_proprietaire(view_func):
     """
-    Vérifie si un utilisateur a un profile ou non
+    Vérifie si un utilisateur est un proprietaire
     """
-
     def wrapper_func(request, *args, **kwargs):
-        try:
-            if request.user.is_proprietaire:
-                return view_func(request, *args, **kwargs)
-        except ObjectDoesNotExist:
-            return redirect('new_proprietaire')
-
+        if request.user.is_proprietaire:
+            return view_func(request, *args, **kwargs)
+        else:
+            return redirect('main_home')
     return wrapper_func
