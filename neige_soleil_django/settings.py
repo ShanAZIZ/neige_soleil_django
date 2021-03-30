@@ -90,7 +90,9 @@ DATABASES = {
         'OPTIONS': {
             'read_default_file': os.path.join(BASE_DIR, 'my.cnf'),
         },
-        'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock'
+        # YOU CAN MODIFY THE HOST AND PORT ACCORDING TO THE DATABASE
+        'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock',
+        # 'PORT':
     }
 }
 

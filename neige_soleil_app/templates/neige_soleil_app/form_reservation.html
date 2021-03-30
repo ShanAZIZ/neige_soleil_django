@@ -17,6 +17,10 @@
             <br>
             <input type="submit" class="btn btn-dark" value="Reserver">
         </form>
+        <br>
+        {% if reservation %}
+            <a href="{% url 'cancel_reservation' reservation.id %}" > <button class="btn btn-danger">Annuler</button></a>
+        {% endif %}
         {% if messages %}
             {% for message in messages %}
                 <p class="text-danger">{{ message }}</p>

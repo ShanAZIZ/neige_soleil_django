@@ -27,7 +27,7 @@ class ContratProprietaireFrom(ModelForm):
     class Meta:
         model = ContratProprietaire
         fields = '__all__'
-        exclude = ['user']
+        exclude = ['user', 'status']
 
 
 class ReservationForm(ModelForm):
