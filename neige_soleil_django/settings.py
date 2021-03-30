@@ -31,6 +31,9 @@ DEBUG = config('DEBUG', cast=bool, default=True)
 
 ALLOWED_HOSTS = []
 
+# MODIFY THE USER MODEL USED ON AUTH
+AUTH_USER_MODEL = 'neige_soleil_app.Utilisateur'
+
 
 # Application definition
 

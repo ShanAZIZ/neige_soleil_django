@@ -32,14 +32,12 @@
                 {% if request.user.profile %}
                     <div class="dropdown">
                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ request.user.profile.nom }} {{ request.user.profile.prenom }}
+                            {{ request.user.first_name }} {{ request.user.last_name }}
                         </a>
 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {% if request.user.profile.profileproprietaire %}
+                            {% if request.user.is_proprietaire %}
                                 <li><a class="dropdown-item" href="{% url 'main_proprietaire' %}">Espace proprietaire</a></li>
-                            {% else %}
-                                <li><a class="dropdown-item" href="{% url 'new_proprietaire' %}">Devenir proprietaire</a></li>
                             {% endif %}
                             <li><a class="dropdown-item" href="{% url 'detail_profile' %}">Mon profil</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Se deconnecter</a></li>

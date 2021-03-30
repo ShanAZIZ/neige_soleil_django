@@ -53,17 +53,9 @@ def known_proprietaire(view_func):
 
     def wrapper_func(request, *args, **kwargs):
         try:
-            if request.user.profile.profileproprietaire:
+            if request.user.is_proprietaire:
                 return view_func(request, *args, **kwargs)
         except ObjectDoesNotExist:
             return redirect('new_proprietaire')
 
     return wrapper_func
-
-
-def unknown_proprietaire(view_func):
-    """
-    Vérifie qu'un utilisateur n'est pas propriétaire
-    TODO: Décorateur unknown_proprietaire
-    """
-    pass

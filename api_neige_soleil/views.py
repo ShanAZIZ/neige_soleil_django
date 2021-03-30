@@ -16,18 +16,8 @@ class AdminViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(AdminViewSet):
-    queryset = User.objects.all()
+    queryset = Utilisateur.objects.all()
     serializer_class = UserSerializer
-
-
-class ProfileViewSet(AdminViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
-
-class ProfileProprietaireViewSet(AdminViewSet):
-    queryset = ProfileProprietaire.objects.all()
-    serializer_class = ProfileProprietaireSerializer
 
 
 class ContratProprietaireViewSet(AdminViewSet):

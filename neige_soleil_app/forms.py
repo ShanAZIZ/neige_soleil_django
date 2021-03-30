@@ -1,27 +1,13 @@
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from .models import Profile, ContratProprietaire, Reservation, ProfileProprietaire
+from .models import Utilisateur, Profile, ContratProprietaire, Reservation
 
 
 class UserCreationForm(UserCreationForm):
     class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
-
-
-class UserInfoUpdateForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'username']
-
-
-class ContratProprietaireFrom(ModelForm):
-    class Meta:
-        model = ContratProprietaire
-        fields = '__all__'
-        exclude = ['profileproprietaire']
+        model = Utilisateur
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'is_proprietaire']
 
 
 class ProfileForm(ModelForm):
@@ -31,15 +17,22 @@ class ProfileForm(ModelForm):
         exclude = ['user']
 
 
+class UserInfoUpdateForm(ModelForm):
+    class Meta:
+        model = Utilisateur
+        fields = ['first_name', 'last_name', 'email', 'username']
+
+
+class ContratProprietaireFrom(ModelForm):
+    class Meta:
+        model = ContratProprietaire
+        fields = '__all__'
+        exclude = ['user']
+
+
 class ReservationForm(ModelForm):
     class Meta:
         model = Reservation
         fields = '__all__'
-        exclude = ['profile', 'propriete']
+        exclude = ['user', 'propriete']
 
-
-class ProfileProprietaireForm(ModelForm):
-    class Meta:
-        model = ProfileProprietaire
-        fields = '__all__'
-        exclude = ['profile']

@@ -6,20 +6,8 @@ from neige_soleil_app.models import *
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Utilisateur
         fields = ['id', 'username', 'email']
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = '__all__'
-
-
-class ProfileProprietaireSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProfileProprietaire
-        fields = '__all__'
 
 
 class ContratProprietaireSerializer(serializers.ModelSerializer):

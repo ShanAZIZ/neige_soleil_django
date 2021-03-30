@@ -1,32 +1,24 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
+class Utilisateur(AbstractUser):
+    is_proprietaire = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.first_name) + " " + str(self.last_name)
+
+
 class Profile(models.Model):
-    """
-    Le profile de l'utilisateur :
-    il contient des informations propre à un utilisateur
-    TODO: Mettre en place AbstractUser et le groupe Proprietaire
-    """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nom = models.CharField(max_length=200)
-    prenom = models.CharField(max_length=200)
+    user = models.OneToOneField(Utilisateur, on_delete=models.CASCADE)
     adresse = models.CharField(max_length=200)
     code_postale = models.CharField(max_length=5)
     ville = models.CharField(max_length=200)
     telephone = models.IntegerField()
+    rib = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.user.first_name
-
-
-class ProfileProprietaire(models.Model):
-    """
-    Défini si les utilisateurs deviennent proprietaire (seuls les proprietaire peuvent
-    creer des contrats)
-    """
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    rib = models.CharField(max_length=50)
+        return str(self.first_name) + " " + str(self.last_name)
 
 
 class ContratProprietaire(models.Model):
@@ -34,14 +26,16 @@ class ContratProprietaire(models.Model):
     Cette class génèrera la table des propriétés,
     et contient les informations des propriétés.
     TODO: Gérer les dates du contrat, debut et fin et status a revoir
+    TODO: Tester la vérification des reservations annulés
     """
     DISPONIBLE = 'AVAIL'
-    OCCUPER = 'BUSY'
-    INACTIF = 'OFF'
+    INACTIF = 'EXPIRED'
+    ATTENTE = 'CHECK'
 
     STATUS_CHOICES = [
+        (ATTENTE, 'Attente de Validation'),
         (DISPONIBLE, 'Actif'),
-        (INACTIF, 'Inactif')
+        (INACTIF, 'Expiré')
     ]
 
     TYPES_CHOICES = [
@@ -63,7 +57,7 @@ class ContratProprietaire(models.Model):
         ('Ouest', 'Ouest'),
     ]
 
-    profileproprietaire = models.ForeignKey(ProfileProprietaire, on_delete=models.CASCADE)
+    user = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     nom = models.CharField(max_length=200)
     adresse = models.CharField(max_length=200)
     code_postale = models.CharField(max_length=5)
@@ -75,7 +69,7 @@ class ContratProprietaire(models.Model):
     surface_balcon = models.FloatField()
     capacite = models.IntegerField()
     distance_pistes = models.FloatField()
-    status = models.CharField(max_length=5, choices=STATUS_CHOICES, default=DISPONIBLE)
+    status = models.CharField(max_length=7, choices=STATUS_CHOICES, default=DISPONIBLE)
     prix_saison_haute = models.FloatField()
     prix_saison_moyenne = models.FloatField()
     prix_saison_basse = models.FloatField()
@@ -89,14 +83,16 @@ class ContratProprietaire(models.Model):
     def is_avail(self, date_debut_sejour, date_fin_sejour, pk=None):
         reservations = self.reservation_set.exclude(id=pk)
         for reservation in reservations:
-            if reservation.date_debut_sejour <= date_debut_sejour <= reservation.date_fin_sejour or reservation.date_debut_sejour <= date_fin_sejour <= reservation.date_fin_sejour:
+            if (reservation.date_debut_sejour <= date_debut_sejour \
+                    <= reservation.date_fin_sejour or reservation.date_debut_sejour \
+                    <= date_fin_sejour <= reservation.date_fin_sejour) and reservation.status_reservation != 'CANCEL':
                 return False
         return True
 
 
 class ProprieteImage(models.Model):
     """
-    Class qui regroupe les images des proprietés
+    Class qui regroupe les images des propriétés
     """
     propriete = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
@@ -128,12 +124,18 @@ class Reservation(models.Model):
         (ANNULER, 'Annuler'),
     ]
 
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    user = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     propriete = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     date_reservation = models.DateField(auto_now_add=True)
     date_debut_sejour = models.DateField()
     date_fin_sejour = models.DateField()
-    status_reservation = models.CharField(max_length=8, choices=STATUS_RES, default=ENCOURS)
+    status_reservation = models.CharField(max_length=8,
+                                          choices=STATUS_RES,
+                                          default=ENCOURS)
+
+    def __str__(self):
+        return str(self.user.first_name) + " " + str(self.propriete.nom) + " " + \
+               str(self.date_reservation)
 
     def prix_total(self):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days

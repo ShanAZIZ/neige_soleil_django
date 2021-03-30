@@ -1,7 +1,3 @@
-"""
-TODO: DEBUG - Identifier les vues à transformer en Class View
-"""
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -34,9 +30,6 @@ def register(request):
     Page de creation de compte utilisateur
     Creation d'un utilisateur dans la table user de Django
     Restriction: User non authentifies
-
-    TODO : FEATURE - Rédiger le message d'erreur
-
     """
     form = UserCreationForm()
     if request.method == 'POST':
@@ -110,8 +103,7 @@ def main_home(request):
     Restriction: User authentifier
     """
     try:
-        profile = request.user.profile
-        contrat_prop = ContratProprietaire.objects.exclude(profileproprietaire=profile.profileproprietaire.id)
+        contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id)
     except ObjectDoesNotExist:
         contrat_prop = ContratProprietaire.objects.all()
     context = {
@@ -126,10 +118,9 @@ def dashboard(request):
     """
     Vue dashboard
     Restriction: User authentifier, avec Profile
-    TODO: FEATURE Optimiser les visuels et ajouter des options
     """
-    reservations = Reservation.objects.filter(profile=request.user.profile.id, location__isnull=True)
-    locations = Location.objects.filter(reservation__profile=request.user.profile.id)
+    reservations = Reservation.objects.filter(user=request.user.id, location__isnull=True)
+    locations = Location.objects.filter(reservation__user=request.user.id)
 
     context = {
         'reservations': reservations,
@@ -149,10 +140,6 @@ def new_profile(request):
     Utilise la table Profile
     Permet de completer les informations d'un utilisateur
     Restriction: User authentifier
-
-    TODO : FEATURE - Gérer les messages d'erreurs du formulaire
-    TODO : FEATURE - Ajouter une photo de profile (Optionnel)
-
     """
     if request.method == 'POST':
         profile = ProfileForm(request.POST)
@@ -161,6 +148,8 @@ def new_profile(request):
             form.user = request.user
             form.save()
             return redirect('main_home')
+        else :
+            messages.error(request, 'Entrez correctement les données')
     context = {}
     return render(request, 'neige_soleil_app/main_new_profile.html', context)
 
@@ -197,31 +186,18 @@ def detail_profile(request):
 def new_proprietaire(request):
     """
     Création d'un proprietaire
-    TODO: Vérification de la qualité du RIB
-    TODO: Décorateur pour les propriétaires déjà existants
+    TODO: Un utilisateur peut il devenir proprietaire par la suite
     """
-    if request.method == 'POST':
-        form = ProfileProprietaireForm(request.POST)
-        if form.is_valid():
-            prop = form.save(commit=False)
-            prop.profile = request.user.profile
-            prop.save()
-            return redirect('main_proprietaire')
-    context = {}
-    return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
-
-
-@login_required(login_url='login')
-@known_profile
-@known_proprietaire
-def edit_proprietaire(request):
-    if request.method == 'POST':
-        form = ProfileProprietaireForm(request.POST, instance=request.user.profile.profileproprietaire)
-        if form.is_valid():
-            form.save()
-            return redirect('main_proprietaire')
-    context = {}
-    return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
+    # if request.method == 'POST':
+    #     form = ProfileProprietaireForm(request.POST)
+    #     if form.is_valid():
+    #         prop = form.save(commit=False)
+    #         prop.profile = request.user.profile
+    #         prop.save()
+    #         return redirect('main_proprietaire')
+    # context = {}
+    # return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
+    pass
 
 
 @login_required(login_url='login')
@@ -232,10 +208,10 @@ def main_proprietaire(request):
     Vue espace proprietaire, elle affiche les contrats du proprietaire et
     lui permet de se rediriger vers l'ajout de nouveaux contrats
     Restriction: User authentifier, avec Profile
-    TODO: PROJET - Terminer le front end de la vue main_proprietaire
-
+    TODO: Visuel des propriétés et leur status (En attente, actif et expirés)
+    TODO: Voir des infos tels que le nombre de locations et reservations
     """
-    contrat = ContratProprietaire.objects.filter(profileproprietaire=request.user.profile.profileproprietaire)
+    contrat = ContratProprietaire.objects.filter(user=request.user)
     context = {
         'contrats': contrat
     }
@@ -252,13 +228,14 @@ def new_propriete(request):
     """
     Vue qui permet de créer un contrat d'un proprietaire
     Restriction: User authentifier, avec Profile
+    TODO: Passer la propriete en attente
     """
     if request.method == 'POST':
         ContratPropForm = ContratProprietaireFrom(request.POST)
         images = request.FILES.getlist('images')
         if ContratPropForm.is_valid():
             contrat = ContratPropForm.save(commit=False)
-            contrat.profileproprietaire = request.user.profile.profileproprietaire
+            contrat.user = request.user
             contrat.save()
             for image in images:
                 ProprieteImage.objects.create(propriete=contrat, image=image)
@@ -271,10 +248,10 @@ def new_propriete(request):
 @known_profile
 def edit_propriete(request, pk):
     """
-    TODO: FEATURE - Mise a jour des images de propriétés
+    TODO: Mise a jour des images de propriétés
     """
     contrat = ContratProprietaire.objects.get(id=pk)
-    if contrat.profileproprietaire == request.user.profile.profileproprietaire:
+    if contrat.user == request.user:
         if request.method == 'POST':
             contratEditForm = ContratProprietaireFrom(request.POST, instance=contrat)
             if contratEditForm.is_valid():
@@ -312,27 +289,29 @@ def new_reservation(request, pk):
     """
     Vue de reservation
     Restriction: User authentifier,  avec Profile
-    TODO: DEBUG - Empêcher le propriete d'accéder a cette vue par l'url
+    TODO: Tester
     """
     contrat = ContratProprietaire.objects.get(id=pk)
-    reservations = contrat.reservation_set.all()
-    if request.method == "POST":
-        resForm = ReservationForm(request.POST)
-        date_debut_sejour = parse_date(request.POST['date_debut_sejour'])
-        date_fin_sejour = parse_date(request.POST['date_fin_sejour'])
-        if contrat.is_avail(date_debut_sejour, date_fin_sejour):
-            if resForm.is_valid():
-                res = resForm.save(commit=False)
-                res.profile = request.user.profile
-                res.propriete = contrat
-                res.save()
-                return redirect('dashboard')
-        else:
-            messages.error(request, 'Cette propriete est deja reservée a cette date')
-    context = {
-        'reservations': reservations
-    }
-    return render(request, 'neige_soleil_app/main_new_reservation.html', context)
+    if contrat.user != request.user:
+        reservations = contrat.reservation_set.all()
+        if request.method == "POST":
+            resForm = ReservationForm(request.POST)
+            date_debut_sejour = parse_date(request.POST['date_debut_sejour'])
+            date_fin_sejour = parse_date(request.POST['date_fin_sejour'])
+            if contrat.is_avail(date_debut_sejour, date_fin_sejour):
+                if resForm.is_valid():
+                    res = resForm.save(commit=False)
+                    res.user = request.user
+                    res.propriete = contrat
+                    res.save()
+                    return redirect('dashboard')
+            else:
+                messages.error(request, 'Cette propriete est deja reservée a cette date')
+        context = {
+            'reservations': reservations
+        }
+        return render(request, 'neige_soleil_app/main_new_reservation.html', context)
+    return redirect('dashboard')
 
 
 def edit_reservation(request, pk):
@@ -346,7 +325,7 @@ def edit_reservation(request, pk):
         if contrat.is_avail(date_debut_sejour, date_fin_sejour, pk):
             if resForm.is_valid():
                 res = resForm.save(commit=False)
-                res.profile = request.user.profile
+                res.user = request.user
                 res.propriete = contrat
                 res.save()
                 return redirect('dashboard')
@@ -359,9 +338,9 @@ def edit_reservation(request, pk):
     return render(request, 'neige_soleil_app/main_edit_reservation.html', context)
 
 
-def cancel_reservation(request):
+def cancel_reservation(request, pk):
     """
-    TODO: À implémenter
+    TODO: Annulation des reservations
     """
     context = {}
     return render(request, 'neige_soleil_app/main_cancel_reservation.html', context)

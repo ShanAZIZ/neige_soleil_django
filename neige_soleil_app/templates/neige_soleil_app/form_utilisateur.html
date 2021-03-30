@@ -1,0 +1,51 @@
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="username" class="form-label" >Nom d'utilisateur : </label>
+        <input class="form-control" id="username" type="text" name="username" placeholder="Votre nom d'utilisateur"  value="{{ request.user.username }}">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email : </label>
+        <input class="form-control"  id="email" type="text" name="email" placeholder="Adresse email" value="{{ request.user.email }}">
+    </div>
+
+    <div class="mb-3">
+        <label for="nom" class="form-label" >Votre nom : </label>
+        <input class="form-control" id="nom" type="text" name="last_name" placeholder="Votre nom"  value="{{ request.user.last_name }}">
+    </div>
+
+    <div class="mb-3">
+        <label for="prenom" class="form-label" >Votre prenom : </label>
+        <input class="form-control" id="prenom" type="text" name="first_name" placeholder="Votre prenom"  value="{{ request.user.first_name }}">
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <label for="exampleInputPassword" class="form-label" >Mot de passe : </label>
+            <input type="password" class="form-control form-control-user"
+                   id="exampleInputPassword" name="password1" placeholder="Mot de passe">
+        </div>
+        <div class="col-sm-6">
+            <label for="exampleRepeatPassword" class="form-label" >Confirmez votre mot de passe : </label>
+            <input type="password" class="form-control form-control-user"
+                   id="exampleRepeatPassword" name="password2" placeholder="Confirmez votre mot de passe">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1 form-check">
+            <input class="form-check-label"  id="isproprietaire" type="checkbox" name="is_proprietaire">
+        </div>
+        <div class="col-4">
+            <p> Je souhaite etre hôte</p>
+        </div>
+
+    </div>
+
+
+    <br>
+    <div class="mb-5">
+        <input type="submit" class="btn btn-primary" value="Valider">
+    </div>
+
+
+</form>
