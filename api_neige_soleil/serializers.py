@@ -4,10 +4,39 @@ from rest_framework.permissions import IsAuthenticated
 from neige_soleil_app.models import *
 
 
+
+############################################################################################
+# USER MODEL SERIALIZERS
+############################################################################################
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    profile = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all()) 
+    class Meta:
+        model = Utilisateur
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_proprietaire', 'profile_id']
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', 'adresse', 'code_postale', 'ville', 'telephone', 'rib']
+
+
+class PasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+
+############################################################################################
+# 
+############################################################################################
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Utilisateur
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_proprietaire']
 
 
 class ContratProprietaireSerializer(serializers.ModelSerializer):

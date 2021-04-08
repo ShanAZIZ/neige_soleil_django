@@ -11,4 +11,5 @@ router.register(r'location', views.LocationViewSet)
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api-token-auth/', views.CustomAuthToken.as_view()),
 ]
