@@ -31,9 +31,9 @@ def register(request):
     Creation d'un utilisateur dans la table user de Django
     Restriction: User non authentifies
     """
-    form = UserCreationForm()
+    form = NewUserForm()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
