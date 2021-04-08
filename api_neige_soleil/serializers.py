@@ -14,7 +14,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     profile = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all()) 
     class Meta:
         model = Utilisateur
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_proprietaire', 'profile_id']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_proprietaire', 'profile']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
