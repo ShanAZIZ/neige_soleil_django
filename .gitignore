@@ -1,6 +1,11 @@
 .idea
 static/images
 neige_soleil_app/templates/neige_soleil_app/old
+neige_soleil_app/__pycache__
+neige_soleil_app/migrations/__pycache__
+api_neige_soleil/__pycache__
+neige_soleil_django/__pycache__
+.DS_Store
 my.cnf
 .env
 venv
