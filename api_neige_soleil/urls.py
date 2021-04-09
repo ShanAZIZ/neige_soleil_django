@@ -9,8 +9,10 @@ router.register(r'profile', views.ProfileViewSet)
 router.register(r'reservation', views.ReservationViewSet)
 router.register(r'location', views.LocationViewSet)
 
+
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api-token-auth/', views.CustomAuthToken.as_view()),
+    path('api/user-profile/<str:pk>/', views.getUserProfileView.as_view()),
 ]

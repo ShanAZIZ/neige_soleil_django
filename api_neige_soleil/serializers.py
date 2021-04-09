@@ -22,8 +22,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'adresse', 'code_postale', 'ville', 'telephone', 'rib', 'user']
 
 
-class PasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(required=True)
+class AdminPasswordSerializer(serializers.Serializer):
+    # old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
 

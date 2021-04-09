@@ -7,6 +7,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework import serializers
 
 # from .permissions import *
 from .serializers import *
@@ -14,8 +17,9 @@ from neige_soleil_app.models import *
 
 # TODO: API - Adapter les permissions des vues
 
+
 ############################################################################################
-# ADMIN VIEWS
+# GENERAL VIEWS
 ############################################################################################
 
 
@@ -31,6 +35,11 @@ class CustomAuthToken(ObtainAuthToken):
             'token': token.key,
             'is_superuser': user.is_superuser,
         })
+
+
+############################################################################################
+# ADMIN VIEWS
+############################################################################################
 
 
 class AdminViewSet(viewsets.ModelViewSet):
@@ -53,7 +62,7 @@ class UserViewSet(AdminViewSet):
     @action(detail=True, methods=['post'])
     def set_password(self, request, pk=None):
         user = self.get_object()
-        serializer = PasswordSerializer(data=request.data)
+        serializer = AdminPasswordSerializer(data=request.data)
         if serializer.is_valid():
             user.set_password(serializer.validated_data['new_password'])
             user.save()
@@ -61,6 +70,24 @@ class UserViewSet(AdminViewSet):
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class getUserProfileView(APIView):
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
+    permission_classes = [IsAdminUser]
+
+
+    def get(self, request, pk, format=None):
+        serializer = ProfileSerializer
+        try:
+            profile = Profile.objects.get(user=pk)
+            print(profile)
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+        except:
+            content = ""
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
 
 
 class ProfileViewSet(AdminViewSet):
