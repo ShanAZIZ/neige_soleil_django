@@ -11,16 +11,15 @@ from neige_soleil_app.models import *
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    profile = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all()) 
     class Meta:
         model = Utilisateur
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_proprietaire', 'profile']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_proprietaire']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'adresse', 'code_postale', 'ville', 'telephone', 'rib']
+        fields = ['id', 'adresse', 'code_postale', 'ville', 'telephone', 'rib', 'user']
 
 
 class PasswordSerializer(serializers.Serializer):

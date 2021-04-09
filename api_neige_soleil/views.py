@@ -39,7 +39,7 @@ class AdminViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(AdminViewSet):
-    queryset = Utilisateur.objects.all()
+    queryset = Utilisateur.objects.exclude(is_superuser=True)
     serializer_class = UserProfileSerializer
 
     # def get_permissions(self):
@@ -63,9 +63,9 @@ class UserViewSet(AdminViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProfileView(AdminViewSet):
-    queryset = Utilisateur.objects.all()
-    serializer_class = UserProfileSerializer
+class ProfileViewSet(AdminViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
 class ContratProprietaireViewSet(AdminViewSet):

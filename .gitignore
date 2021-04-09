@@ -3,3 +3,4 @@ static/images
 neige_soleil_app/templates/neige_soleil_app/old
 my.cnf
 .env
+venv
