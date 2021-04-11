@@ -119,9 +119,9 @@ def dashboard(request):
     Vue dashboard
     Restriction: User authentifier, avec Profile
     """
-    reservations = Reservation.objects.filter(user=request.user.id, location__isnull=True, status_reservation='WAIT')
-    reservations_annules = Reservation.objects.filter(user=request.user.id, location__isnull=True, status_reservation='CANCEL')
-    locations = Location.objects.filter(reservation__user=request.user.id)
+    reservations = Reservation.objects.filter(user=request.user.id, status_reservation='WAIT')
+    reservations_annules = Reservation.objects.filter(user=request.user.id, status_reservation='CANCEL')
+    locations = Reservation.objects.filter(user=request.user.id, status_reservation='LOCATION')
 
     context = {
         'reservations': reservations,
@@ -354,19 +354,15 @@ def cancel_reservation(request, pk):
     return render(request, 'neige_soleil_app/main_cancel_reservation.html', context)
 
 
-############################################################################################
-# LES LOCATIONS
-############################################################################################
 @login_required(login_url='login')
 @known_profile
-def new_location(request, pk):
+def confirm_reservation(request, pk):
     """
     Vue qui permet de générer une location (Page de confirmation de location)
     Restriction: User authentifier, avec Profile
     """
     reservation = Reservation.objects.get(id=pk)
     if request.method == 'POST':
-        Location.objects.create(reservation=reservation)
         reservation.status_reservation = 'LOCATION'
         reservation.save()
         return redirect('dashboard')

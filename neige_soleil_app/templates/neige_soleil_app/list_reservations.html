@@ -23,7 +23,7 @@
                         <td>{{ reservation.propriete.nom }}</td>
                         <td>{{ reservation.date_debut_sejour }}</td>
                         <td>{{ reservation.date_fin_sejour }}</td>
-                        <td>{{ reservation.prixTotal | floatformat:2 }} Euros</td>
+                        <td>{{ reservation.prix_total | floatformat:2 }} Euros</td>
                         <td>
                             <a href="{% url 'louer' reservation.id %}"><button class="btn btn-success">Confirmer</button></a>
                             <a href="{% url 'edit_reservation' reservation.id %}"><button class="btn btn-info">Modifier</button></a>
@@ -56,7 +56,7 @@
                         <td>{{ reservation.propriete.nom }}</td>
                         <td>{{ reservation.date_debut_sejour }}</td>
                         <td>{{ reservation.date_fin_sejour }}</td>
-                        <td>{{ reservation.prixTotal | floatformat:2 }} Euros</td>
+                        <td>{{ reservation.prix_total | floatformat:2 }} Euros</td>
                     </tr>
                 {% endfor %}
             {% endif %}

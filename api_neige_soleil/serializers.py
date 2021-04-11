@@ -1,8 +1,9 @@
+from abc import ABC
+
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 
 from neige_soleil_app.models import *
-
 
 
 ############################################################################################
@@ -23,19 +24,19 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class AdminPasswordSerializer(serializers.Serializer):
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
     # old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
 
 ############################################################################################
-# 
+# CONTRAT MODEL SERIALIZERS
 ############################################################################################
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Utilisateur
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_proprietaire']
 
 
 class ContratProprietaireSerializer(serializers.ModelSerializer):
@@ -47,10 +48,4 @@ class ContratProprietaireSerializer(serializers.ModelSerializer):
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
-        fields = '__all__'
-
-
-class LocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Location
         fields = '__all__'

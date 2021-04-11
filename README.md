@@ -7,7 +7,8 @@ Ce projet est un client léger réaliser dans le cadre de mon BTS SIO SLAM en ta
 
 1. Installer python3 IDE depuis le site : https://www.python.org/downloads/.
 Si vous êtes sur Windows n'oubliez pas d'ajouter python à PATH. Attention tout le projet est fait sur Python3 
-   (Si nécessaire dans vos commandes au lieu de python utilisez python3).
+   (Si nécessaire dans vos commandes au lieu de python utilisez python3). 
+   Si vous le souhaitez vous pouvez créer un Venv python et effectuer les manipulations avec .
 2. Cloner le projet GitHub : git -clone https://github.com/ShanAZIZ/neige_soleil_django
    
 3. Installer les dependencies - Mettez vous dans le répertoire du projet et tapez

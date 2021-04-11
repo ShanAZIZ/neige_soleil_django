@@ -22,10 +22,6 @@ class Profile(models.Model):
 
 
 class ContratProprietaire(models.Model):
-    """
-    Cette class génèrera la table des propriétés,
-    et contient les informations des propriétés.
-    """
     DISPONIBLE = 'AVAIL'
     INACTIF = 'EXPIRED'
     ATTENTE = 'CHECK'
@@ -35,7 +31,6 @@ class ContratProprietaire(models.Model):
         (DISPONIBLE, 'Actif'),
         (INACTIF, 'Expiré')
     ]
-
     TYPES_CHOICES = [
         ('F1', 'F1'),
         ('F2', 'F2'),
@@ -43,7 +38,6 @@ class ContratProprietaire(models.Model):
         ('F4', 'F4'),
         ('F5', 'F5'),
     ]
-
     EXPOSITION_CHOICES = [
         ('Sud', 'Sud'),
         ('Nord', 'Nord'),
@@ -54,8 +48,11 @@ class ContratProprietaire(models.Model):
         ('Est', 'Est'),
         ('Ouest', 'Ouest'),
     ]
-
     user = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    date_debut = models.DateField()
+    date_fin = models.DateField()
+    date_creation = models.DateField(auto_now_add=True)
+    status = models.CharField(max_length=7, choices=STATUS_CHOICES, default=ATTENTE)
     nom = models.CharField(max_length=200)
     adresse = models.CharField(max_length=200)
     code_postale = models.CharField(max_length=5)
@@ -67,13 +64,9 @@ class ContratProprietaire(models.Model):
     surface_balcon = models.FloatField()
     capacite = models.IntegerField()
     distance_pistes = models.FloatField()
-    status = models.CharField(max_length=7, choices=STATUS_CHOICES, default=ATTENTE)
     prix_saison_haute = models.FloatField()
     prix_saison_moyenne = models.FloatField()
     prix_saison_basse = models.FloatField()
-    date_debut = models.DateField()
-    date_fin = models.DateField()
-    date_creation = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.nom
@@ -92,9 +85,6 @@ class ContratProprietaire(models.Model):
 
 
 class ProprieteImage(models.Model):
-    """
-    Class qui regroupe les images des propriétés
-    """
     propriete = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
 
@@ -111,10 +101,7 @@ class ProprieteImage(models.Model):
 
 
 class Reservation(models.Model):
-    """
-    Class des reservations
-    TODO: Gérer les dates de fin antérieures aux dates débuts et les dates de debut avant date actuelle
-    """
+    # TODO: Gérer les dates de fin antérieures aux dates débuts et les dates de debut avant date actuelle
     ENCOURS = 'WAIT'
     LOCATION = 'LOCATION'
     ANNULER = 'CANCEL'
@@ -150,11 +137,3 @@ class Reservation(models.Model):
         """
         self.status_reservation = self.ANNULER
         pass
-
-
-class Location(models.Model):
-    """
-    Class des locations
-    """
-    reservation = models.OneToOneField(Reservation, on_delete=models.SET_NULL, null=True)
-    date_confirmation = models.DateField(auto_now_add=True)
