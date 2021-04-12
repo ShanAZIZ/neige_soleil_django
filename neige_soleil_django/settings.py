@@ -19,7 +19,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -36,7 +35,6 @@ AUTH_USER_MODEL = 'neige_soleil_app.Utilisateur'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,7 +47,8 @@ INSTALLED_APPS = [
     'neige_soleil_app.apps.NeigeSoleilAppConfig',
     'api_neige_soleil.apps.ApiNeigeSoleilConfig',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'neige_soleil_django.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -93,11 +91,10 @@ DATABASES = {
             'read_default_file': os.path.join(BASE_DIR, 'my.cnf'),
         },
         # YOU CAN MODIFY THE HOST AND PORT ACCORDING TO THE DATABASE
-        'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock',
+        # 'HOST': '',
         # 'PORT':
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -117,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -131,7 +127,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -140,6 +135,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-MEDIA_URL = '/images/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+DEFAULT_FILE_STORAGE = 'custom_azure.AzureMediaStorage'
+
+AZURE_ACCOUNT_NAME = "neigesoleilstorage"
+MEDIA_LOCATION = "neigesoleil-media"
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'

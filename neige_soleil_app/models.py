@@ -6,7 +6,7 @@ class Utilisateur(AbstractUser):
     is_proprietaire = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.first_name) + " " + str(self.last_name)
+        return str(self.username)
 
 
 class Profile(models.Model):
@@ -85,6 +85,7 @@ class ContratProprietaire(models.Model):
 
 
 class ProprieteImage(models.Model):
+    # TODO: Suppression des images du serveur si suppression de la bdd
     propriete = models.ForeignKey(ContratProprietaire, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
 

@@ -6,3 +6,4 @@ my.cnf
 .env
 venv
 *.pyc
+/custom_azure.py
