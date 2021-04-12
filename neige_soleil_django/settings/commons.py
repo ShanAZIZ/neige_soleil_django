@@ -17,18 +17,13 @@ from pathlib import Path
 # TODO: PROJET - Mettre en place un serveur distant pour le stockage des static
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+import custom_azure
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool, default=True)
-
-ALLOWED_HOSTS = []
 
 # MODIFY THE USER MODEL USED ON AUTH
 AUTH_USER_MODEL = 'neige_soleil_app.Utilisateur'
@@ -81,20 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'neige_soleil_django.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': os.path.join(BASE_DIR, 'my.cnf'),
-        },
-        # YOU CAN MODIFY THE HOST AND PORT ACCORDING TO THE DATABASE
-        # 'HOST': '',
-        # 'PORT':
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -130,15 +111,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_LOCATION = "neigesoleil-static"
+MEDIA_LOCATION = "neigesoleil-media"
+
+AZURE_ACCOUNT_NAME = custom_azure.STORAGE_ACCOUNT_NAME
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
 
 DEFAULT_FILE_STORAGE = 'custom_azure.AzureMediaStorage'
+STATICFILES_STORAGE = 'custom_azure.AzureStaticStorage'
 
-AZURE_ACCOUNT_NAME = "neigesoleilstorage"
-MEDIA_LOCATION = "neigesoleil-media"
-AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+
+
