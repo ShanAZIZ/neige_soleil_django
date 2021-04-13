@@ -6,6 +6,7 @@ from neige_soleil_django.settings.commons import *
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# TODO: Check the String value of Debug for implementing Boolean
 DEBUG = os.environ['DEBUG']
 
 ALLOWED_HOSTS = ['127.0.0.1', 'neigesoleil-app.azurewebsites.net']
