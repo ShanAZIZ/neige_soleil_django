@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.utils.dateparse import parse_date
 
 from .forms import *
-from .decorators import unauthenticated_user, known_profile, known_proprietaire, no_profile
+from .decorators import unauthenticated_user, known_profile, no_profile
 from .models import *
 
 
@@ -34,6 +34,7 @@ def register(request):
     form = NewUserForm()
     if request.method == 'POST':
         form = NewUserForm(request.POST)
+        print(request.POST)
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
@@ -41,8 +42,9 @@ def register(request):
             messages.success(request, " Votre compte à bien été créer "+username)
             return redirect('main_home')
         else:
+            print(form.errors)
             messages.error(request, "Entrez des informations correcte et suffisant (longueur de mot de passe 8 "
-                                    "caractères")
+                                    "caractères minimum)")
     context = {
         'form': form,
     }
@@ -203,7 +205,6 @@ def detail_profile(request):
 
 
 @login_required(login_url='login')
-@known_proprietaire
 @known_profile
 def main_proprietaire(request):
     """
@@ -223,7 +224,6 @@ def main_proprietaire(request):
 # LES PROPRIÉTÉS
 ############################################################################################
 @login_required(login_url='login')
-@known_proprietaire
 @known_profile
 def new_propriete(request):
     """
@@ -246,7 +246,6 @@ def new_propriete(request):
 
 @login_required(login_url='login')
 @known_profile
-@known_proprietaire
 def edit_propriete(request, pk):
     """
     TODO: Mise a jour des images de propriétés

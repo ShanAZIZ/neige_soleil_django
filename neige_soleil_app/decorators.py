@@ -46,13 +46,13 @@ def known_profile(view_func):
     return wrapper_func
 
 
-def known_proprietaire(view_func):
-    """
-    Vérifie si un utilisateur est un proprietaire
-    """
-    def wrapper_func(request, *args, **kwargs):
-        if request.user.is_proprietaire:
-            return view_func(request, *args, **kwargs)
-        else:
-            return redirect('main_home')
-    return wrapper_func
+# def known_proprietaire(view_func):
+#     """
+#     Vérifie si un utilisateur est un proprietaire
+#     """
+#     def wrapper_func(request, *args, **kwargs):
+#         if request.user.is_proprietaire:
+#             return view_func(request, *args, **kwargs)
+#         else:
+#             return redirect('main_home')
+#     return wrapper_func

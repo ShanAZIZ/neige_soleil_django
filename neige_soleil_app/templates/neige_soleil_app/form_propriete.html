@@ -8,15 +8,15 @@
         <input required maxlength="200" type="text" id="TextInput" class="form-control" name="nom" placeholder="Le nom du lieu ou de l'immeuble" value="{{ contrat.nom }}">
     </div>
     <div class="row">
-        <div class="col-4">
+        <div class="col-sm">
             <label for="TextInput" class="form-label">Adresse</label>
             <input required maxlength="200" type="text" id="TextInput" class="form-control" name="adresse" placeholder="l'adresse du lieu" value="{{ contrat.adresse }}">
         </div>
-        <div class="col-4">
+        <div class="col-sm">
             <label for="TextInput" class="form-label">Ville</label>
             <input required maxlength="200" type="text" id="TextInput" class="form-control" name="ville" placeholder="La ville" value="{{ contrat.ville }}">
         </div>
-        <div class="col-4">
+        <div class="col-sm">
             <label for="TextInput" class="form-label">Code postale</label>
             <input required maxlength="200" type="text" id="TextInput" class="form-control" name="code_postale" placeholder="Le code postale" value="{{ contrat.code_postale }}">
         </div>
@@ -27,42 +27,42 @@
     </div>
 
     <div class="row">
-        <div class="col-3">
+        <div class="col-sm">
             <label for="id_surface_habitable" class="form-label">Surface habitable</label>
             <input type="number" class="form-control" name="surface_habitable" step="any" required id="id_surface_habitable" value="{{ contrat.surface_habitable }}">
         </div>
 
-        <div class="col-3">
+        <div class="col-sm">
             <label for="id_surface_balcon" class="form-label">Surface du balcon</label>
             <input type="number" class="form-control" name="surface_balcon" step="any" required id="id_surface_balcon" value="{{ contrat.surface_balcon }}">
         </div>
     </div>
     <br>
     <div class="row">
-        <div class="col-2">
+        <div class="col-sm">
             <label for="id_capacite" class="form-label">Capacite d'accueil</label>
             <input type="number" class="form-control" name="capacite" required id="id_capacite" value="{{ contrat.capacite }}">
         </div>
-        <div class="col-2">
+        <div class="col-sm">
             <label for="id_distance_pistes" class="form-label">Distance des pistes</label>
             <input type="number" class="form-control" name="distance_pistes" step="any" required id="id_distance_pistes" value="{{ contrat.distance_pistes }}">
         </div>
-        <div class="col-2">
+        <div class="col-sm">
             <label for="price" class="form-label">Prix a la saison haute</label>
             <input required type="number" id="price" class="form-control" name="prix_saison_haute" placeholder="Prix" value="{{ contrat.prix_saison_haute }}">
         </div>
-        <div class="col-2">
+        <div class="col-sm">
             <label for="price" class="form-label">Prix a la saison moyenne</label>
             <input required type="number" id="price" class="form-control" name="prix_saison_moyenne" placeholder="Prix" value="{{ contrat.prix_saison_moyenne }}">
         </div>
-        <div class="col-2">
+        <div class="col-sm">
             <label for="price" class="form-label">Prix a la saison basse</label>
             <input required type="number" id="price" class="form-control" name="prix_saison_basse" placeholder="Prix" value="{{ contrat.prix_saison_basse }}">
         </div>
     </div>
     <br>
     <div class="row">
-        <div class="col-3">
+        <div class="col-sm">
             <label for="id_status" class="form-label">Type</label>
             <select name="type" class="form-control" id="id_status" required>
                 <option value="F1">F1</option>
@@ -72,7 +72,7 @@
                 <option value="F5">F5</option>
             </select>
         </div>
-        <div class="col-3">
+        <div class="col-sm">
             <label for="id_status" class="form-label">Exposition</label>
             <select name="exposition" class="form-control" id="id_status" required>
                 <option value="Sud" >Sud</option>
@@ -88,19 +88,20 @@
             </select>
         </div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-sm">
+                <br>
                 <label for="datedebut" class="form-label"> Date de début du contrat </label>
-                <input id="datedebut" name="date_debut" type="date" required value="{{ contrat.date_debut }}">
+                <input class="form-control" id="datedebut" name="date_debut" type="date" required value="{{ contrat.date_debut }}">
             </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
+            <div class="col-sm">
+                <br>
                 <label for="datefin" class="form-label"> Date de fin du contrat </label>
-                <input id="datefin" name="date_fin" type="date" required value="{{ contrat.date_fin }}">
+                <input  class="form-control" id="datefin" name="date_fin" type="date" required value="{{ contrat.date_fin }}">
             </div>
         </div>
 
-        <div class="col-3">
+        <div class="col-sm">
+            <br>
             <label class="form-label">Inserer toutes les images</label>
             <input type="file" name="images" multiple class="form-control-file">
         </div>

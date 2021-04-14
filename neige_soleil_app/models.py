@@ -1,9 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import post_save
 
 
 class Utilisateur(AbstractUser):
-    is_proprietaire = models.BooleanField(default=False)
+    is_proprietaire = models.BooleanField(null=True, blank=True, default=False)
 
     def __str__(self):
         return str(self.username)
@@ -138,3 +139,13 @@ class Reservation(models.Model):
         """
         self.status_reservation = self.ANNULER
         pass
+
+
+def on_new_propriete(sender, instance, created,  **kwargs):
+    if created:
+        utilisateur = Utilisateur.objects.get(id=instance.user.id)
+        utilisateur.is_proprietaire = True
+        utilisateur.save()
+
+
+post_save.connect(on_new_propriete, sender=ContratProprietaire)

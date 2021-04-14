@@ -7,7 +7,7 @@ from .models import Utilisateur, Profile, ContratProprietaire, Reservation
 class NewUserForm(UserCreationForm):
     class Meta:
         model = Utilisateur
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'is_proprietaire']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
 
 class ProfileForm(ModelForm):
