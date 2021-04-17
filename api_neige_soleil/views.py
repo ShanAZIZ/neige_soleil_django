@@ -73,7 +73,6 @@ class UserViewSet(AdminViewSet):
 @authentication_classes([TokenAuthentication, BasicAuthentication])
 @permission_classes([IsAdminUser])
 def get_user_profile_view(request, pk):
-    # TODO: Tester la vue
     serializer = ProfileSerializer
     try:
         profile = Profile.objects.get(user=pk)

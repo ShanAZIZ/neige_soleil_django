@@ -1,5 +1,6 @@
 {% block content %}
     <form method="post">
+    <!-- TODO: Mettre plusieurs champs sur une même ligne -->
         {% csrf_token %}
         <div class="mb-3">
             <label for="username" class="form-label" >Nom : </label><input class="form-control" placeholder="Nom d'utilisateur" id="username" type="text" name="username"  value="{{ request.user.username }}">

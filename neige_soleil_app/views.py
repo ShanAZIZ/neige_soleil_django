@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
@@ -10,6 +10,7 @@ from .forms import *
 from .decorators import unauthenticated_user, known_profile, no_profile
 from .models import *
 
+# TODO: Suppression des images si suppression
 
 @unauthenticated_user
 def accueil(request):
@@ -26,11 +27,6 @@ def accueil(request):
 ############################################################################################
 @unauthenticated_user
 def register(request):
-    """
-    Page de creation de compte utilisateur
-    Creation d'un utilisateur dans la table user de Django
-    Restriction: User non authentifies
-    """
     form = NewUserForm()
     if request.method == 'POST':
         form = NewUserForm(request.POST)
@@ -53,18 +49,14 @@ def register(request):
 
 @unauthenticated_user
 def loginPage(request):
-    """
-    Page de connexion
-    Récupérer les infos de connexion et authentifier l'utilisateur avec le système d'authentification de
-    Django
-    Restriction: User non authentifies
-    """
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            if request.user.is_superuser:
+                return redirect('neige_soleil_admin')
             return redirect('main_home')
         else:
             messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect')
@@ -74,10 +66,6 @@ def loginPage(request):
 
 @login_required(login_url='login')
 def logoutPage(request):
-    """
-    Page de déconnexion, utilise la methode logout de Django
-    Restriction: User authentifier
-    """
     logout(request)
     return redirect('/')
 
@@ -99,11 +87,6 @@ def edit_password(request):
 ############################################################################################
 @login_required(login_url='login')
 def main_home(request):
-    """
-    Page d'accueil pour les utilisateurs Authentifies
-    Récupère les propriétés et les affiches
-    Restriction: User authentifier
-    """
     try:
         contrat_prop = ContratProprietaire.objects.exclude(user=request.user.id).filter(status='AVAIL')
     except ObjectDoesNotExist:
@@ -117,10 +100,6 @@ def main_home(request):
 @login_required(login_url='login')
 @known_profile
 def dashboard(request):
-    """
-    Vue dashboard
-    Restriction: User authentifier, avec Profile
-    """
     reservations = Reservation.objects.filter(user=request.user.id, status_reservation='WAIT')
     reservations_annules = Reservation.objects.filter(user=request.user.id, status_reservation='CANCEL')
     locations = Reservation.objects.filter(user=request.user.id, status_reservation='LOCATION')
@@ -139,12 +118,6 @@ def dashboard(request):
 @login_required(login_url='login')
 @no_profile
 def new_profile(request):
-    """
-    Page de creation du profile utilisateur
-    Utilise la table Profile
-    Permet de completer les informations d'un utilisateur
-    Restriction: User authentifier
-    """
     if request.method == 'POST':
         profile = ProfileForm(request.POST)
         if profile.is_valid():
@@ -185,34 +158,12 @@ def detail_profile(request):
 ############################################################################################
 # LES PROPRIÉTAIRES/HÔTES
 ############################################################################################
-# @login_required(login_url='login')
-# @known_profile
-# def new_proprietaire(request):
-#     """
-#     Création d'un proprietaire
-#     TODO: Un utilisateur peut il devenir proprietaire par la suite
-#     """
-#     # if request.method == 'POST':
-#     #     form = ProfileProprietaireForm(request.POST)
-#     #     if form.is_valid():
-#     #         prop = form.save(commit=False)
-#     #         prop.profile = request.user.profile
-#     #         prop.save()
-#     #         return redirect('main_proprietaire')
-#     # context = {}
-#     # return render(request, 'neige_soleil_app/main_new_proprietaire.html', context)
-#     pass
 
 
 @login_required(login_url='login')
 @known_profile
 def main_proprietaire(request):
-    """
-    Vue espace proprietaire, elle affiche les contrats du proprietaire et
-    lui permet de se rediriger vers l'ajout de nouveaux contrats
-    Restriction: User authentifier, avec Profile
-    TODO: Voir des infos tels que le nombre de locations et reservations
-    """
+    # TODO: Voir des infos tels que le nombre de locations et reservations
     contrat = ContratProprietaire.objects.filter(user=request.user)
     context = {
         'contrats': contrat
@@ -226,10 +177,6 @@ def main_proprietaire(request):
 @login_required(login_url='login')
 @known_profile
 def new_propriete(request):
-    """
-    Vue qui permet de créer un contrat d'un proprietaire
-    Restriction: User authentifier, avec Profile
-    """
     if request.method == 'POST':
         ContratPropForm = ContratProprietaireFrom(request.POST)
         images = request.FILES.getlist('images')
@@ -247,9 +194,7 @@ def new_propriete(request):
 @login_required(login_url='login')
 @known_profile
 def edit_propriete(request, pk):
-    """
-    TODO: Mise a jour des images de propriétés
-    """
+    # TODO: Mise a jour des images de propriétés
     contrat = ContratProprietaire.objects.get(id=pk)
     if contrat.user == request.user:
         if request.method == 'POST':
@@ -267,10 +212,6 @@ def edit_propriete(request, pk):
 
 @login_required(login_url='login')
 def detail_propriete(request, pk):
-    """
-    Vue qui affiche les détails d'un contrat proprietaire et permet de reservation un bien
-    Restriction: User authentifier
-    """
     contrat = ContratProprietaire.objects.get(id=pk)
     reservations = contrat.reservation_set.all()
     context = {
@@ -286,11 +227,8 @@ def detail_propriete(request, pk):
 @login_required(login_url='login')
 @known_profile
 def new_reservation(request, pk):
-    """
-    Vue de reservation
-    Restriction: User authentifier,  avec Profile
-    TODO: Vérifier la cohérence des dates
-    """
+    # TODO: Vérifier la cohérence des dates
+    # TODO: Refactor de la verification des dates
     contrat = ContratProprietaire.objects.get(id=pk)
     if contrat.user != request.user:
         reservations = contrat.reservation_set.all().exclude(status_reservation='CANCEL')
@@ -339,9 +277,6 @@ def edit_reservation(request, pk):
 
 
 def cancel_reservation(request, pk):
-    """
-    TODO: Tester l'annulation de reservations
-    """
     reservation = Reservation.objects.get(id=pk)
     if request.method == 'POST':
         reservation.annuler_reservation()
@@ -356,10 +291,6 @@ def cancel_reservation(request, pk):
 @login_required(login_url='login')
 @known_profile
 def confirm_reservation(request, pk):
-    """
-    Vue qui permet de générer une location (Page de confirmation de location)
-    Restriction: User authentifier, avec Profile
-    """
     reservation = Reservation.objects.get(id=pk)
     if request.method == 'POST':
         reservation.status_reservation = 'LOCATION'
@@ -369,3 +300,18 @@ def confirm_reservation(request, pk):
         'reservation': reservation,
     }
     return render(request, 'neige_soleil_app/main_confirm_reservation.html', context)
+
+
+############################################################################################
+# LES RESERVATIONS
+############################################################################################
+
+@login_required(login_url='login')
+@permission_required('is_superuser')
+def admin_home(request):
+    reservations = Reservation.objects.all()
+    propriete = ContratProprietaire.objects.all()
+    # TODO: Completer la vue admin
+    return render(request, 'neige_soleil_app/main_admin_home.html')
+
+

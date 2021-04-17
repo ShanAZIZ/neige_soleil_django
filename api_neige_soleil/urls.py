@@ -12,7 +12,7 @@ router.register(r'reservation', views.ReservationViewSet)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('api-token-auth/', views.CustomAuthToken.as_view()),
-    path('api/user-profile/<str:pk>/', views.get_user_profile_view),
+    path('', include(router.urls)),
+    path('token-auth/', views.CustomAuthToken.as_view()),
+    path('user-profile/<str:pk>/', views.get_user_profile_view),
 ]
