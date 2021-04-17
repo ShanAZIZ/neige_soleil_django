@@ -3,7 +3,7 @@ Ce projet est un client léger réaliser dans le cadre de mon BTS SIO SLAM en ta
 
 ## Installation 
 
-### Installer du projet en developpement
+### Installer le projet en developpement
 
 1. Installer python3 IDE depuis le site : https://www.python.org/downloads/.
 Si vous êtes sur Windows n'oubliez pas d'ajouter python à PATH. Attention tout le projet est fait sur Python3 
@@ -18,8 +18,11 @@ Si vous êtes sur Windows n'oubliez pas d'ajouter python à PATH. Attention tout
    
 4. Renommer le fichier ".env.example" en ".env" et ajouter les configurations demandées 
    (SECRET_KEY, DEBUG). Ces configurations seront spécifiées ultérieurement
+   
 
-5. Renommer le fichier "my.cnf.example" en "my.cnf" et ajouter les configurations demandées. Ces configurations seront spécifiées ultérieurement
+5. Dans le fichier neige_soleil_django/settings/developement.py remplacez les informations de la base de donnée
+par la base que vous souhaitez utiliser.
+   
 
 ## Utilisation 
 

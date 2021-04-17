@@ -4,7 +4,7 @@ from neige_soleil_django.settings.commons import *
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -23,9 +23,9 @@ DATABASES = {
 }
 
 
-# STATIC_URL = '/static/'
-# MEDIA_URL = '/images/'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
+STATIC_URL = '/static/'
+MEDIA_URL = '/images/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')

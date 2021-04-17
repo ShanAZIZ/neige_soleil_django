@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from decouple import config
 from pathlib import Path
-import custom_azure
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -105,28 +104,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-DEFAULT_FILE_STORAGE = 'custom_azure.AzureMediaStorage'
-STATICFILES_STORAGE = 'custom_azure.AzureStaticStorage'
-
-# any static paths you want to publish
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
-
-
-STATIC_LOCATION = "neigesoleil-static"
-MEDIA_LOCATION = "neigesoleil-media"
-
-AZURE_ACCOUNT_NAME = "neigesoleilstorage"
-AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
-MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
-
-
 
 
 
