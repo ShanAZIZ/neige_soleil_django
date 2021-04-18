@@ -1,5 +1,5 @@
 import os
-from neige_soleil_django import azure
+
 from neige_soleil_django.settings.commons import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
