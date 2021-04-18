@@ -12,7 +12,7 @@ Si vous êtes sur Windows n'oubliez pas d'ajouter python à PATH. Attention tout
 2. Cloner le projet GitHub : git -clone https://github.com/ShanAZIZ/neige_soleil_django
    
 3. Installer les dependencies - Mettez vous dans le répertoire du projet et tapez
-   la commande suivante 
+   la commande suivante (Attention, certaines dependencies ne sont utilisés qu'en production)
    
     `pip install -r requirements.txt`
    

@@ -17,15 +17,7 @@ DATABASES = {
         'NAME': 'BTS_Neige_Soleil',
         'USER': 'root',
         'PASSWORD': 'root',
-        'PORT': '3306',
+        'PORT': '8889',
         'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock',
     }
 }
-
-
-STATIC_URL = '/static/'
-MEDIA_URL = '/images/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
