@@ -9,11 +9,8 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
-import os
 from decouple import config
 from pathlib import Path
-# import custom_azure
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -106,34 +103,35 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/images/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
 
-# # Static files (CSS, JavaScript, Images)
-# # https://docs.djangoproject.com/en/3.1/howto/static-files/
-#
-# DEFAULT_FILE_STORAGE = 'custom_azure.AzureMediaStorage'
-# STATICFILES_STORAGE = 'custom_azure.AzureStaticStorage'
-#
-# # any static paths you want to publish
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
+
+# Stockage des fichiers statiques en local
+# STATIC_URL = '/static/'
+# MEDIA_URL = '/images/'
+
 # STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
+#     os.path.join(BASE_DIR, 'static'),
 # ]
-#
-#
-# STATIC_LOCATION = "neigesoleil-static"
-# MEDIA_LOCATION = "neigesoleil-media"
-#
-# AZURE_ACCOUNT_NAME = "neigesoleilstorage"
-# AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-# STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
-# MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
 
 
+# Stockage des fichiers statiques sur le Blob Azure
+DEFAULT_FILE_STORAGE = 'azure_storage.AzureMediaStorage'
+STATICFILES_STORAGE = 'azure_storage.AzureStaticStorage'
 
 
+STATIC_LOCATION = "neigesoleil-static"
+MEDIA_LOCATION = "neigesoleil-media"
 
+
+AZURE_ACCOUNT_NAME = "neigesoleilstorage"
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]

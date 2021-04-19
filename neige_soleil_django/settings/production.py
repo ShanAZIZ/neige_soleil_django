@@ -1,5 +1,3 @@
-import os
-
 from neige_soleil_django.settings.commons import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -24,14 +22,5 @@ DATABASES = {
         'PORT': os.environ['DB_PORT'],
     }
 }
-
-
-
-
-
-
-
-
-
 
 
