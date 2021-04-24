@@ -8,3 +8,4 @@ venv
 *.pyc
 static
 media
+azure_json_env.json

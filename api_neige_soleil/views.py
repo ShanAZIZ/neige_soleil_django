@@ -6,7 +6,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import serializers
@@ -30,9 +30,28 @@ class CustomAuthToken(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({
+            'id': user.id,
+            'nom': user.first_name + " " + user.last_name,
             'token': token.key,
             'is_superuser': user.is_superuser,
         })
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def get_user_profile_view(request, pk):
+    if request.user.id == int(pk) or request.user.is_superuser:
+        serializer = ProfileSerializer
+        try:
+            profile = Profile.objects.get(user=pk)
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+        except Profile.DoesNotExist:
+            content = ""
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+    content = ""
+    return Response(content, status=status.HTTP_403_FORBIDDEN)
 
 
 ############################################################################################
@@ -69,24 +88,26 @@ class UserViewSet(AdminViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication, BasicAuthentication])
-@permission_classes([IsAdminUser])
-def get_user_profile_view(request, pk):
-    serializer = ProfileSerializer
-    try:
-        profile = Profile.objects.get(user=pk)
-        print(profile)
-        serializer = ProfileSerializer(profile)
-        return Response(serializer.data)
-    except Profile.DoesNotExist:
-        content = ""
-        return Response(content, status=status.HTTP_404_NOT_FOUND)
-
-
 class ProfileViewSet(AdminViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+    def get_permissions(self):
+        if self.request.method == "POST" or self.request.method == "PUT":
+            self.permission_classes = [IsAuthenticated]
+        return super().get_permissions()
+
+    def create(self, request, *args, **kwargs):
+        if request.user.id == int(request.data["user"]) or request.user.is_superuser:
+            return super().create(request, *args, **kwargs)
+        content = ""
+        return Response(content, status=status.HTTP_403_FORBIDDEN)
+
+    def update(self, request, *args, **kwargs):
+        if request.user.id == int(request.data["user"]) or request.user.is_superuser:
+            return super().update(request, *args, **kwargs)
+        content = ""
+        return Response(content, status=status.HTTP_403_FORBIDDEN)
 
 
 class ContratProprietaireViewSet(AdminViewSet):
@@ -99,7 +120,6 @@ class ReservationViewSet(AdminViewSet):
     serializer_class = ReservationSerializer
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):

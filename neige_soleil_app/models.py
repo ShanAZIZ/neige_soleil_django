@@ -149,3 +149,4 @@ def on_new_propriete(sender, instance, created,  **kwargs):
 
 
 post_save.connect(on_new_propriete, sender=ContratProprietaire)
+
