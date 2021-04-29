@@ -7,11 +7,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework import serializers
 
-# from .permissions import *
+from .permissions import *
 from .serializers import *
 from neige_soleil_app.models import *
 
@@ -54,8 +52,37 @@ def get_user_profile_view(request, pk):
     return Response(content, status=status.HTTP_403_FORBIDDEN)
 
 
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def get_user_reservation_view(request, pk):
+    if request.user.id == int(pk) or request.user.is_superuser:
+        serializer = ReservationSerializer
+        reservations = Reservation.objects.filter(user=pk)
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)
+        # TODO : If no reservations found
+        
+    content = ""
+    return Response(content, status=status.HTTP_403_FORBIDDEN)
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def get_contrat_by_user_view(request, pk):
+    if request.user.id == int(pk) or request.user.is_superuser:
+        serializer = ContratProprietaireSerializer
+        contrats = ContratProprietaire.objects.exclude(user=pk)
+        serializer = ContratProprietaireSerializer(contrats, many=True)
+        return Response(serializer.data)
+        # TODO : If no Contrats found
+    content = ""
+    return Response(content, status=status.HTTP_403_FORBIDDEN)
+
+
 ############################################################################################
-# ADMIN VIEWS
+# GENERIC VIEWS
 ############################################################################################
 
 
@@ -68,12 +95,10 @@ class UserViewSet(AdminViewSet):
     queryset = Utilisateur.objects.exclude(is_superuser=True)
     serializer_class = UserProfileSerializer
 
-    # def get_permissions(self):
-    #     if self.action in ['update', 'partial_update', 'list']:
-    #         self.permission_classes = [IsAdminOrIsSelf]
-    #     elif self.action in ['create', 'destroy']:
-    #         self.permission_classes = [IsAdminUser]
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if self.action in ['update', 'retrieve']:
+            self.permission_classes = [IsAuthenticated]
+        return super().get_permissions()
 
     @action(detail=True, methods=['post'])
     def set_password(self, request, pk=None):
@@ -87,6 +112,18 @@ class UserViewSet(AdminViewSet):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
+    def retrieve(self, request, *args, **kwargs):
+        if request.user.id == int(request.data['id']) or request.user.is_superuser:
+            return super().retrieve(request, *args, **kwargs)
+        content = ""
+        return Response(content, status=status.HTTP_403_FORBIDDEN)
+
+    def update(self, request, *args, **kwargs):
+        if request.user.id == int(request.data['id']) or request.user.is_superuser:
+            return super().update(request, *args, **kwargs)
+        content = ""
+        return Response(content, status=status.HTTP_403_FORBIDDEN)
+
 
 class ProfileViewSet(AdminViewSet):
     queryset = Profile.objects.all()
@@ -94,42 +131,29 @@ class ProfileViewSet(AdminViewSet):
 
     def get_permissions(self):
         if self.request.method == "POST" or self.request.method == "PUT":
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAdminOrOwner]
         return super().get_permissions()
-
-    def create(self, request, *args, **kwargs):
-        if request.user.id == int(request.data["user"]) or request.user.is_superuser:
-            return super().create(request, *args, **kwargs)
-        content = ""
-        return Response(content, status=status.HTTP_403_FORBIDDEN)
-
-    def update(self, request, *args, **kwargs):
-        if request.user.id == int(request.data["user"]) or request.user.is_superuser:
-            return super().update(request, *args, **kwargs)
-        content = ""
-        return Response(content, status=status.HTTP_403_FORBIDDEN)
 
 
 class ContratProprietaireViewSet(AdminViewSet):
     queryset = ContratProprietaire.objects.all()
     serializer_class = ContratProprietaireSerializer
 
+    def get_permissions(self):
+        if self.request.method == "POST" or self.request.method == "PUT":
+            self.permission_classes = [IsAdminOrOwner]
+        if self.request.method == "GET":
+            self.permission_classes = [IsAuthenticated]
+        return super().get_permissions()
+
 
 class ReservationViewSet(AdminViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+    def get_permissions(self):
+        if self.request.method == "POST" or self.request.method == "PUT" or self.request.method == "DELETE":
+            self.permission_classes = [IsAdminOrOwner]
+        return super().get_permissions()
 
     # TODO: Gérer la conformités des dates avant les put et les post
-
-############################################################################################
-# USER VIEWS
-############################################################################################
-
-# TODO: Contrat View : Il voit tout les contrats qui ne sont pas les siens
-# TODO: Reservations View : Voir, Ajouter et modifier ces reservations

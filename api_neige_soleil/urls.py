@@ -15,4 +15,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('token-auth/', views.CustomAuthToken.as_view()),
     path('user-profile/<str:pk>/', views.get_user_profile_view),
+    path('user-reservation/<str:pk>/', views.get_user_reservation_view),
+    path('user-contrats/<str:pk>/', views.get_contrat_by_user_view),
 ]
