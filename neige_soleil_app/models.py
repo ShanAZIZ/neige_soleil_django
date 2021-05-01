@@ -140,6 +140,16 @@ class Reservation(models.Model):
         self.status_reservation = self.ANNULER
         pass
 
+    # def check_date(self):
+    #     if self.date_debut_sejour < self.date_fin_sejour:
+    #         if self.propriete.is_avail(self.date_debut_sejour, self.date_fin_sejour):
+    #             return True
+    #     return False
+    #
+    # def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    #     if self.check_date() and self.propriete.is_avail(self.date_debut_sejour, self.date_fin_sejour):
+    #         super().save(force_insert, force_update, using, update_fields)
+
 
 def on_new_propriete(sender, instance, created,  **kwargs):
     if created:

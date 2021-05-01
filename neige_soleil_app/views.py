@@ -227,22 +227,17 @@ def detail_propriete(request, pk):
 @login_required(login_url='login')
 @known_profile
 def new_reservation(request, pk):
-    # TODO: Vérifier la cohérence des dates
-    # TODO: Refactor de la verification des dates
     contrat = ContratProprietaire.objects.get(id=pk)
     if contrat.user != request.user:
         reservations = contrat.reservation_set.all().exclude(status_reservation='CANCEL')
         if request.method == "POST":
-            resForm = ReservationForm(request.POST)
-            date_debut_sejour = parse_date(request.POST['date_debut_sejour'])
-            date_fin_sejour = parse_date(request.POST['date_fin_sejour'])
-            if contrat.is_avail(date_debut_sejour, date_fin_sejour):
-                if resForm.is_valid():
-                    res = resForm.save(commit=False)
-                    res.user = request.user
-                    res.propriete = contrat
-                    res.save()
-                    return redirect('dashboard')
+            post_value = request.POST.copy()
+            post_value['user'] = request.user.id
+            post_value['propriete'] = contrat.id
+            resForm = ReservationForm(post_value)
+            if resForm.is_valid():
+                resForm.save()
+                return redirect('dashboard')
             else:
                 messages.error(request, 'Cette propriete est deja réservée a cette date')
         context = {
@@ -257,16 +252,13 @@ def edit_reservation(request, pk):
     contrat = ContratProprietaire.objects.get(id=reservation.propriete.id)
     reservations = contrat.reservation_set.exclude(id=pk)
     if request.method == 'POST':
-        resForm = ReservationForm(request.POST, instance=reservation)
-        date_debut_sejour = parse_date(request.POST['date_debut_sejour'])
-        date_fin_sejour = parse_date(request.POST['date_fin_sejour'])
-        if contrat.is_avail(date_debut_sejour, date_fin_sejour, pk):
-            if resForm.is_valid():
-                res = resForm.save(commit=False)
-                res.user = request.user
-                res.propriete = contrat
-                res.save()
-                return redirect('dashboard')
+        post_value = request.POST.copy()
+        post_value['user'] = request.user.id
+        post_value['propriete'] = contrat.id
+        resForm = ReservationForm(post_value, instance=reservation)
+        if resForm.is_valid():
+            res = resForm.save()
+            return redirect('dashboard')
         else:
             messages.error(request, 'Cette propriete est deja réservée a cette date')
     context = {
