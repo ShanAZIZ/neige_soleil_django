@@ -50,6 +50,7 @@ class ReservationForm(ModelForm):
     def is_valid(self):
         if self.check_date():
             return super().is_valid()
+        return False
 
 
 
