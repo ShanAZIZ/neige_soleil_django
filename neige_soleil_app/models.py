@@ -124,8 +124,8 @@ class Reservation(models.Model):
                                           default=ENCOURS)
 
     def __str__(self):
-        return str(self.user.first_name) + " " + str(self.propriete.nom) + " " + \
-               str(self.date_reservation)
+        return str(self.user.username) + " " + str(self.propriete.nom) + " " + \
+               str(self.date_debut_sejour) + " a " + str(self.date_fin_sejour)
 
     def prix_total(self):
         duree = (self.date_fin_sejour - self.date_debut_sejour).days

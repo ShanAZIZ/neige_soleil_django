@@ -39,6 +39,9 @@ class CustomAuthToken(ObtainAuthToken):
 @authentication_classes([TokenAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user_profile_view(request, pk):
+    """
+    Affiche le profile de l'utilisateur, sinon un 404 ou 403
+    """
     if request.user.id == int(pk) or request.user.is_superuser:
         serializer = ProfileSerializer
         try:
@@ -56,13 +59,14 @@ def get_user_profile_view(request, pk):
 @authentication_classes([TokenAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user_reservation_view(request, pk):
+    """
+    Affiche les reservations de l'utilisateur, sinon une liste vide ou 403
+    """
     if request.user.id == int(pk) or request.user.is_superuser:
         serializer = ReservationSerializer
         reservations = Reservation.objects.filter(user=pk)
         serializer = ReservationSerializer(reservations, many=True)
         return Response(serializer.data)
-        # TODO : If no reservations found
-        
     content = ""
     return Response(content, status=status.HTTP_403_FORBIDDEN)
 
@@ -71,12 +75,15 @@ def get_user_reservation_view(request, pk):
 @authentication_classes([TokenAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def get_contrat_by_user_view(request, pk):
+    """
+    Affiche les contrats par proprietaire, sinon une liste vide ou 403
+    """
     if request.user.id == int(pk) or request.user.is_superuser:
         serializer = ContratProprietaireSerializer
         contrats = ContratProprietaire.objects.exclude(user=pk)
+        contrats.filter(status='AVAIL')
         serializer = ContratProprietaireSerializer(contrats, many=True)
         return Response(serializer.data)
-        # TODO : If no Contrats found
     content = ""
     return Response(content, status=status.HTTP_403_FORBIDDEN)
 
@@ -96,7 +103,7 @@ class UserViewSet(AdminViewSet):
     serializer_class = UserProfileSerializer
 
     def get_permissions(self):
-        if self.action in ['update', 'retrieve']:
+        if self.action in ['update', 'retrieve', 'create']:
             self.permission_classes = [IsAuthenticated]
         return super().get_permissions()
 
@@ -130,8 +137,10 @@ class ProfileViewSet(AdminViewSet):
     serializer_class = ProfileSerializer
 
     def get_permissions(self):
-        if self.request.method == "POST" or self.request.method == "PUT":
+        if self.action in ['update', 'retrieve', 'create']:
             self.permission_classes = [IsAdminOrOwner]
+        else:
+            self.permission_classes = [IsAdminUser]
         return super().get_permissions()
 
 
@@ -140,9 +149,7 @@ class ContratProprietaireViewSet(AdminViewSet):
     serializer_class = ContratProprietaireSerializer
 
     def get_permissions(self):
-        if self.request.method == "POST" or self.request.method == "PUT":
-            self.permission_classes = [IsAdminOrOwner]
-        if self.request.method == "GET":
+        if self.action in ['list', 'retrieve']: 
             self.permission_classes = [IsAuthenticated]
         return super().get_permissions()
 
@@ -152,8 +159,19 @@ class ReservationViewSet(AdminViewSet):
     serializer_class = ReservationSerializer
 
     def get_permissions(self):
-        if self.request.method == "POST" or self.request.method == "PUT" or self.request.method == "DELETE":
+
+        if self.action in ['create', 'retrieve', 'update', 'delete']:
             self.permission_classes = [IsAdminOrOwner]
+
+        # if self.action == "retrieve":
+        #     self.permission_classes = [IsAuthenticated] # TODO: Permission sur le retrieve des reservartions
         return super().get_permissions()
 
-    # TODO: Gérer la conformités des dates avant les put et les post
+    # def retrieve(self, request, *args, **kwargs):
+    #     if request.user.id == self.queryset.get(id=request.pk).user:
+    #         return super().retrieve(request, *args, **kwargs)
+    #     content = ""
+    #     return Response(content, status=status.HTTP_403_FORBIDDEN)
+
+
+

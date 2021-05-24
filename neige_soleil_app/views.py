@@ -30,7 +30,6 @@ def register(request):
     form = NewUserForm()
     if request.method == 'POST':
         form = NewUserForm(request.POST)
-        print(request.POST)
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
@@ -38,7 +37,6 @@ def register(request):
             messages.success(request, " Votre compte à bien été créer "+username)
             return redirect('main_home')
         else:
-            print(form.errors)
             messages.error(request, "Entrez des informations correcte et suffisant (longueur de mot de passe 8 "
                                     "caractères minimum)")
     context = {
