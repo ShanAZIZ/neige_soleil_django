@@ -155,6 +155,7 @@ class ContratProprietaireViewSet(AdminViewSet):
 
 
 class ReservationViewSet(AdminViewSet):
+    
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
 
@@ -162,16 +163,13 @@ class ReservationViewSet(AdminViewSet):
 
         if self.action in ['create', 'retrieve', 'update', 'delete']:
             self.permission_classes = [IsAdminOrOwner]
+        else:
+            self.permission_classes = [IsAuthenticated]
 
         # if self.action == "retrieve":
         #     self.permission_classes = [IsAuthenticated] # TODO: Permission sur le retrieve des reservartions
         return super().get_permissions()
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     if request.user.id == self.queryset.get(id=request.pk).user:
-    #         return super().retrieve(request, *args, **kwargs)
-    #     content = ""
-    #     return Response(content, status=status.HTTP_403_FORBIDDEN)
 
 
 
