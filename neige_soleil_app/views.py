@@ -254,7 +254,7 @@ def edit_reservation(request, pk):
         post_value['user'] = request.user.id
         post_value['propriete'] = contrat.id
         resForm = ReservationForm(post_value, instance=reservation)
-        if resForm.is_valid():
+        if resForm.is_valid(reservation.id):
             res = resForm.save()
             return redirect('dashboard')
         else:

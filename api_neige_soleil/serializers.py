@@ -52,11 +52,15 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def check_date(self, data):
+        try:
+            id = self.initial_data['id']
+        except Exception:
+            id = None
         date_debut_sejour = data['date_debut_sejour']
         date_fin_sejour = data['date_fin_sejour']
         contrat = ContratProprietaire.objects.get(id=data['propriete'].id)
         if date_debut_sejour < date_fin_sejour:
-            if contrat.is_avail(date_debut_sejour, date_fin_sejour):
+            if contrat.is_avail(date_debut_sejour, date_fin_sejour, id):
                 return True
         return False
 

@@ -38,17 +38,17 @@ class ReservationForm(ModelForm):
         fields = '__all__'
         # exclude = ['user', 'propriete']
 
-    def check_date(self):
+    def check_date(self, id=None):
         date_debut_sejour = parse_date(self.data['date_debut_sejour'])
         date_fin_sejour = parse_date(self.data['date_fin_sejour'])
         contrat = ContratProprietaire.objects.get(id=self.data['propriete'])
         if date_debut_sejour < date_fin_sejour:
-            if contrat.is_avail(date_debut_sejour, date_fin_sejour):
+            if contrat.is_avail(date_debut_sejour, date_fin_sejour, id):
                 return True
         return False
 
-    def is_valid(self):
-        if self.check_date():
+    def is_valid(self, id=None):
+        if self.check_date(id):
             return super().is_valid()
         return False
 

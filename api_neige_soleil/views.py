@@ -147,14 +147,15 @@ class ProfileViewSet(AdminViewSet):
     # TODO : permission sur create ( Profile )
 
     def retrieve(self, request, *args, **kwargs):
-
-        if request.user.id == int(kwargs['pk']) or request.user.is_superuser:
+        profile = Profile.objects.get(id = int(kwargs['pk']))
+        if request.user.id == profile.user.id or request.user.is_superuser:
             return super().retrieve(request, *args, **kwargs)
         content = ""
         return Response(content, status=status.HTTP_403_FORBIDDEN)
 
     def update(self, request, *args, **kwargs):
-        if request.user.id == int(kwargs['pk']) or request.user.is_superuser:
+        profile = Profile.objects.get(id = int(kwargs['pk']))
+        if request.user.id == profile.user.id or request.user.is_superuser:
             return super().update(request, *args, **kwargs)
         content = ""
         return Response(content, status=status.HTTP_403_FORBIDDEN)
@@ -176,22 +177,28 @@ class ReservationViewSet(AdminViewSet):
     serializer_class = ReservationSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
     # TODO: Permission sur create et list ( Reservation )
 
     def retrieve(self, request, *args, **kwargs):
-        if request.user.id == int(kwargs['pk']) or request.user.is_superuser:
+        reservation = Reservation.objects.get(id=int(kwargs['pk']))
+        if request.user.id == reservation.user.id or request.user.is_superuser:
             return super().retrieve(request, *args, **kwargs)
         content = ""
         return Response(content, status=status.HTTP_403_FORBIDDEN)
 
     def update(self, request, *args, **kwargs):
-        if request.user.id == int(kwargs['pk']) or request.user.is_superuser:
+        reservation = Reservation.objects.get(id=int(kwargs['pk']))
+        if request.user.id == reservation.user.id or request.user.is_superuser:
             return super().update(request, *args, **kwargs)
         content = ""
         return Response(content, status=status.HTTP_403_FORBIDDEN)
 
     def destroy(self, request, *args, **kwargs):
-        if request.user.id == int(kwargs['pk']) or request.user.is_superuser:
+        reservation = Reservation.objects.get(id=int(kwargs['pk']))
+        if request.user.id == reservation.user.id or request.user.is_superuser:
             return super().destroy(request, *args, **kwargs)
         content = ""
         return Response(content, status=status.HTTP_403_FORBIDDEN)
